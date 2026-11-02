@@ -332,7 +332,7 @@ export const ResumePdfDocument: React.FC<ResumePdfDocumentProps> = ({ data }) =>
               <View key={exp.id} wrap={false} style={{ marginBottom: 6 }}>
                 <View style={baseStyles.itemRow}>
                   <Text style={{ fontFamily: boldFont, fontSize: 9.5, color: '#000000' }}>
-                    {exp.jobTitle}
+                    {exp.jobTitle || (exp as any).position}
                   </Text>
                   <Text style={{ fontFamily: baseFont, fontSize: 8.5, color: '#334155' }}>
                     {formatResumeDateRange(exp.startDate, exp.endDate, exp.current)}
