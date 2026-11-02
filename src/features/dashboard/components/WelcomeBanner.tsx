@@ -21,14 +21,14 @@ export const WelcomeBanner: React.FC = () => {
               {tier} Tier Workspace
             </Badge>
             <Badge variant="success" size="sm" className="bg-emerald-500/20 text-emerald-300 border-emerald-400/30 text-[10px] gap-1">
-              <ShieldCheck className="w-3 h-3" /> Architecture Phase 1
+              <ShieldCheck className="w-3 h-3" /> Phase 2 Resume Builder Live
             </Badge>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
             Welcome back, {userName}! 👋
           </h1>
           <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
-            Your career command center is ready. Modules are scheduled for progressive delivery starting with the AI Resume Builder in Phase 2.
+            Your career command center is ready. The ATS Resume Builder is live with 4 single-column templates and real-time vector PDF export.
           </p>
         </div>
 

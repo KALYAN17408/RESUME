@@ -25,7 +25,7 @@ export const Sidebar: React.FC = () => {
 
   const navigation = [
     { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Resume Builder', href: '/dashboard/builder', icon: FileText, badge: 'Phase 2' },
+    { name: 'Resume Builder', href: '/dashboard/resumes', icon: FileText, badge: 'Live' },
     { name: 'ATS Analyzer', href: '/dashboard/analyzer', icon: ScanSearch, badge: 'Phase 3' },
     { name: 'Job Matching', href: '/dashboard/jobs', icon: Briefcase, badge: 'Phase 4' },
     { name: 'AI Career Copilot', href: '/dashboard/copilot', icon: Bot, badge: 'Phase 5' },
@@ -76,7 +76,10 @@ export const Sidebar: React.FC = () => {
         {/* Navigation links */}
         <nav className="flex-1 space-y-1 px-3 py-4 overflow-y-auto">
           {navigation.map((item) => {
-            const isActive = location.pathname === item.href;
+            const isActive =
+              item.href === '/dashboard'
+                ? location.pathname === '/dashboard'
+                : location.pathname.startsWith(item.href);
             const Icon = item.icon;
 
             return (

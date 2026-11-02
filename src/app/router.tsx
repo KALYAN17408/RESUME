@@ -10,6 +10,8 @@ import { NotFoundPage } from '@/pages/NotFoundPage';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { DashboardOverview } from '@/features/dashboard/components/DashboardOverview';
 import { SettingsPage } from '@/pages/SettingsPage';
+import { ResumeListPage } from '@/features/resumes/pages/ResumeListPage';
+import { ResumeEditorPage } from '@/features/resumes/pages/ResumeEditorPage';
 import { Spinner } from '@/components/ui/Spinner';
 import { Sparkles } from 'lucide-react';
 
@@ -87,6 +89,24 @@ export const AppRouter: React.FC = () => {
       />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 
+      {/* Protected Standalone Resume Editor Routes */}
+      <Route
+        path="/dashboard/resumes/new"
+        element={
+          <ProtectedRoute>
+            <ResumeEditorPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/dashboard/resumes/:resumeId/edit"
+        element={
+          <ProtectedRoute>
+            <ResumeEditorPage />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Protected Dashboard Routes */}
       <Route
         path="/dashboard"
@@ -97,9 +117,10 @@ export const AppRouter: React.FC = () => {
         }
       >
         <Route index element={<DashboardOverview />} />
+        <Route path="resumes" element={<ResumeListPage />} />
         <Route path="settings" element={<SettingsPage />} />
-        {/* Placeholder redirects for planned modules */}
-        <Route path="builder" element={<DashboardOverview />} />
+        {/* Module A route redirect */}
+        <Route path="builder" element={<Navigate to="/dashboard/resumes" replace />} />
         <Route path="analyzer" element={<DashboardOverview />} />
         <Route path="jobs" element={<DashboardOverview />} />
         <Route path="copilot" element={<DashboardOverview />} />

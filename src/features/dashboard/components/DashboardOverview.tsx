@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { WelcomeBanner } from './WelcomeBanner';
 import { QuickStats } from './QuickStats';
 import { ModuleCard, type ModuleCardProps } from './ModuleCard';
@@ -16,6 +17,7 @@ import {
 } from 'lucide-react';
 
 export const DashboardOverview: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedModule, setSelectedModule] = useState<ModuleCardProps | null>(null);
 
   const modules: ModuleCardProps[] = [
@@ -23,13 +25,13 @@ export const DashboardOverview: React.FC = () => {
       id: 'module-a',
       title: 'AI Resume Builder',
       moduleTag: 'Module A',
-      phaseBadge: 'Phase 2 Next',
-      description: 'Single-column ATS templates (Jake’s, Harvard, Stanford) with live split-screen preview and vector text PDF export.',
+      phaseBadge: 'Operational',
+      description: 'Single-column ATS templates (Jake’s, Harvard, Stanford, Modern Tech) with live split-screen preview and vector text PDF export.',
       features: [
-        'Jake’s Tech & Harvard Classic single-column templates',
+        'Jake’s Tech, Harvard Classic, Stanford Editorial & Modern Tech Clean templates',
         'Live split-screen editor with debounced auto-save',
-        'Vector text-stream PDF & DOCX export engine',
-        'Inline Google XYZ bullet-point optimizer',
+        'Vector text-stream PDF export with 100% selectable text',
+        'Full section reordering and customization engine',
       ],
       icon: FileText,
       color: 'text-brand-600 bg-brand-50 border-brand-200/60',
@@ -158,11 +160,25 @@ export const DashboardOverview: React.FC = () => {
             <div className="flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-100">
               <span className="flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                Scheduled Phase: <span className="font-semibold text-slate-800">{selectedModule.phaseBadge}</span>
+                Status: <span className="font-semibold text-slate-800">{selectedModule.phaseBadge}</span>
               </span>
-              <Button variant="outline" size="sm" onClick={() => setSelectedModule(null)}>
-                Close
-              </Button>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" onClick={() => setSelectedModule(null)}>
+                  Close
+                </Button>
+                {selectedModule.id === 'module-a' && (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedModule(null);
+                      navigate('/dashboard/resumes');
+                    }}
+                  >
+                    Open Resume Builder
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </Modal>
