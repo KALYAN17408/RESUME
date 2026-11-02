@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/stores/authStore';
 import { Button } from '@/components/ui/Button';
 import { Sparkles, Menu, X, ArrowRight, LayoutDashboard, LogOut } from 'lucide-react';
+import { cn } from '@/utils/cn';
 
 export const Navbar: React.FC = () => {
   const { user, signOut } = useAuthStore();
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleSignOut = async () => {
     await signOut();
@@ -15,7 +25,14 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 backdrop-blur-md">
+    <header
+      className={cn(
+        'sticky top-0 z-40 w-full transition-all duration-300',
+        isScrolled
+          ? 'border-b border-slate-200/90 bg-white/90 shadow-sm backdrop-blur-xl py-0'
+          : 'border-b border-transparent bg-white/60 backdrop-blur-md py-1.5'
+      )}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo & Brand */}
