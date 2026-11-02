@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Badge } from '@/components/ui/Badge';
 import { Sparkles, CheckCircle2, ShieldCheck, ArrowRight } from 'lucide-react';
 
@@ -8,27 +8,21 @@ export const HeroScrollShowcase: React.FC = () => {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ['start end', 'end start'],
+    offset: ['start end', 'center center'],
   });
 
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001,
-  });
-
-  // Apple-style 3D perspective transforms
-  const rotateX = useTransform(smoothProgress, [0, 0.45], [18, 0]);
-  const scale = useTransform(smoothProgress, [0, 0.45], [0.92, 1]);
-  const opacity = useTransform(smoothProgress, [0, 0.25], [0.6, 1]);
-  const y = useTransform(smoothProgress, [0, 0.45], [40, 0]);
-
-  // Floating parallax elements
-  const badgeY = useTransform(smoothProgress, [0, 1], [-20, 20]);
-  const badgeX = useTransform(smoothProgress, [0, 1], [-10, 10]);
+  // Direct GPU-accelerated transforms (instant responsiveness without spring lag)
+  const rotateX = useTransform(scrollYProgress, [0, 1], [10, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.95, 1]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [0.75, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], [35, 0]);
 
   return (
-    <div ref={containerRef} className="pt-6 sm:pt-10 max-w-5xl mx-auto perspective-1000">
+    <div
+      ref={containerRef}
+      style={{ perspective: 1200 }}
+      className="pt-6 sm:pt-10 max-w-5xl mx-auto"
+    >
       <motion.div
         style={{
           rotateX,
@@ -36,28 +30,23 @@ export const HeroScrollShowcase: React.FC = () => {
           opacity,
           y,
           transformStyle: 'preserve-3d',
+          willChange: 'transform',
+          transform: 'translateZ(0)',
         }}
-        transition={{ ease: [0.16, 1, 0.3, 1] }}
-        className="relative rounded-3xl border border-slate-200/90 bg-gradient-to-b from-white/90 to-slate-50/80 p-3 sm:p-5 shadow-2xl backdrop-blur-2xl"
+        className="relative rounded-3xl border border-slate-200/90 bg-white p-3 sm:p-5 shadow-elevated"
       >
-        {/* Apple-style subtle ambient sheen */}
-        <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-brand-500/5 via-transparent to-purple-500/10 pointer-events-none" />
+        {/* Subtle ambient sheen */}
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-brand-500/5 via-transparent to-purple-500/5 pointer-events-none" />
 
         {/* Floating Top Floating Chip */}
-        <motion.div
-          style={{ y: badgeY, x: badgeX }}
-          className="absolute -top-4 right-8 sm:right-12 z-20 hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 text-white text-xs font-semibold shadow-elevated border border-slate-800"
-        >
+        <div className="absolute -top-3.5 right-6 sm:right-10 z-20 hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-semibold shadow-md border border-slate-800">
           <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
           <span>Real-time ATS Compliance Check</span>
-        </motion.div>
+        </div>
 
-        <div className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 text-left shadow-subtle grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="rounded-2xl border border-slate-200/80 bg-white p-6 sm:p-8 text-left grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Column: Interactive Resume Sheet Preview */}
-          <div className="lg:col-span-7 space-y-4 font-mono text-xs text-slate-800 bg-slate-50/90 p-6 sm:p-7 rounded-2xl border border-slate-200/80 shadow-xs relative overflow-hidden group">
-            {/* Soft watermark line */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-brand-500/5 rounded-full blur-2xl pointer-events-none" />
-
+          <div className="lg:col-span-7 space-y-4 font-mono text-xs text-slate-800 bg-slate-50 p-6 sm:p-7 rounded-2xl border border-slate-200/80 shadow-xs relative overflow-hidden group">
             <div className="border-b border-slate-200/80 pb-3 flex justify-between items-start">
               <div>
                 <h3 className="text-base sm:text-lg font-black text-slate-900 tracking-tight font-sans">
@@ -67,7 +56,7 @@ export const HeroScrollShowcase: React.FC = () => {
                   San Francisco, CA • alex@example.com • linkedin.com/in/alex • github.com/alex
                 </p>
               </div>
-              <Badge variant="success" size="sm" className="font-sans shadow-xs font-bold px-2.5 py-1">
+              <Badge variant="success" size="sm" className="font-sans font-bold px-2.5 py-1">
                 ATS Score 96/100
               </Badge>
             </div>
@@ -103,11 +92,7 @@ export const HeroScrollShowcase: React.FC = () => {
 
           {/* Right Column: AI Live Transformation showcase */}
           <div className="lg:col-span-5 space-y-4">
-            <motion.div
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.2 }}
-              className="rounded-2xl border border-brand-200/80 bg-gradient-to-br from-brand-50/80 via-white to-indigo-50/50 p-5 space-y-3 shadow-xs"
-            >
+            <div className="rounded-2xl border border-brand-200/80 bg-gradient-to-br from-brand-50/80 via-white to-indigo-50/50 p-5 space-y-3 shadow-xs">
               <div className="flex items-center justify-between text-brand-700 font-bold text-xs">
                 <span className="flex items-center gap-1.5">
                   <Sparkles className="w-4 h-4 text-brand-600" />
@@ -130,7 +115,7 @@ export const HeroScrollShowcase: React.FC = () => {
                   &quot;Spearheaded migration of 14 microservices to Kubernetes, reducing p99 API latency by 42% across 1.2M daily active users.&quot;
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             <div className="grid grid-cols-2 gap-3 text-center">
               <div className="rounded-2xl bg-white p-4 border border-slate-200/80 shadow-xs">

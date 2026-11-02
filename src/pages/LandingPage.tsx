@@ -32,8 +32,8 @@ export const LandingPage: React.FC = () => {
 
       {/* ─── Hero Section with Apple-Style 3D Tilt & Parallax ─── */}
       <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-32 bg-gradient-to-b from-indigo-50/50 via-white to-white">
-        {/* Ambient background glows */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-[700px] h-[400px] bg-brand-200/30 rounded-full blur-3xl pointer-events-none" />
+        {/* Ambient background glow optimized with GPU-composited radial gradient */}
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-[700px] h-[400px] bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.15)_0%,rgba(99,102,241,0)_70%)] rounded-full pointer-events-none transform-gpu will-change-transform" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
           {/* Announcement pill with subtle spring float */}
@@ -121,12 +121,13 @@ export const LandingPage: React.FC = () => {
             {/* Feature 1 */}
             <motion.div
               variants={{
-                hidden: { opacity: 0, y: 30, filter: 'blur(6px)' },
-                show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.6 } },
+                hidden: { opacity: 0, y: 24 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
               }}
-              whileHover={{ y: -6 }}
+              whileHover={{ y: -4 }}
+              style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
             >
-              <Card className="p-6 space-y-4 hover:shadow-elevated transition-all h-full flex flex-col justify-between">
+              <Card className="p-6 space-y-4 hover:shadow-elevated transition-shadow h-full flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="w-12 h-12 rounded-2xl bg-brand-50 border border-brand-200/60 text-brand-600 flex items-center justify-center">
                     <FileText className="w-6 h-6" />
@@ -152,12 +153,13 @@ export const LandingPage: React.FC = () => {
             {/* Feature 2 */}
             <motion.div
               variants={{
-                hidden: { opacity: 0, y: 30, filter: 'blur(6px)' },
-                show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.6 } },
+                hidden: { opacity: 0, y: 24 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
               }}
-              whileHover={{ y: -6 }}
+              whileHover={{ y: -4 }}
+              style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
             >
-              <Card className="p-6 space-y-4 hover:shadow-elevated transition-all h-full flex flex-col justify-between">
+              <Card className="p-6 space-y-4 hover:shadow-elevated transition-shadow h-full flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200/60 text-emerald-600 flex items-center justify-center">
                     <ScanSearch className="w-6 h-6" />
@@ -183,12 +185,13 @@ export const LandingPage: React.FC = () => {
             {/* Feature 3 */}
             <motion.div
               variants={{
-                hidden: { opacity: 0, y: 30, filter: 'blur(6px)' },
-                show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.6 } },
+                hidden: { opacity: 0, y: 24 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
               }}
-              whileHover={{ y: -6 }}
+              whileHover={{ y: -4 }}
+              style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
             >
-              <Card className="p-6 space-y-4 hover:shadow-elevated transition-all h-full flex flex-col justify-between">
+              <Card className="p-6 space-y-4 hover:shadow-elevated transition-shadow h-full flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-200/60 text-purple-600 flex items-center justify-center">
                     <Bot className="w-6 h-6" />
@@ -214,12 +217,13 @@ export const LandingPage: React.FC = () => {
             {/* Feature 4 */}
             <motion.div
               variants={{
-                hidden: { opacity: 0, y: 30, filter: 'blur(6px)' },
-                show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.6 } },
+                hidden: { opacity: 0, y: 24 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } },
               }}
-              whileHover={{ y: -6 }}
+              whileHover={{ y: -4 }}
+              style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
             >
-              <Card className="p-6 space-y-4 hover:shadow-elevated transition-all h-full flex flex-col justify-between">
+              <Card className="p-6 space-y-4 hover:shadow-elevated transition-shadow h-full flex flex-col justify-between">
                 <div className="space-y-4">
                   <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200/60 text-rose-600 flex items-center justify-center">
                     <MessageSquare className="w-6 h-6" />

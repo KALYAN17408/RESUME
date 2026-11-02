@@ -6,16 +6,14 @@ interface FadeInProps extends HTMLMotionProps<'div'> {
   duration?: number;
   direction?: 'up' | 'down' | 'left' | 'right' | 'none';
   distance?: number;
-  blur?: boolean;
 }
 
 export const FadeIn: React.FC<FadeInProps> = ({
   children,
   delay = 0,
-  duration = 0.7,
+  duration = 0.45,
   direction = 'up',
-  distance = 30,
-  blur = true,
+  distance = 24,
   className,
   ...props
 }) => {
@@ -34,20 +32,19 @@ export const FadeIn: React.FC<FadeInProps> = ({
       initial={{
         opacity: 0,
         ...initialOffset,
-        filter: blur ? 'blur(8px)' : 'blur(0px)',
       }}
       whileInView={{
         opacity: 1,
         x: 0,
         y: 0,
-        filter: 'blur(0px)',
       }}
-      viewport={{ once: true, margin: '-50px' }}
+      viewport={{ once: true, margin: '-20px' }}
       transition={{
         duration,
         delay,
-        ease: [0.21, 0.47, 0.32, 0.98], // Apple-style fluid cubic bezier
+        ease: [0.16, 1, 0.3, 1], // Apple fluid decel curve (fast start, smooth settle)
       }}
+      style={{ willChange: 'transform, opacity', transform: 'translateZ(0)' }}
       className={className}
       {...props}
     >
@@ -58,7 +55,7 @@ export const FadeIn: React.FC<FadeInProps> = ({
 
 export const StaggerContainer: React.FC<HTMLMotionProps<'div'> & { staggerDelay?: number }> = ({
   children,
-  staggerDelay = 0.12,
+  staggerDelay = 0.08,
   className,
   ...props
 }) => {
@@ -66,7 +63,7 @@ export const StaggerContainer: React.FC<HTMLMotionProps<'div'> & { staggerDelay?
     <motion.div
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, margin: '-50px' }}
+      viewport={{ once: true, margin: '-30px' }}
       variants={{
         hidden: {},
         show: {
