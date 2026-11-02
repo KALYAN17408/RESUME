@@ -154,7 +154,7 @@ export const SkillsForm: React.FC<SkillsFormProps> = ({
                         handleAddSkill(cat.id);
                       }
                     }}
-                    className="flex-1 text-xs rounded-xl border border-slate-300 px-3 py-2 text-slate-800 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none"
+                    className="flex-1 text-xs rounded-xl border border-slate-300 px-3 py-2 text-slate-800 focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
                   />
                   <Button
                     size="sm"

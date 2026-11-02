@@ -164,7 +164,7 @@ export const ProjectsForm: React.FC<ProjectsFormProps> = ({
                         value={proj.description}
                         placeholder="Engineered high-throughput background queue handling 50k requests/min with automatic backoff..."
                         onChange={(e) => onUpdate(proj.id, { description: e.target.value })}
-                        className="w-full text-xs rounded-xl border border-slate-300 p-2.5 text-slate-800 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none"
+                        className="w-full text-xs rounded-xl border border-slate-300 p-2.5 text-slate-800 focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
                       />
                     </div>
                   </div>

@@ -109,7 +109,7 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({
           <button
             type="button"
             onClick={() => setReorderModalOpen(true)}
-            className="text-xs text-brand-600 hover:text-brand-700 font-semibold flex items-center gap-1 hover:underline"
+            className="text-xs text-black font-semibold flex items-center gap-1 hover:underline"
           >
             <ArrowUpDown className="w-3.5 h-3.5" /> Reorder Sections
           </button>
@@ -127,7 +127,7 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
                   isActive
-                    ? 'bg-brand-600 text-white shadow-xs'
+                    ? 'bg-black text-white shadow-xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
                 }`}
               >

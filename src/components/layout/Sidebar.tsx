@@ -57,11 +57,11 @@ export const Sidebar: React.FC = () => {
         {/* Brand header */}
         <div className="flex h-16 items-center justify-between px-6 border-b border-slate-100">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-sm shadow-brand-500/20">
+            <div className="w-8 h-8 rounded-xl bg-black flex items-center justify-center text-white shadow-sm shadow-black/20">
               <Sparkles className="w-4 h-4" />
             </div>
             <span className="text-base font-black tracking-tight text-slate-900">
-              ResuMax <span className="text-brand-600">AI</span>
+              ResuMax <span className="text-black font-extrabold text-xs px-1.5 py-0.5 rounded-md bg-zinc-100 border border-zinc-200">AI</span>
             </span>
           </Link>
           <button
@@ -89,16 +89,16 @@ export const Sidebar: React.FC = () => {
                 className={cn(
                   'flex items-center justify-between rounded-xl px-3.5 py-2.5 text-xs font-medium transition-colors',
                   isActive
-                    ? 'bg-brand-50 text-brand-700 font-semibold shadow-xs'
-                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                    ? 'bg-black text-white font-semibold shadow-xs'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                 )}
               >
                 <div className="flex items-center gap-3">
-                  <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-brand-600' : 'text-slate-400')} />
+                  <Icon className={cn('w-4 h-4 shrink-0', isActive ? 'text-white' : 'text-slate-400')} />
                   <span>{item.name}</span>
                 </div>
                 {item.badge && (
-                  <Badge variant="default" size="sm" className="text-[10px] py-0 px-1.5 bg-slate-100 text-slate-500">
+                  <Badge variant="default" size="sm" className={cn('text-[10px] py-0 px-1.5', isActive ? 'bg-zinc-800 text-white border-zinc-700' : 'bg-slate-100 text-slate-500')}>
                     {item.badge}
                   </Badge>
                 )}
@@ -110,14 +110,14 @@ export const Sidebar: React.FC = () => {
         {/* User profile & footer */}
         <div className="border-t border-slate-100 p-3.5">
           <div className="flex items-center gap-3 p-2 rounded-xl bg-slate-50 border border-slate-100">
-            <div className="w-9 h-9 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center font-bold text-xs uppercase shrink-0">
+            <div className="w-9 h-9 rounded-full bg-black text-white flex items-center justify-center font-bold text-xs uppercase shrink-0">
               {userName.charAt(0) || <UserIcon className="w-4 h-4" />}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-semibold text-slate-900 truncate">{userName}</p>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span className="text-[10px] text-slate-500 truncate max-w-[110px]">{userEmail}</span>
-                <Badge variant="brand" size="sm" className="text-[9px] px-1 py-0 uppercase">
+                <Badge variant="brand" size="sm" className="text-[9px] px-1 py-0 uppercase bg-black text-white">
                   {userTier}
                 </Badge>
               </div>

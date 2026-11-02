@@ -105,7 +105,7 @@ export const ResumeToolbar: React.FC<ResumeToolbarProps> = ({
                     }
                   }}
                   autoFocus
-                  className="text-base font-bold text-slate-900 border-b-2 border-brand-600 px-1 py-0.5 outline-none bg-brand-50/40 rounded"
+                  className="text-base font-bold text-slate-900 border-b-2 border-black px-1 py-0.5 outline-none bg-zinc-100 rounded"
                 />
               ) : (
                 <h1
@@ -141,10 +141,10 @@ export const ResumeToolbar: React.FC<ResumeToolbarProps> = ({
               )}
               {saveStatus === 'offline' && (
                 <span
-                  className="inline-flex items-center gap-1 text-indigo-700 font-medium bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200/60"
+                  className="inline-flex items-center gap-1 text-zinc-800 font-medium bg-zinc-100 px-2 py-0.5 rounded-full border border-zinc-200"
                   title="Saved to local browser storage"
                 >
-                  <Cloud className="w-3.5 h-3.5 text-indigo-600" />
+                  <Cloud className="w-3.5 h-3.5 text-black" />
                   <span className="hidden sm:inline">Cached Locally</span>
                 </span>
               )}

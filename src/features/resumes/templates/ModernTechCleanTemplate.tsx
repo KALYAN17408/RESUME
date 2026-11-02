@@ -9,7 +9,7 @@ interface TemplateProps {
 
 export const ModernTechCleanTemplate: React.FC<TemplateProps> = ({ data }) => {
   const { personalInfo, customization } = data;
-  const accentColor = customization.accentColor || '#2563eb';
+  const accentColor = customization.accentColor || '#000000';
   const fontStyle = { fontFamily: customization.fontFamily || 'Inter, sans-serif' };
 
   // Contact items array
@@ -147,7 +147,7 @@ export const ModernTechCleanTemplate: React.FC<TemplateProps> = ({ data }) => {
                         href={sanitizeUrl(proj.url)}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-[9px] font-medium hover:underline text-blue-600"
+                        className="text-[9px] font-medium hover:underline text-black"
                       >
                         Live: {cleanDisplayUrl(proj.url)}
                       </a>

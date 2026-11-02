@@ -43,7 +43,7 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     badge: 'Editorial & Modern',
     recommendedRole: 'Product Managers, Tech Leads, Engineering Directors, Researchers',
     defaultFont: 'Inter',
-    defaultAccent: '#4338ca',
+    defaultAccent: '#000000',
   },
   'modern-tech-clean': {
     id: 'modern-tech-clean',
@@ -54,7 +54,7 @@ export const TEMPLATE_REGISTRY: Record<TemplateId, TemplateDefinition> = {
     badge: 'Modern Tech',
     recommendedRole: 'Frontend Engineers, Full-Stack Developers, UI/UX Technologists',
     defaultFont: 'Inter',
-    defaultAccent: '#2563eb',
+    defaultAccent: '#000000',
   },
 };
 

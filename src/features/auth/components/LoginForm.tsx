@@ -157,7 +157,7 @@ export const LoginForm: React.FC = () => {
             </label>
             <Link
               to="/forgot-password"
-              className="text-xs font-medium text-brand-600 hover:text-brand-700 hover:underline"
+              className="text-xs font-medium text-black hover:underline"
             >
               Forgot password?
             </Link>
@@ -185,7 +185,7 @@ export const LoginForm: React.FC = () => {
       {/* Footer link to signup */}
       <p className="text-center text-xs text-slate-500">
         Don&apos;t have an account?{' '}
-        <Link to="/signup" className="font-semibold text-brand-600 hover:text-brand-700 hover:underline">
+        <Link to="/signup" className="font-semibold text-black hover:underline">
           Create free account
         </Link>
       </p>

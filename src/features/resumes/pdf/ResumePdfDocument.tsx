@@ -236,7 +236,7 @@ export const ResumePdfDocument: React.FC<ResumePdfDocumentProps> = ({ data }) =>
   const isModern = templateId === 'modern-tech-clean';
   const isJakes = !isHarvard && !isStanford && !isModern;
 
-  const accentColor = customization.accentColor || (isModern ? '#2563eb' : isStanford ? '#4338ca' : '#000000');
+  const accentColor = customization.accentColor || '#000000';
   const baseFont = isHarvard ? 'Times-Roman' : 'Helvetica';
   const boldFont = isHarvard ? 'Times-Bold' : 'Helvetica-Bold';
   const italicFont = isHarvard ? 'Times-Italic' : 'Helvetica-Oblique';

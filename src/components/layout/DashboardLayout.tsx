@@ -47,7 +47,7 @@ export const DashboardLayout: React.FC = () => {
               className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors relative"
             >
               <Bell className="w-4 h-4" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-brand-600"></span>
+              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-black"></span>
             </button>
 
             <div className="h-4 w-px bg-slate-200"></div>

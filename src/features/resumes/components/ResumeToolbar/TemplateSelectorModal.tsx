@@ -39,7 +39,7 @@ export const TemplateSelectorModal: React.FC<TemplateSelectorModalProps> = ({
               }}
               className={`p-4 rounded-2xl border-2 text-left cursor-pointer transition-all flex flex-col justify-between ${
                 isSelected
-                  ? 'border-brand-600 bg-brand-50/20 shadow-subtle'
+                  ? 'border-black bg-zinc-50 shadow-subtle'
                   : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50/50'
               }`}
             >
@@ -48,7 +48,7 @@ export const TemplateSelectorModal: React.FC<TemplateSelectorModalProps> = ({
                   <h3 className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
                     {template.name}
                     {isSelected && (
-                      <span className="w-5 h-5 rounded-full bg-brand-600 text-white flex items-center justify-center">
+                      <span className="w-5 h-5 rounded-full bg-black text-white flex items-center justify-center">
                         <Check className="w-3 h-3" />
                       </span>
                     )}
@@ -89,7 +89,7 @@ export const TemplateSelectorModal: React.FC<TemplateSelectorModalProps> = ({
 
       <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
         <span className="flex items-center gap-1.5">
-          <Sparkles className="w-4 h-4 text-brand-600" /> Switching templates preserves all resume content.
+          <Sparkles className="w-4 h-4 text-black" /> Switching templates preserves all resume content.
         </span>
         <Button variant="ghost" size="sm" onClick={onClose}>
           Close

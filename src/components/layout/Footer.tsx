@@ -10,11 +10,11 @@ export const Footer: React.FC = () => {
           {/* Brand Info */}
           <div className="md:col-span-1 space-y-4">
             <Link to="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center text-white">
+              <div className="w-8 h-8 rounded-lg bg-black flex items-center justify-center text-white">
                 <Sparkles className="w-4 h-4" />
               </div>
               <span className="text-base font-bold text-slate-900 tracking-tight">
-                ResuMax <span className="text-brand-600">AI</span>
+                ResuMax <span className="text-black">AI</span>
               </span>
             </Link>
             <p className="text-xs text-slate-500 leading-relaxed">
@@ -22,7 +22,7 @@ export const Footer: React.FC = () => {
             </p>
             <div className="flex items-center gap-4 text-xs text-slate-400 pt-2">
               <span className="flex items-center gap-1">
-                <Shield className="w-3.5 h-3.5 text-brand-600" /> ATS-Tested
+                <Shield className="w-3.5 h-3.5 text-black" /> ATS-Tested
               </span>
               <span className="flex items-center gap-1">
                 <Lock className="w-3.5 h-3.5 text-emerald-600" /> Private & Secure

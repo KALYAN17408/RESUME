@@ -23,7 +23,7 @@ import {
 
 export const LandingPage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-white text-slate-900 selection:bg-brand-500 selection:text-white">
+    <div className="min-h-screen bg-white text-slate-900 selection:bg-black selection:text-white">
       {/* Apple-style top scroll-progress indicator */}
       <ScrollProgress />
 
@@ -31,18 +31,18 @@ export const LandingPage: React.FC = () => {
       <Navbar />
 
       {/* ─── Hero Section with Apple-Style 3D Tilt & Parallax ─── */}
-      <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-32 bg-gradient-to-b from-indigo-50/50 via-white to-white">
+      <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-32 bg-gradient-to-b from-slate-100/60 via-white to-white">
         {/* Ambient background glow optimized with GPU-composited radial gradient */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-[700px] h-[400px] bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.15)_0%,rgba(99,102,241,0)_70%)] rounded-full pointer-events-none transform-gpu will-change-transform" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-[700px] h-[400px] bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.06)_0%,rgba(0,0,0,0)_70%)] rounded-full pointer-events-none transform-gpu will-change-transform" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
           {/* Announcement pill with subtle spring float */}
           <FadeIn delay={0.1} direction="down">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-brand-200 bg-brand-50/80 text-brand-700 text-xs font-semibold shadow-xs">
-              <Sparkles className="w-3.5 h-3.5 text-brand-600" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-zinc-200 bg-zinc-100 text-black text-xs font-semibold shadow-xs">
+              <Sparkles className="w-3.5 h-3.5 text-black" />
               <span>Next-Generation Career Platform Built for Tech</span>
-              <span className="text-brand-300">•</span>
-              <span className="font-bold text-slate-900">Zero Parsing Errors</span>
+              <span className="text-zinc-400">•</span>
+              <span className="font-bold text-black">Zero Parsing Errors</span>
             </div>
           </FadeIn>
 
@@ -51,7 +51,7 @@ export const LandingPage: React.FC = () => {
             <FadeIn delay={0.2} distance={40}>
               <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black text-slate-900 tracking-tight leading-[1.08]">
                 Land Your Dream Job with an <br className="hidden sm:inline" />
-                <span className="bg-gradient-to-r from-brand-700 via-brand-600 to-indigo-600 bg-clip-text text-transparent">
+                <span className="text-black">
                   AI-Powered Resume
                 </span>
               </h1>
@@ -87,7 +87,7 @@ export const LandingPage: React.FC = () => {
                 <CheckCircle2 className="w-4 h-4 text-emerald-600" /> 100% Vector Text-Stream PDF
               </span>
               <span className="flex items-center gap-1.5">
-                <ShieldCheck className="w-4 h-4 text-brand-600" /> Workday & Greenhouse Parser Safe
+                <ShieldCheck className="w-4 h-4 text-black" /> Workday & Greenhouse Parser Safe
               </span>
               <span className="flex items-center gap-1.5">
                 <Lock className="w-4 h-4 text-slate-600" /> Private & Secure Storage
@@ -129,7 +129,7 @@ export const LandingPage: React.FC = () => {
             >
               <Card className="p-6 space-y-4 hover:shadow-elevated transition-shadow h-full flex flex-col justify-between">
                 <div className="space-y-4">
-                  <div className="w-12 h-12 rounded-2xl bg-brand-50 border border-brand-200/60 text-brand-600 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-2xl bg-zinc-100 border border-zinc-200 text-black flex items-center justify-center">
                     <FileText className="w-6 h-6" />
                   </div>
                   <div className="space-y-1 text-left">
@@ -141,10 +141,10 @@ export const LandingPage: React.FC = () => {
                 </div>
                 <ul className="text-xs text-slate-600 space-y-1.5 text-left border-t border-slate-100 pt-3">
                   <li className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-brand-600 shrink-0" /> Zero parsing tables
+                    <CheckCircle2 className="w-3.5 h-3.5 text-black shrink-0" /> Zero parsing tables
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-brand-600 shrink-0" /> Debounced autosave
+                    <CheckCircle2 className="w-3.5 h-3.5 text-black shrink-0" /> Debounced autosave
                   </li>
                 </ul>
               </Card>
@@ -193,7 +193,7 @@ export const LandingPage: React.FC = () => {
             >
               <Card className="p-6 space-y-4 hover:shadow-elevated transition-shadow h-full flex flex-col justify-between">
                 <div className="space-y-4">
-                  <div className="w-12 h-12 rounded-2xl bg-purple-50 border border-purple-200/60 text-purple-600 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-2xl bg-zinc-100 border border-zinc-200 text-black flex items-center justify-center">
                     <Bot className="w-6 h-6" />
                   </div>
                   <div className="space-y-1 text-left">
@@ -205,10 +205,10 @@ export const LandingPage: React.FC = () => {
                 </div>
                 <ul className="text-xs text-slate-600 space-y-1.5 text-left border-t border-slate-100 pt-3">
                   <li className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 shrink-0" /> Grounded career RAG
+                    <CheckCircle2 className="w-3.5 h-3.5 text-black shrink-0" /> Grounded career RAG
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 shrink-0" /> Skills gap analysis
+                    <CheckCircle2 className="w-3.5 h-3.5 text-black shrink-0" /> Skills gap analysis
                   </li>
                 </ul>
               </Card>
@@ -274,7 +274,7 @@ export const LandingPage: React.FC = () => {
                 show: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
               }}
               whileHover={{ y: -6, scale: 1.02 }}
-              className="group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition-all hover:border-brand-500 hover:shadow-card text-left cursor-pointer"
+              className="group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition-all hover:border-black hover:shadow-card text-left cursor-pointer"
             >
               <div className="h-44 rounded-xl bg-white border border-slate-200 p-3 space-y-2 font-mono text-[9px] text-slate-400 overflow-hidden shadow-xs">
                 <div className="border-b pb-1 font-bold text-slate-800 text-[10px]">JAKE&apos;S TECHNICAL RESUME</div>
@@ -296,7 +296,7 @@ export const LandingPage: React.FC = () => {
                 show: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
               }}
               whileHover={{ y: -6, scale: 1.02 }}
-              className="group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition-all hover:border-brand-500 hover:shadow-card text-left cursor-pointer"
+              className="group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition-all hover:border-black hover:shadow-card text-left cursor-pointer"
             >
               <div className="h-44 rounded-xl bg-white border border-slate-200 p-3 space-y-2 font-serif text-[9px] text-slate-400 overflow-hidden shadow-xs">
                 <div className="border-b pb-1 font-bold text-slate-900 text-[10px] text-center">HARVARD CLASSIC</div>
@@ -317,17 +317,17 @@ export const LandingPage: React.FC = () => {
                 show: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
               }}
               whileHover={{ y: -6, scale: 1.02 }}
-              className="group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition-all hover:border-brand-500 hover:shadow-card text-left cursor-pointer"
+              className="group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition-all hover:border-black hover:shadow-card text-left cursor-pointer"
             >
               <div className="h-44 rounded-xl bg-white border border-slate-200 p-3 space-y-2 text-[9px] text-slate-400 overflow-hidden shadow-xs">
-                <div className="border-b border-indigo-200 pb-1 font-bold text-indigo-900 text-[10px]">STANFORD EDITORIAL</div>
-                <div className="h-1.5 w-3/4 bg-indigo-100 rounded"></div>
+                <div className="border-b border-slate-300 pb-1 font-bold text-black text-[10px]">STANFORD EDITORIAL</div>
+                <div className="h-1.5 w-3/4 bg-slate-300 rounded"></div>
                 <div className="h-1.5 w-5/6 bg-slate-100 rounded"></div>
                 <div className="h-1.5 w-2/3 bg-slate-100 rounded"></div>
               </div>
               <div className="pt-3">
                 <h4 className="text-sm font-bold text-slate-900">Stanford Editorial</h4>
-                <p className="text-xs text-slate-500 mt-0.5">Refined layout with restrained ink-blue accents.</p>
+                <p className="text-xs text-slate-500 mt-0.5">Refined layout with restrained monochrome accents.</p>
               </div>
             </motion.div>
 
@@ -338,7 +338,7 @@ export const LandingPage: React.FC = () => {
                 show: { opacity: 1, scale: 1, transition: { duration: 0.5 } },
               }}
               whileHover={{ y: -6, scale: 1.02 }}
-              className="group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition-all hover:border-brand-500 hover:shadow-card text-left cursor-pointer"
+              className="group rounded-2xl border border-slate-200 bg-slate-50 p-4 transition-all hover:border-black hover:shadow-card text-left cursor-pointer"
             >
               <div className="h-44 rounded-xl bg-white border border-slate-200 p-3 space-y-2 text-[9px] text-slate-400 overflow-hidden shadow-xs">
                 <div className="border-b pb-1 font-bold text-slate-900 text-[10px]">MODERN TECH CLEAN</div>
@@ -378,7 +378,7 @@ export const LandingPage: React.FC = () => {
               whileHover={{ y: -4 }}
               className="rounded-2xl bg-white border border-slate-200 p-6 space-y-3 shadow-xs"
             >
-              <span className="w-8 h-8 rounded-xl bg-brand-50 text-brand-600 font-black text-sm flex items-center justify-center">
+              <span className="w-8 h-8 rounded-xl bg-black text-white font-black text-sm flex items-center justify-center">
                 1
               </span>
               <h4 className="text-sm font-bold text-slate-900">Select Template</h4>
@@ -395,7 +395,7 @@ export const LandingPage: React.FC = () => {
               whileHover={{ y: -4 }}
               className="rounded-2xl bg-white border border-slate-200 p-6 space-y-3 shadow-xs"
             >
-              <span className="w-8 h-8 rounded-xl bg-brand-50 text-brand-600 font-black text-sm flex items-center justify-center">
+              <span className="w-8 h-8 rounded-xl bg-black text-white font-black text-sm flex items-center justify-center">
                 2
               </span>
               <h4 className="text-sm font-bold text-slate-900">AI Bullet Optimization</h4>
@@ -412,7 +412,7 @@ export const LandingPage: React.FC = () => {
               whileHover={{ y: -4 }}
               className="rounded-2xl bg-white border border-slate-200 p-6 space-y-3 shadow-xs"
             >
-              <span className="w-8 h-8 rounded-xl bg-brand-50 text-brand-600 font-black text-sm flex items-center justify-center">
+              <span className="w-8 h-8 rounded-xl bg-black text-white font-black text-sm flex items-center justify-center">
                 3
               </span>
               <h4 className="text-sm font-bold text-slate-900">Job Match & Tailor</h4>
@@ -429,7 +429,7 @@ export const LandingPage: React.FC = () => {
               whileHover={{ y: -4 }}
               className="rounded-2xl bg-white border border-slate-200 p-6 space-y-3 shadow-xs"
             >
-              <span className="w-8 h-8 rounded-xl bg-brand-50 text-brand-600 font-black text-sm flex items-center justify-center">
+              <span className="w-8 h-8 rounded-xl bg-black text-white font-black text-sm flex items-center justify-center">
                 4
               </span>
               <h4 className="text-sm font-bold text-slate-900">Vector PDF Export</h4>
@@ -511,9 +511,9 @@ export const LandingPage: React.FC = () => {
               }}
               whileHover={{ y: -8, scale: 1.02 }}
             >
-              <Card className="p-8 flex flex-col justify-between border-brand-500 shadow-elevated relative bg-brand-50/10 h-full">
+              <Card className="p-8 flex flex-col justify-between border-black shadow-elevated relative bg-zinc-50/50 h-full">
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <Badge variant="brand" size="sm" className="bg-brand-600 text-white font-bold py-1 px-3">
+                  <Badge variant="brand" size="sm" className="bg-black text-white font-bold py-1 px-3">
                     Most Popular
                   </Badge>
                 </div>
@@ -529,19 +529,19 @@ export const LandingPage: React.FC = () => {
                   <p className="text-xs text-slate-500">For engineers actively applying to competitive roles.</p>
                   <ul className="space-y-2 text-xs text-slate-700 pt-4 border-t border-slate-100">
                     <li className="flex items-center gap-2 font-medium">
-                      <CheckCircle2 className="w-4 h-4 text-brand-600" /> Unlimited resumes & versions
+                      <CheckCircle2 className="w-4 h-4 text-black" /> Unlimited resumes & versions
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-brand-600" /> 30 Per-job tailored resumes/mo
+                      <CheckCircle2 className="w-4 h-4 text-black" /> 30 Per-job tailored resumes/mo
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-brand-600" /> 25 Recruiter-grade ATS audits
+                      <CheckCircle2 className="w-4 h-4 text-black" /> 25 Recruiter-grade ATS audits
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-brand-600" /> 50 Daily AI copilot turns
+                      <CheckCircle2 className="w-4 h-4 text-black" /> 50 Daily AI copilot turns
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-brand-600" /> DOCX and Vector PDF exports
+                      <CheckCircle2 className="w-4 h-4 text-black" /> DOCX and Vector PDF exports
                     </li>
                   </ul>
                 </div>
@@ -576,16 +576,16 @@ export const LandingPage: React.FC = () => {
                   <p className="text-xs text-slate-500">Maximum speed with full interview coaching tracks.</p>
                   <ul className="space-y-2 text-xs text-slate-600 pt-4 border-t border-slate-100">
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-brand-600" /> 150 Job tailoring runs/mo
+                      <CheckCircle2 className="w-4 h-4 text-black" /> 150 Job tailoring runs/mo
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-brand-600" /> 100 In-depth ATS reviews
+                      <CheckCircle2 className="w-4 h-4 text-black" /> 100 In-depth ATS reviews
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-brand-600" /> Full Mock Interview prep hub
+                      <CheckCircle2 className="w-4 h-4 text-black" /> Full Mock Interview prep hub
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-brand-600" /> 200 Daily Copilot turns
+                      <CheckCircle2 className="w-4 h-4 text-black" /> 200 Daily Copilot turns
                     </li>
                   </ul>
                 </div>

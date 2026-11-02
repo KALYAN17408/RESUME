@@ -66,7 +66,7 @@ export const SectionReorderModal: React.FC<SectionReorderModalProps> = ({
                   id={`sec-${sectionType}`}
                   checked={isEnabled}
                   onChange={(e) => onToggleEnabled(sectionType, e.target.checked)}
-                  className="rounded border-slate-300 text-brand-600 focus:ring-brand-500 w-4 h-4 cursor-pointer"
+                  className="rounded border-slate-300 text-black focus:ring-black w-4 h-4 cursor-pointer"
                 />
                 <label
                   htmlFor={`sec-${sectionType}`}

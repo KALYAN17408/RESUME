@@ -97,7 +97,7 @@ export function createSampleResume(
     createdAt: now,
     updatedAt: now,
     customization: {
-      accentColor: templateId === 'modern-tech-clean' ? '#2563eb' : templateId === 'stanford-editorial' ? '#4338ca' : '#0f172a',
+      accentColor: '#000000',
       fontFamily: templateId === 'harvard-classic' ? 'Merriweather' : 'Inter',
       fontSize: 'medium',
       lineSpacing: 'normal',

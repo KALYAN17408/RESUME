@@ -9,15 +9,15 @@ export const WelcomeBanner: React.FC = () => {
   const tier = profile?.tier || 'free';
 
   return (
-    <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-brand-900 via-slate-900 to-indigo-950 p-8 text-white shadow-elevated">
+    <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-black via-zinc-900 to-black p-8 text-white shadow-elevated">
       {/* Decorative gradient overlay */}
-      <div className="absolute top-0 right-0 -z-0 h-64 w-64 rounded-full bg-brand-500/20 blur-3xl" />
-      <div className="absolute bottom-0 left-1/3 -z-0 h-48 w-48 rounded-full bg-purple-500/15 blur-2xl" />
+      <div className="absolute top-0 right-0 -z-0 h-64 w-64 rounded-full bg-white/5 blur-3xl" />
+      <div className="absolute bottom-0 left-1/3 -z-0 h-48 w-48 rounded-full bg-white/5 blur-2xl" />
 
       <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2">
           <div className="flex items-center gap-2.5">
-            <Badge variant="brand" size="sm" className="bg-brand-500/30 text-brand-200 border-brand-400/30 uppercase tracking-wider text-[10px]">
+            <Badge variant="brand" size="sm" className="bg-white/10 text-white border-white/20 uppercase tracking-wider text-[10px]">
               {tier} Tier Workspace
             </Badge>
             <Badge variant="success" size="sm" className="bg-emerald-500/20 text-emerald-300 border-emerald-400/30 text-[10px] gap-1">
@@ -38,7 +38,7 @@ export const WelcomeBanner: React.FC = () => {
               Active Security Model
             </span>
             <span className="text-xs font-bold text-white flex items-center gap-1.5 mt-1">
-              <Sparkles className="w-3.5 h-3.5 text-brand-400" /> Supabase PKCE Auth
+              <Sparkles className="w-3.5 h-3.5 text-zinc-300" /> Supabase PKCE Auth
             </span>
           </div>
         </div>

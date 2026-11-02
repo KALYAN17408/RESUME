@@ -118,7 +118,7 @@ export const ForgotPasswordForm: React.FC = () => {
 
       <p className="text-center text-xs text-slate-500">
         Remember your password?{' '}
-        <Link to="/login" className="font-semibold text-brand-600 hover:text-brand-700 hover:underline">
+        <Link to="/login" className="font-semibold text-black hover:underline">
           Back to Sign In
         </Link>
       </p>

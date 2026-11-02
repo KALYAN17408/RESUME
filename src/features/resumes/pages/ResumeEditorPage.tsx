@@ -77,7 +77,7 @@ export const ResumeEditorPage: React.FC = () => {
   if (isNewRoute || loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center space-y-3">
-        <Spinner size="lg" className="text-brand-600" />
+        <Spinner size="lg" className="text-black" />
         <p className="text-xs font-semibold text-slate-600">Initializing resume workspace...</p>
       </div>
     );

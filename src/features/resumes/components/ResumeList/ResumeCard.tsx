@@ -40,7 +40,7 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({
         {/* Header: Title and Template Badge */}
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-start gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0 border border-brand-200/60 group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 rounded-xl bg-zinc-100 text-black flex items-center justify-center shrink-0 border border-zinc-200 group-hover:scale-105 transition-transform">
               <FileText className="w-5 h-5" />
             </div>
             <div>

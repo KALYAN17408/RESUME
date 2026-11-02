@@ -34,7 +34,7 @@ export const DashboardOverview: React.FC = () => {
         'Full section reordering and customization engine',
       ],
       icon: FileText,
-      color: 'text-brand-600 bg-brand-50 border-brand-200/60',
+      color: 'text-black bg-zinc-100 border-zinc-200',
     },
     {
       id: 'module-b',
@@ -64,7 +64,7 @@ export const DashboardOverview: React.FC = () => {
         'Automated role-aligned cover letter generation',
       ],
       icon: Target,
-      color: 'text-indigo-600 bg-indigo-50 border-indigo-200/60',
+      color: 'text-black bg-zinc-100 border-zinc-200',
     },
     {
       id: 'module-d',
@@ -122,7 +122,7 @@ export const DashboardOverview: React.FC = () => {
             </p>
           </div>
           <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200 flex items-center gap-1.5">
-            <Layers className="w-3.5 h-3.5 text-brand-600" />
+            <Layers className="w-3.5 h-3.5 text-black" />
             5 Modules Scheduled
           </span>
         </div>
@@ -151,7 +151,7 @@ export const DashboardOverview: React.FC = () => {
               <ul className="space-y-2 text-xs text-slate-700">
                 {selectedModule.features.map((feat, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-brand-600 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-black shrink-0 mt-0.5" />
                     <span>{feat}</span>
                   </li>
                 ))}

@@ -9,7 +9,7 @@ export const QuickStats: React.FC = () => {
       value: '0',
       quota: '3 Max (Free Tier)',
       icon: FileText,
-      color: 'text-brand-600 bg-brand-50 border-brand-200/60',
+      color: 'text-black bg-zinc-100 border-zinc-200',
     },
     {
       name: 'ATS Score Scans',
@@ -23,7 +23,7 @@ export const QuickStats: React.FC = () => {
       value: '0',
       quota: 'Active in Phase 4',
       icon: Target,
-      color: 'text-indigo-600 bg-indigo-50 border-indigo-200/60',
+      color: 'text-black bg-zinc-100 border-zinc-200',
     },
     {
       name: 'AI Quota Balance',

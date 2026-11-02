@@ -25,7 +25,7 @@ export const SettingsPage: React.FC = () => {
         <Card className="md:col-span-2">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <User className="w-5 h-5 text-brand-600" />
+              <User className="w-5 h-5 text-black" />
               <CardTitle>Profile Details</CardTitle>
             </div>
             <CardDescription>Your personal profile associated with your authenticated account.</CardDescription>
@@ -98,7 +98,7 @@ export const SettingsPage: React.FC = () => {
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Shield className="w-5 h-5 text-brand-600" />
+            <Shield className="w-5 h-5 text-black" />
             <CardTitle>Security & Password</CardTitle>
           </div>
           <CardDescription>Manage credentials and session access.</CardDescription>

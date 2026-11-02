@@ -22,7 +22,7 @@ export const ProtectedRoute: React.FC<{ children: React.ReactElement }> = ({ chi
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col justify-center items-center bg-slate-50 gap-4">
-        <div className="w-12 h-12 rounded-2xl bg-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+        <div className="w-12 h-12 rounded-2xl bg-black flex items-center justify-center text-white shadow-md shadow-black/20">
           <Sparkles className="w-6 h-6" />
         </div>
         <Spinner size="md" />

@@ -37,12 +37,12 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo & Brand */}
           <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-700 via-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 rounded-xl bg-black flex items-center justify-center text-white shadow-md shadow-black/20 group-hover:scale-105 transition-transform">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div className="flex flex-col">
               <span className="text-lg font-black tracking-tight text-slate-900 flex items-center gap-1">
-                ResuMax <span className="text-brand-600 font-extrabold text-xs px-1.5 py-0.5 rounded-md bg-brand-50 border border-brand-200/60">AI</span>
+                ResuMax <span className="text-white font-extrabold text-xs px-1.5 py-0.5 rounded-md bg-black">AI</span>
               </span>
             </div>
           </Link>

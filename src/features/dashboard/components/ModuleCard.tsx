@@ -53,7 +53,7 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
             <ul className="space-y-1.5 text-xs text-slate-600">
               {features.map((feature, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-brand-500 shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-black shrink-0 mt-0.5" />
                   <span className="leading-tight">{feature}</span>
                 </li>
               ))}

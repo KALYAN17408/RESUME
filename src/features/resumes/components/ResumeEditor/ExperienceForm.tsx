@@ -72,7 +72,7 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
                   className="p-3.5 bg-slate-50/80 hover:bg-slate-100/80 cursor-pointer flex items-center justify-between transition-colors"
                 >
                   <div className="flex items-center gap-2.5">
-                    <span className="w-6 h-6 rounded-lg bg-brand-100 text-brand-700 font-bold text-xs flex items-center justify-center">
+                    <span className="w-6 h-6 rounded-lg bg-zinc-100 text-black font-bold text-xs flex items-center justify-center">
                       {index + 1}
                     </span>
                     <div className="text-left">
@@ -163,7 +163,7 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
                                 endDate: e.target.checked ? '' : exp.endDate,
                               })
                             }
-                            className="rounded border-slate-300 text-brand-600 focus:ring-brand-500 w-4 h-4"
+                            className="rounded border-slate-300 text-black focus:ring-black w-4 h-4"
                           />
                           <span className="text-xs text-slate-700 font-medium">
                             I currently work here
@@ -185,7 +185,7 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
                               highlights: [...exp.highlights, ''],
                             });
                           }}
-                          className="text-xs text-brand-600 font-semibold hover:underline flex items-center gap-1"
+                          className="text-xs text-black font-semibold hover:underline flex items-center gap-1"
                         >
                           <Plus className="w-3.5 h-3.5" /> Add Bullet
                         </button>
@@ -204,7 +204,7 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
                                 newHighlights[hIdx] = e.target.value;
                                 onUpdate(exp.id, { highlights: newHighlights });
                               }}
-                              className="flex-1 text-xs rounded-xl border border-slate-200 p-2.5 text-slate-800 focus:border-brand-500 focus:ring-1 focus:ring-brand-500 focus:outline-none"
+                              className="flex-1 text-xs rounded-xl border border-slate-200 p-2.5 text-slate-800 focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
                             />
                             <button
                               type="button"

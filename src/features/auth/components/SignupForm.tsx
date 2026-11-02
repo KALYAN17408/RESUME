@@ -176,7 +176,7 @@ export const SignupForm: React.FC = () => {
 
       <p className="text-center text-xs text-slate-500">
         Already have an account?{' '}
-        <Link to="/login" className="font-semibold text-brand-600 hover:text-brand-700 hover:underline">
+        <Link to="/login" className="font-semibold text-black hover:underline">
           Sign In
         </Link>
       </p>

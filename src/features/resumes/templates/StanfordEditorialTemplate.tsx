@@ -9,7 +9,7 @@ interface TemplateProps {
 
 export const StanfordEditorialTemplate: React.FC<TemplateProps> = ({ data }) => {
   const { personalInfo, customization } = data;
-  const accentColor = customization.accentColor || '#4338ca';
+  const accentColor = customization.accentColor || '#000000';
   const fontStyle = { fontFamily: customization.fontFamily || 'Inter, sans-serif' };
 
   // Contact items array
@@ -170,7 +170,7 @@ export const StanfordEditorialTemplate: React.FC<TemplateProps> = ({ data }) => 
                       href={sanitizeUrl(proj.url)}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-[9px] text-indigo-700 underline block"
+                      className="text-[9px] text-black underline block"
                     >
                       {cleanDisplayUrl(proj.url)}
                     </a>

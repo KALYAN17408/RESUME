@@ -11,13 +11,13 @@ interface CustomizationModalProps {
 }
 
 const ACCENT_COLORS = [
+  { name: 'Pure Black', value: '#000000' },
+  { name: 'Obsidian', value: '#09090b' },
+  { name: 'Charcoal', value: '#18181b' },
   { name: 'Slate Black', value: '#0f172a' },
-  { name: 'Indigo Brand', value: '#4338ca' },
-  { name: 'Royal Blue', value: '#2563eb' },
-  { name: 'Emerald', value: '#059669' },
-  { name: 'Teal', value: '#0d9488' },
-  { name: 'Crimson', value: '#e11d48' },
-  { name: 'Purple', value: '#7c3aed' },
+  { name: 'Graphite', value: '#27272a' },
+  { name: 'Zinc Dark', value: '#3f3f46' },
+  { name: 'Neutral Dark', value: '#52525b' },
 ];
 
 const FONTS = [
@@ -56,7 +56,7 @@ export const CustomizationModal: React.FC<CustomizationModalProps> = ({
                   type="button"
                   onClick={() => onUpdate({ accentColor: color.value })}
                   className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
-                    isSelected ? 'ring-2 ring-offset-2 ring-brand-600 scale-110 shadow-sm' : 'hover:scale-105'
+                    isSelected ? 'ring-2 ring-offset-2 ring-black scale-110 shadow-sm' : 'hover:scale-105'
                   }`}
                   style={{ backgroundColor: color.value }}
                   title={color.name}
@@ -82,13 +82,13 @@ export const CustomizationModal: React.FC<CustomizationModalProps> = ({
                   onClick={() => onUpdate({ fontFamily: font.value })}
                   className={`p-3 rounded-xl border text-sm cursor-pointer transition-all flex items-center justify-between ${
                     isSelected
-                      ? 'border-brand-600 bg-brand-50/20 font-bold text-brand-900'
+                      ? 'border-black bg-zinc-50 font-bold text-black'
                       : 'border-slate-200 hover:border-slate-300 text-slate-700'
                   }`}
                   style={{ fontFamily: font.value }}
                 >
                   <span>{font.name}</span>
-                  {isSelected && <span className="text-brand-600 text-xs">Active</span>}
+                  {isSelected && <span className="text-black font-semibold text-xs">Active</span>}
                 </div>
               );
             })}
@@ -110,7 +110,7 @@ export const CustomizationModal: React.FC<CustomizationModalProps> = ({
                   onClick={() => onUpdate({ lineSpacing: spacing })}
                   className={`py-2 px-3 rounded-xl border text-xs font-medium capitalize transition-all ${
                     isSelected
-                      ? 'border-brand-600 bg-brand-50/30 text-brand-900 font-bold'
+                      ? 'border-black bg-zinc-100 text-black font-bold'
                       : 'border-slate-200 hover:border-slate-300 text-slate-700'
                   }`}
                 >

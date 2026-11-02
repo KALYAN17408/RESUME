@@ -11,10 +11,10 @@ interface AuthLayoutProps {
 
 export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title, subtitle }) => {
   return (
-    <div className="relative min-h-screen flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-indigo-50/70 via-white to-purple-50/60 overflow-hidden">
+    <div className="relative min-h-screen flex flex-col justify-center items-center py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-100/70 via-white to-zinc-100/60 overflow-hidden">
       {/* Ambient gradient spheres */}
-      <div className="absolute top-0 right-1/4 -z-10 w-96 h-96 bg-brand-200/40 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 left-1/4 -z-10 w-80 h-80 bg-purple-200/40 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-1/4 -z-10 w-96 h-96 bg-zinc-200/40 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-10 left-1/4 -z-10 w-80 h-80 bg-slate-200/40 rounded-full blur-3xl pointer-events-none" />
 
       {/* Back to Home Button */}
       <div className="absolute top-6 left-6 sm:top-8 sm:left-8">
@@ -31,11 +31,11 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title, subtitl
         {/* Brand Logo & Header */}
         <div className="text-center space-y-2">
           <Link to="/" className="inline-flex items-center gap-2.5 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-700 via-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-brand-500/25 group-hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center text-white shadow-md shadow-black/20 group-hover:scale-105 transition-transform">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl font-black tracking-tight text-slate-900">
-              ResuMax <span className="text-brand-600">AI</span>
+              ResuMax <span className="text-black font-extrabold text-xs px-1.5 py-0.5 rounded-md bg-zinc-100 border border-zinc-200">AI</span>
             </span>
           </Link>
           <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight sm:text-3xl pt-2">

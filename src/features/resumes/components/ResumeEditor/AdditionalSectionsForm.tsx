@@ -48,7 +48,7 @@ export const AdditionalSectionsForm: React.FC<AdditionalSectionsFormProps> = ({
               id="enable-achievements"
               checked={data.enabledSections.achievements || false}
               onChange={(e) => onToggleSection('achievements', e.target.checked)}
-              className="rounded border-slate-300 text-brand-600 focus:ring-brand-500 w-4 h-4"
+              className="rounded border-slate-300 text-black focus:ring-black w-4 h-4"
             />
             <label htmlFor="enable-achievements" className="text-xs font-bold text-slate-900 cursor-pointer">
               Achievements & Honors
@@ -114,7 +114,7 @@ export const AdditionalSectionsForm: React.FC<AdditionalSectionsFormProps> = ({
               id="enable-languages"
               checked={data.enabledSections.languages || false}
               onChange={(e) => onToggleSection('languages', e.target.checked)}
-              className="rounded border-slate-300 text-brand-600 focus:ring-brand-500 w-4 h-4"
+              className="rounded border-slate-300 text-black focus:ring-black w-4 h-4"
             />
             <label htmlFor="enable-languages" className="text-xs font-bold text-slate-900 cursor-pointer">
               Languages
