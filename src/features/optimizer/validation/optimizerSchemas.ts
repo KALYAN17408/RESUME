@@ -223,7 +223,7 @@ export const saveSessionInputSchema = z.object({
   sessionName: z.string().max(200).optional().default('Untitled Optimization'),
   jobTitle: z.string().max(200).optional().default(''),
   companyName: z.string().max(200).optional().default(''),
-  jobDescription: z.string().min(1, 'Job description cannot be empty').max(30000, 'Job description must not exceed 30,000 characters'),
+  jobDescription: z.string().max(30000, 'Job description must not exceed 30,000 characters').optional().default(''),
   resumeVersionId: z.string().nullable().optional(),
   originalResumeSnapshot: z.any().nullable().optional(),
   optimizationResults: z.any().optional(),

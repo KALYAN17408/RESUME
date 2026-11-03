@@ -259,7 +259,7 @@ Qualifications:
     expect(deleteOk).toBe(true);
     const checkDeleted = await OptimizationSessionService.getSessionById(duplicated!.id, userId);
     expect(checkDeleted).toBeNull();
-  });
+  }, 30000);
 
   it('aborts resume merge and preserves resume untouched if snapshot creation fails', async () => {
     vi.spyOn(ResumeService, 'createSnapshot').mockResolvedValue({

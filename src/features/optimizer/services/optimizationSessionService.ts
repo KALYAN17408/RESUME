@@ -136,6 +136,7 @@ export class OptimizationSessionService {
 
     const updatedSession: OptimizationSession = {
       ...session,
+      jobDescription: session.jobDescription || '',
       updatedAt: new Date().toISOString(),
     };
 

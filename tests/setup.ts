@@ -53,3 +53,35 @@ if (typeof globalThis.DOMMatrix === 'undefined') {
     a = 1; b = 0; c = 0; d = 1; e = 0; f = 0;
   } as any;
 }
+
+if (typeof Blob !== 'undefined') {
+  if (!Blob.prototype.text) {
+    Blob.prototype.text = function () {
+      return new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ''));
+        reader.onerror = () => reject(reader.error || new Error('Failed to read text'));
+        reader.readAsText(this);
+      });
+    };
+  }
+  if (!Blob.prototype.arrayBuffer) {
+    Blob.prototype.arrayBuffer = function () {
+      return new Promise<ArrayBuffer>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as ArrayBuffer);
+        reader.onerror = () => reject(reader.error || new Error('Failed to read arrayBuffer'));
+        reader.readAsArrayBuffer(this);
+      });
+    };
+  }
+}
+
+if (typeof File !== 'undefined') {
+  if (!File.prototype.text && Blob?.prototype?.text) {
+    File.prototype.text = Blob.prototype.text;
+  }
+  if (!File.prototype.arrayBuffer && Blob?.prototype?.arrayBuffer) {
+    File.prototype.arrayBuffer = Blob.prototype.arrayBuffer;
+  }
+}

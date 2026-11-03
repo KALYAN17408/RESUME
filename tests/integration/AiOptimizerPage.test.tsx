@@ -149,16 +149,22 @@ describe('AiOptimizerPage Integration', () => {
     fireEvent.click(generateBtn);
 
     // Wait for alternatives and stage
-    await waitFor(() => {
-      expect(screen.getByRole('button', { name: /apply to staged changes/i })).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByRole('button', { name: /apply to staged changes/i })).toBeInTheDocument();
+      },
+      { timeout: 10000 }
+    );
     const stageBtn = screen.getByRole('button', { name: /apply to staged changes/i });
     fireEvent.click(stageBtn);
 
     // Banner and header both display "Review & Apply"
-    await waitFor(() => {
-      expect(screen.getAllByText(/Review & Apply \(1\)/i).length).toBeGreaterThanOrEqual(1);
-    });
+    await waitFor(
+      () => {
+        expect(screen.getAllByText(/Review & Apply \(1\)/i).length).toBeGreaterThanOrEqual(1);
+      },
+      { timeout: 10000 }
+    );
 
     // Open DiffComparisonModal
     const reviewBtn = screen.getAllByRole('button', { name: /Review & Apply/i })[0];

@@ -9,12 +9,15 @@ import type { ResumeListItem } from '../types/resume.types';
 import { ResumeCard } from '../components/ResumeList/ResumeCard';
 import { DeleteResumeModal } from '../components/ResumeList/DeleteResumeModal';
 import { RenameResumeModal } from '../components/ResumeList/RenameResumeModal';
+import { ResumeImportModal } from '../components/ResumeImportModal/ResumeImportModal';
+import type { ResumeData } from '../types/resume.types';
 import {
   Plus,
   FileText,
   Sparkles,
   ShieldCheck,
   Search,
+  UploadCloud,
 } from 'lucide-react';
 
 export const ResumeListPage: React.FC = () => {
@@ -29,6 +32,7 @@ export const ResumeListPage: React.FC = () => {
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; title: string } | null>(null);
   const [renameTarget, setRenameTarget] = useState<{ id: string; title: string } | null>(null);
   const [isCreating, setIsCreating] = useState(false);
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
 
   const effectiveUserId = user?.id || 'demo_user';
 
@@ -47,6 +51,10 @@ export const ResumeListPage: React.FC = () => {
   useEffect(() => {
     loadResumes();
   }, [effectiveUserId]);
+
+  const handleImportSuccess = (newResume: ResumeData) => {
+    navigate(`/dashboard/resumes/${newResume.id}/edit`);
+  };
 
   const handleCreateNew = async () => {
     setIsCreating(true);
@@ -136,6 +144,14 @@ export const ResumeListPage: React.FC = () => {
           <Button
             variant="outline"
             size="sm"
+            onClick={() => setIsImportModalOpen(true)}
+            leftIcon={<UploadCloud className="w-3.5 h-3.5 text-black" />}
+          >
+            Import Resume
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
             onClick={handleCreateSample}
             isLoading={isCreating}
             leftIcon={<Sparkles className="w-3.5 h-3.5 text-black" />}
@@ -198,6 +214,13 @@ export const ResumeListPage: React.FC = () => {
             </Button>
             <Button
               variant="outline"
+              onClick={() => setIsImportModalOpen(true)}
+              leftIcon={<UploadCloud className="w-4 h-4 text-black" />}
+            >
+              Import from Device
+            </Button>
+            <Button
+              variant="outline"
               onClick={handleCreateSample}
               leftIcon={<Sparkles className="w-4 h-4 text-black" />}
             >
@@ -254,6 +277,14 @@ export const ResumeListPage: React.FC = () => {
           currentTitle={renameTarget.title}
         />
       )}
+
+      {/* Import Resume Modal */}
+      <ResumeImportModal
+        isOpen={isImportModalOpen}
+        onClose={() => setIsImportModalOpen(false)}
+        userId={effectiveUserId}
+        onImportSuccess={handleImportSuccess}
+      />
     </div>
   );
 };
