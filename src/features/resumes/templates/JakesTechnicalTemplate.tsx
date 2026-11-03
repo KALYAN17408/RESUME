@@ -137,9 +137,13 @@ export const JakesTechnicalTemplate: React.FC<TemplateProps> = ({ data }) => {
                     </a>
                   )}
                   {proj.description && (
-                    <p className="text-[10px] mt-0.5 text-black leading-relaxed">
-                      • {proj.description}
-                    </p>
+                    <div className="text-[10px] mt-0.5 text-black leading-relaxed">
+                      {proj.description.split('\n').map((line, lIdx) => (
+                        <p key={lIdx}>
+                          {line.startsWith('•') || line.startsWith('-') ? line : `• ${line}`}
+                        </p>
+                      ))}
+                    </div>
                   )}
                 </div>
               ))}

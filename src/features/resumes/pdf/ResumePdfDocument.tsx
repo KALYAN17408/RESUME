@@ -391,9 +391,13 @@ export const ResumePdfDocument: React.FC<ResumePdfDocumentProps> = ({ data }) =>
                   </Link>
                 )}
                 {proj.description && (
-                  <Text style={{ fontFamily: baseFont, fontSize: 8.8, color: '#1e293b', marginTop: 1 }}>
-                    • {proj.description}
-                  </Text>
+                  <View style={{ marginTop: 1 }}>
+                    {proj.description.split('\n').map((line, lIdx) => (
+                      <Text key={lIdx} style={{ fontFamily: baseFont, fontSize: 8.8, color: '#1e293b', marginTop: 1 }}>
+                        {line.startsWith('•') || line.startsWith('-') ? line : `• ${line}`}
+                      </Text>
+                    ))}
+                  </View>
                 )}
               </View>
             ))}

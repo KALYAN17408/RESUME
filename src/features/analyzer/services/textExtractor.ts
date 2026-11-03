@@ -62,10 +62,37 @@ export async function extractTextFromPdf(arrayBuffer: ArrayBuffer): Promise<Extr
     for (let pageNum = 1; pageNum <= numPages; pageNum++) {
       const page = await pdfDoc.getPage(pageNum);
       const textContent = await page.getTextContent();
-      const pageText = textContent.items
-        .map((item: any) => item.str || '')
-        .join(' ');
-      pageTexts.push(pageText);
+      
+      let pageText = '';
+      let lastY: number | null = null;
+      for (const item of textContent.items as any[]) {
+        if (!item.str && !item.hasEOL) continue;
+        const currentY = item.transform && Array.isArray(item.transform) ? item.transform[5] : null;
+        
+        // When vertical Y position changes significantly, insert a newline
+        if (lastY !== null && currentY !== null && Math.abs(currentY - lastY) > 3.5) {
+          if (!pageText.endsWith('\n')) {
+            pageText += '\n';
+          }
+        } else if (
+          pageText.length > 0 &&
+          !pageText.endsWith('\n') &&
+          !pageText.endsWith(' ') &&
+          item.str &&
+          !item.str.startsWith(' ')
+        ) {
+          pageText += ' ';
+        }
+        
+        pageText += item.str || '';
+        if (item.hasEOL && !pageText.endsWith('\n')) {
+          pageText += '\n';
+        }
+        if (currentY !== null) {
+          lastY = currentY;
+        }
+      }
+      pageTexts.push(pageText.trim());
     }
 
     const fullText = pageTexts.join('\n\n').trim();

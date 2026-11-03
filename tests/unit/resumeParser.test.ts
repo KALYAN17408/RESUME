@@ -129,4 +129,87 @@ GPA: 3.8 | Dean's Honor List
     expect(imported.educations[0].institution).toBe('MIT');
     expect(imported.skillCategories[0].skills).toContain('AWS');
   });
+
+  it('correctly parses candidate resume with Career Objective, Projects, Internships, Categorized Skills, and Certifications', () => {
+    const candidateResumeText = `KALYAN CHANDANA
+kalyanchandana926@gmail.com — +91 9000469422
+linkedin.com/in/kalyan-chandana — github.com/KALYAN17408 — thekalyanportfolio.netlify.app
+
+Career Objective
+Aspiring Software Developer with a strong foundation in Python, SQL, HTML, CSS, GitHub, and modern web development. Experienced in building responsive web applications and AI-assisted software projects using React, TypeScript, Supabase, and serverless technologies.
+
+Education
+Sri Vasavi Institute of Engineering and Technology, Nandamuru 2022 – 2026
+Bachelor of Technology in Electronics and Communication Engineering CGPA: 7.7/10
+
+Projects
+VAKVA INTELLIGENCE – VAKVA GROUP vakvagroup.in
+• Developed a modern, responsive web platform for VAKVA GROUP using React 18, TypeScript, Vite, and Tailwind CSS.
+• Implemented GSAP-powered kinetic typography animations and responsive layouts for a high-performance user experience.
+
+RESUMEFORGE – ATS Friendly Resume Builder theresumeforge.netlify.app
+• Developed a responsive ATS-friendly resume builder web application using React.js and modern front-end development practices.
+
+Internships
+Python Internship – BIST PVT LTD
+• Completed a Basics of Python virtual internship with hands-on projects and exercises to strengthen Python programming skills.
+
+Technical Skills
+Languages: Python, SQL
+Frontend: HTML, CSS, JavaScript (Basics)
+Backend / Database: Supabase, Supabase Edge Functions
+Tools & Platforms: GitHub, Netlify, Excel
+Development: AI-assisted development workflows, Responsive Web Development
+
+Certifications
+• Data Analysis Virtual Internship – Deloitte
+• Python Internship – BIST PVT LTD`;
+
+    const resume = parseResumeFromText(candidateResumeText, 'user_kalyan', 'jakes-technical', 'Kalyan Chandana Resume');
+
+    expect(resume.personalInfo.fullName).toBe('KALYAN CHANDANA');
+    expect(resume.personalInfo.email).toBe('kalyanchandana926@gmail.com');
+    expect(resume.personalInfo.phone).toBe('+91 9000469422');
+    expect(resume.personalInfo.linkedinUrl).toContain('linkedin.com/in/kalyan-chandana');
+    expect(resume.personalInfo.githubUrl).toContain('github.com/KALYAN17408');
+    expect(resume.personalInfo.portfolioUrl).toContain('thekalyanportfolio.netlify.app');
+    expect(resume.personalInfo.summary).toContain('Aspiring Software Developer with a strong foundation');
+    expect(resume.personalInfo.professionalTitle).toBe('Software Developer');
+
+    // Education
+    expect(resume.educations).toHaveLength(1);
+    expect(resume.educations[0].institution).toContain('Sri Vasavi Institute');
+    expect(resume.educations[0].degree).toContain('Bachelor of Technology');
+    expect(resume.educations[0].gpa).toBe('CGPA: 7.7/10');
+    expect(resume.educations[0].startDate).toBe('2022');
+    expect(resume.educations[0].endDate).toBe('2026');
+
+    // Projects
+    expect(resume.projects).toHaveLength(2);
+    expect(resume.projects[0].name).toContain('VAKVA INTELLIGENCE');
+    expect(resume.projects[0].url).toBe('https://vakvagroup.in');
+    expect(resume.projects[0].description).toContain('Developed a modern, responsive web platform');
+    expect(resume.projects[1].name).toContain('RESUMEFORGE');
+    expect(resume.projects[1].url).toBe('https://theresumeforge.netlify.app');
+
+    // Internships / Experience
+    expect(resume.experiences).toHaveLength(1);
+    expect(resume.experiences[0].jobTitle).toContain('Python Internship');
+    expect(resume.experiences[0].company).toContain('BIST PVT LTD');
+    expect(resume.experiences[0].employmentType).toBe('Internship');
+
+    // Skills
+    expect(resume.skillCategories).toHaveLength(5);
+    expect(resume.skillCategories[0].name).toBe('Languages');
+    expect(resume.skillCategories[0].skills).toEqual(['Python', 'SQL']);
+    expect(resume.skillCategories[1].name).toBe('Frontend');
+    expect(resume.skillCategories[2].name).toBe('Backend / Database');
+
+    // Certifications
+    expect(resume.certifications).toHaveLength(2);
+    expect(resume.certifications[0].name).toBe('Data Analysis Virtual Internship');
+    expect(resume.certifications[0].issuer).toBe('Deloitte');
+    expect(resume.certifications[1].name).toBe('Python Internship');
+    expect(resume.certifications[1].issuer).toBe('BIST PVT LTD');
+  });
 });

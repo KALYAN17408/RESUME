@@ -176,9 +176,13 @@ export const StanfordEditorialTemplate: React.FC<TemplateProps> = ({ data }) => 
                     </a>
                   )}
                   {proj.description && (
-                    <p className="text-[9.5px] mt-0.5 text-slate-700 leading-relaxed">
-                      • {proj.description}
-                    </p>
+                    <div className="text-[9.5px] mt-0.5 text-slate-700 leading-relaxed">
+                      {proj.description.split('\n').map((line, lIdx) => (
+                        <p key={lIdx}>
+                          {line.startsWith('•') || line.startsWith('-') ? line : `• ${line}`}
+                        </p>
+                      ))}
+                    </div>
                   )}
                 </div>
               ))}
