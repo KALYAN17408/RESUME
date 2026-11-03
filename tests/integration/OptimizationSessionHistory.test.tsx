@@ -198,8 +198,36 @@ describe('OptimizationSessionHistory Component', () => {
     fireEvent.click(saveButton);
 
     await waitFor(() => {
-      expect(OptimizationSessionService.renameSession).toHaveBeenCalledWith('session-1', 'Stripe Staff Role 2026', 'user_123');
+      expect(OptimizationSessionService.renameSession).toHaveBeenCalledWith('session-1', 'user_123', 'Stripe Staff Role 2026');
       expect(screen.getByText('Stripe Staff Role 2026')).toBeInTheDocument();
+    });
+  });
+
+  it('allows duplicating a session', async () => {
+    vi.spyOn(OptimizationSessionService, 'duplicateSession').mockResolvedValue({
+      ...fullMockSession,
+      id: 'session-1-copy',
+      sessionName: 'Stripe Senior Engineer Optimization (Copy)',
+    });
+
+    render(
+      <OptimizationSessionHistory
+        isOpen={true}
+        onClose={vi.fn()}
+        userId="user_123"
+        onSelectSession={vi.fn()}
+      />
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Stripe Senior Engineer Optimization')).toBeInTheDocument();
+    });
+
+    const duplicateButtons = screen.getAllByTitle('Duplicate session');
+    fireEvent.click(duplicateButtons[0]);
+
+    await waitFor(() => {
+      expect(OptimizationSessionService.duplicateSession).toHaveBeenCalledWith('session-1', 'user_123');
     });
   });
 

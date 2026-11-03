@@ -1,3 +1,4 @@
+import { ZodError } from 'zod';
 import { supabase } from '@/lib/supabase/client';
 import { getSupabaseEnv } from '@/lib/supabase/env';
 import type {
@@ -123,8 +124,13 @@ export class OptimizationSessionService {
     // 1. Validate session input
     try {
       saveSessionInputSchema.parse(session);
-    } catch (valErr: any) {
-      const msg = valErr.errors?.[0]?.message || 'Invalid session payload';
+    } catch (valErr: unknown) {
+      const msg =
+        valErr instanceof ZodError
+          ? valErr.errors[0]?.message || 'Invalid session payload'
+          : valErr instanceof Error
+          ? valErr.message
+          : 'Invalid session payload';
       return { success: false, isRemote: false, error: msg };
     }
 

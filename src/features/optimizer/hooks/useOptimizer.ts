@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { ZodError } from 'zod';
 import type { ResumeData } from '@/features/resumes/types/resume.types';
 import { ResumeService } from '@/features/resumes/services/resumeService';
 import {
@@ -27,6 +28,16 @@ import {
 export interface UseOptimizerOptions {
   userId?: string;
   enableAutoSave?: boolean;
+}
+
+function getErrorMessage(err: unknown, fallback: string): string {
+  if (err instanceof ZodError) {
+    return err.errors[0]?.message || fallback;
+  }
+  if (err instanceof Error) {
+    return err.message;
+  }
+  return fallback;
 }
 
 export interface StagedBulletItem {
@@ -170,8 +181,8 @@ export function useOptimizer(options?: UseOptimizerOptions) {
         targetCompany: companyName,
       });
       setValidationError(null);
-    } catch (err: any) {
-      setValidationError(err.errors?.[0]?.message || 'Invalid job description or input');
+    } catch (err: unknown) {
+      setValidationError(getErrorMessage(err, 'Invalid job description or input'));
       return;
     }
 
@@ -189,9 +200,9 @@ export function useOptimizer(options?: UseOptimizerOptions) {
         allowDeterministicFallback: true,
       });
       setSummaryResult(result);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Summary optimization error:', err);
-      setSummaryError(err.message || 'Failed to generate optimized summary alternatives.');
+      setSummaryError(getErrorMessage(err, 'Failed to generate optimized summary alternatives.'));
     } finally {
       setIsOptimizingSummary(false);
     }
@@ -215,8 +226,8 @@ export function useOptimizer(options?: UseOptimizerOptions) {
           jobDescription: jobDescription || 'Standard technical evaluation',
         });
         setBulletError(null);
-      } catch (err: any) {
-        setBulletError(err.errors?.[0]?.message || 'Bullet text must be at least 5 characters');
+      } catch (err: unknown) {
+        setBulletError(getErrorMessage(err, 'Bullet text must be at least 5 characters'));
         return;
       }
 
@@ -238,9 +249,9 @@ export function useOptimizer(options?: UseOptimizerOptions) {
           ...prev,
           [bulletKey]: result,
         }));
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error('Bullet rewrite error:', err);
-        setBulletError(err.message || 'Failed to rewrite selected bullet.');
+        setBulletError(getErrorMessage(err, 'Failed to rewrite selected bullet.'));
       } finally {
         setIsRewritingBullet(false);
       }
@@ -261,8 +272,8 @@ export function useOptimizer(options?: UseOptimizerOptions) {
         resumeTextOrSkills: selectedResume.personalInfo.summary || selectedResume.title,
       });
       setValidationError(null);
-    } catch (err: any) {
-      setValidationError(err.errors?.[0]?.message || 'Invalid job description');
+    } catch (err: unknown) {
+      setValidationError(getErrorMessage(err, 'Invalid job description'));
       return;
     }
 
@@ -286,9 +297,9 @@ export function useOptimizer(options?: UseOptimizerOptions) {
         allowDeterministicFallback: true,
       });
       setKeywordResult(result);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Keyword suggestion error:', err);
-      setKeywordError(err.message || 'Failed to analyze keywords.');
+      setKeywordError(getErrorMessage(err, 'Failed to analyze keywords.'));
     } finally {
       setIsSuggestingKeywords(false);
     }
@@ -375,8 +386,8 @@ export function useOptimizer(options?: UseOptimizerOptions) {
         jobDescription,
       });
       setValidationError(null);
-    } catch (err: any) {
-      setValidationError(err.errors?.[0]?.message || 'Invalid job description or parameters');
+    } catch (err: unknown) {
+      setValidationError(getErrorMessage(err, 'Invalid job description or parameters'));
       return;
     }
 
@@ -410,9 +421,9 @@ export function useOptimizer(options?: UseOptimizerOptions) {
 
       setCoverLetterResult(result);
       setEditedCoverLetter(finalContent);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Cover letter generation error:', err);
-      setCoverLetterError(err.message || 'Failed to generate tailored cover letter.');
+      setCoverLetterError(getErrorMessage(err, 'Failed to generate tailored cover letter.'));
     } finally {
       setIsGeneratingCoverLetter(false);
     }

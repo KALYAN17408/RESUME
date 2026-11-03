@@ -14,6 +14,7 @@ import {
   Search,
   Plus,
   Trash2,
+  Copy,
   Edit2,
   Check,
   X,
@@ -154,7 +155,7 @@ export const OptimizationSessionHistory: React.FC<OptimizationSessionHistoryProp
     if (!editingName.trim()) return;
     setIsRenaming(true);
     try {
-      const ok = await OptimizationSessionService.renameSession(sessionId, editingName.trim(), userId);
+      const ok = await OptimizationSessionService.renameSession(sessionId, userId, editingName.trim());
       if (ok) {
         setSessions((prev) =>
           prev.map((s) => (s.id === sessionId ? { ...s, sessionName: editingName.trim() } : s))
@@ -168,6 +169,20 @@ export const OptimizationSessionHistory: React.FC<OptimizationSessionHistoryProp
       setError(`Failed to rename: ${msg}`);
     } finally {
       setIsRenaming(false);
+    }
+  };
+
+  const handleDuplicateSession = async (sessionId: string) => {
+    try {
+      const duplicated = await OptimizationSessionService.duplicateSession(sessionId, userId);
+      if (duplicated) {
+        await fetchSessions();
+      } else {
+        setError('Failed to duplicate session');
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      setError(`Failed to duplicate: ${msg}`);
     }
   };
 
@@ -427,13 +442,22 @@ export const OptimizationSessionHistory: React.FC<OptimizationSessionHistoryProp
                           </Button>
                         </div>
                       ) : (
-                        <button
-                          onClick={() => setDeletingSessionId(session.id)}
-                          className="text-zinc-400 hover:text-rose-600 transition-colors p-1"
-                          title="Delete session"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => handleDuplicateSession(session.id)}
+                            className="text-zinc-400 hover:text-black transition-colors p-1"
+                            title="Duplicate session"
+                          >
+                            <Copy className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            onClick={() => setDeletingSessionId(session.id)}
+                            className="text-zinc-400 hover:text-rose-600 transition-colors p-1"
+                            title="Delete session"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       )}
                     </div>
 
