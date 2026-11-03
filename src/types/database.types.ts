@@ -282,6 +282,63 @@ export interface Database {
         };
         Relationships: [];
       };
+      resume_optimization_sessions: {
+        Row: {
+          id: string;
+          user_id: string;
+          resume_id: string | null;
+          session_name: string;
+          job_title: string | null;
+          company_name: string | null;
+          job_description: string;
+          resume_version_id: string | null;
+          original_resume_snapshot: Json;
+          optimization_results: Json;
+          staged_changes: Json;
+          cover_letter: Json;
+          status: 'draft' | 'in_progress' | 'partially_applied' | 'completed' | 'archived';
+          created_at: string;
+          updated_at: string;
+          last_opened_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          resume_id?: string | null;
+          session_name?: string;
+          job_title?: string | null;
+          company_name?: string | null;
+          job_description: string;
+          resume_version_id?: string | null;
+          original_resume_snapshot?: Json;
+          optimization_results?: Json;
+          staged_changes?: Json;
+          cover_letter?: Json;
+          status?: 'draft' | 'in_progress' | 'partially_applied' | 'completed' | 'archived';
+          created_at?: string;
+          updated_at?: string;
+          last_opened_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          resume_id?: string | null;
+          session_name?: string;
+          job_title?: string | null;
+          company_name?: string | null;
+          job_description?: string;
+          resume_version_id?: string | null;
+          original_resume_snapshot?: Json;
+          optimization_results?: Json;
+          staged_changes?: Json;
+          cover_letter?: Json;
+          status?: 'draft' | 'in_progress' | 'partially_applied' | 'completed' | 'archived';
+          created_at?: string;
+          updated_at?: string;
+          last_opened_at?: string;
+        };
+        Relationships: [];
+      };
     };
   };
 }

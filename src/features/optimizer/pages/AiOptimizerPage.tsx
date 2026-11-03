@@ -10,7 +10,9 @@ import { BulletRewriterCard } from '../components/BulletRewriterCard';
 import { KeywordSuggestionsCard } from '../components/KeywordSuggestionsCard';
 import { CoverLetterGeneratorCard } from '../components/CoverLetterGeneratorCard';
 import { DiffComparisonModal } from '../components/DiffComparisonModal';
+import { OptimizationSessionHistory } from '../components/OptimizationSessionHistory';
 import type { ApprovedChangesPayload } from '../services/resumeMergeService';
+import type { OptimizationSession } from '../types/optimizer.types';
 import { useOptimizer } from '../hooks/useOptimizer';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -20,10 +22,12 @@ import {
   Briefcase,
   Building,
   AlertCircle,
+  AlertTriangle,
   CheckCircle2,
   ListOrdered,
   Tag,
   Mail,
+  History,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
@@ -40,6 +44,15 @@ export const AiOptimizerPage: React.FC = () => {
     jobTitle,
     companyName,
     validationError,
+    // Session states & actions
+    currentSessionId,
+    sessionName,
+    saveStatus,
+    isStaleResumeVersion,
+    loadSession,
+    saveCurrentSession,
+    newSession,
+    dismissStaleResumeWarning,
     isOptimizingSummary,
     summaryResult,
     summaryError,
@@ -91,11 +104,39 @@ export const AiOptimizerPage: React.FC = () => {
     stageBullet,
     unstageBullet,
     resetSession,
-  } = useOptimizer();
+  } = useOptimizer({ userId: effectiveUserId, enableAutoSave: true });
 
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
   const [isDiffModalOpen, setIsDiffModalOpen] = useState(false);
+  const [isHistoryModalOpen, setIsHistoryModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'summary' | 'bullets' | 'keywords' | 'cover-letter'>('summary');
+
+  const handleSelectSession = async (session: OptimizationSession) => {
+    let freshResume = null;
+    if (session.resumeId) {
+      freshResume = await ResumeService.getResume(session.resumeId, effectiveUserId);
+    }
+    loadSession(session, freshResume);
+    addToast({
+      message: `Loaded session "${session.sessionName}".`,
+      type: 'info',
+    });
+  };
+
+  const handleSaveSession = async () => {
+    const res = await saveCurrentSession(effectiveUserId);
+    if (res.success) {
+      addToast({
+        message: `Saved session "${res.session?.sessionName}".`,
+        type: 'success',
+      });
+    } else {
+      addToast({
+        message: `Failed to save session: ${res.error}`,
+        type: 'error',
+      });
+    }
+  };
 
   const handleApplyApprovedChanges = async (approvedPayload: ApprovedChangesPayload) => {
     try {
@@ -153,17 +194,46 @@ export const AiOptimizerPage: React.FC = () => {
     <div className="space-y-6 animate-fade-in">
       {/* Top Header */}
       {selectedResume ? (
-        <OptimizerHeader
-          resumeTitle={selectedResume.title}
-          resumeId={selectedResume.id}
-          targetJobTitle={jobTitle || selectedResume.targetRole}
-          companyName={companyName}
-          totalStagedCount={totalStagedCount}
-          stagedResumeChangesCount={stagedResumeChangesCount}
-          onOpenDiffModal={() => setIsDiffModalOpen(true)}
-          onChangeResume={() => setIsSelectorOpen(true)}
-          onReset={resetSession}
-        />
+        <div className="space-y-4">
+          <OptimizerHeader
+            resumeTitle={selectedResume.title}
+            resumeId={selectedResume.id}
+            targetJobTitle={jobTitle || selectedResume.targetRole}
+            companyName={companyName}
+            sessionName={sessionName}
+            saveStatus={saveStatus}
+            totalStagedCount={totalStagedCount}
+            stagedResumeChangesCount={stagedResumeChangesCount}
+            onOpenDiffModal={() => setIsDiffModalOpen(true)}
+            onOpenSessionsHistory={() => setIsHistoryModalOpen(true)}
+            onSaveSession={handleSaveSession}
+            onChangeResume={() => setIsSelectorOpen(true)}
+            onReset={resetSession}
+          />
+
+          {/* Stale Resume Version Warning Banner */}
+          {isStaleResumeVersion && (
+            <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+              <div className="flex items-start gap-3">
+                <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-xs font-bold text-amber-900">
+                    Stale Resume Version Detected
+                  </p>
+                  <p className="text-xs text-amber-800 mt-0.5 leading-relaxed">
+                    The underlying resume has been modified since this session was created. Review diffs carefully before applying optimizations.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={dismissStaleResumeWarning}
+                className="text-xs font-semibold px-3 py-1.5 rounded-xl bg-amber-200 hover:bg-amber-300 text-amber-950 transition-colors shrink-0 self-end sm:self-center"
+              >
+                Acknowledge & Continue
+              </button>
+            </div>
+          )}
+        </div>
       ) : (
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
@@ -182,6 +252,16 @@ export const AiOptimizerPage: React.FC = () => {
               Tailor and optimize your resume against specific target job postings. Generate truthful professional summaries, strengthen bullets with Google's XYZ formula, and stage approved improvements.
             </p>
           </div>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsHistoryModalOpen(true)}
+            className="gap-1.5 text-xs self-start sm:self-auto shrink-0"
+          >
+            <History className="w-3.5 h-3.5" />
+            <span>Saved Sessions</span>
+          </Button>
         </div>
       )}
 
@@ -543,6 +623,18 @@ export const AiOptimizerPage: React.FC = () => {
           confirmedSkills={confirmedSkills}
           onApplyApprovedChanges={handleApplyApprovedChanges}
           isApplying={isApplyingChanges}
+        />
+      )}
+
+      {/* Session History Modal */}
+      {effectiveUserId && (
+        <OptimizationSessionHistory
+          isOpen={isHistoryModalOpen}
+          onClose={() => setIsHistoryModalOpen(false)}
+          userId={effectiveUserId}
+          currentSessionId={currentSessionId}
+          onSelectSession={handleSelectSession}
+          onNewSession={newSession}
         />
       )}
     </div>

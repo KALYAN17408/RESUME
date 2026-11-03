@@ -11,6 +11,10 @@ import {
   ScanSearch,
   CheckCircle2,
   Sparkles,
+  History,
+  Save,
+  AlertCircle,
+  Loader2,
 } from 'lucide-react';
 
 interface OptimizerHeaderProps {
@@ -18,9 +22,13 @@ interface OptimizerHeaderProps {
   resumeId?: string;
   targetJobTitle?: string;
   companyName?: string;
+  sessionName?: string;
+  saveStatus?: 'idle' | 'saving' | 'saved' | 'error';
   totalStagedCount: number;
   stagedResumeChangesCount?: number;
   onOpenDiffModal?: () => void;
+  onOpenSessionsHistory?: () => void;
+  onSaveSession?: () => void;
   onChangeResume: () => void;
   onReset: () => void;
 }
@@ -30,9 +38,13 @@ export const OptimizerHeader: React.FC<OptimizerHeaderProps> = ({
   resumeId,
   targetJobTitle,
   companyName,
+  sessionName,
+  saveStatus = 'idle',
   totalStagedCount,
   stagedResumeChangesCount = 0,
   onOpenDiffModal,
+  onOpenSessionsHistory,
+  onSaveSession,
   onChangeResume,
   onReset,
 }) => {
@@ -50,10 +62,33 @@ export const OptimizerHeader: React.FC<OptimizerHeaderProps> = ({
             <Badge variant="outline" size="sm" className="font-mono text-[10px]">
               Grounded Heuristics
             </Badge>
+            {sessionName && (
+              <span className="text-[11px] font-medium px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-800 border border-zinc-200">
+                {sessionName}
+              </span>
+            )}
             {totalStagedCount > 0 && (
               <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-black text-white flex items-center gap-1 shadow-xs">
                 <CheckCircle2 className="w-3 h-3" />
                 <span>{totalStagedCount} change{totalStagedCount > 1 ? 's' : ''} staged</span>
+              </span>
+            )}
+            {saveStatus === 'saving' && (
+              <span className="text-[10px] text-zinc-500 flex items-center gap-1 font-mono">
+                <Loader2 className="w-3 h-3 animate-spin text-zinc-500" />
+                <span>Saving...</span>
+              </span>
+            )}
+            {saveStatus === 'saved' && (
+              <span className="text-[10px] text-emerald-600 flex items-center gap-1 font-mono">
+                <CheckCircle2 className="w-3 h-3" />
+                <span>Saved</span>
+              </span>
+            )}
+            {saveStatus === 'error' && (
+              <span className="text-[10px] text-rose-500 flex items-center gap-1 font-mono">
+                <AlertCircle className="w-3 h-3" />
+                <span>Save error</span>
               </span>
             )}
           </div>
@@ -115,6 +150,33 @@ export const OptimizerHeader: React.FC<OptimizerHeaderProps> = ({
             <ScanSearch className="w-3.5 h-3.5" />
             <span>ATS Analyzer</span>
           </Button>
+
+          {onOpenSessionsHistory && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onOpenSessionsHistory}
+              className="gap-1.5 text-xs"
+              title="View Optimization Sessions History"
+            >
+              <History className="w-3.5 h-3.5" />
+              <span>Sessions</span>
+            </Button>
+          )}
+
+          {onSaveSession && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={onSaveSession}
+              disabled={saveStatus === 'saving'}
+              className="gap-1.5 text-xs"
+              title="Save Optimization Session"
+            >
+              <Save className="w-3.5 h-3.5" />
+              <span>Save</span>
+            </Button>
+          )}
 
           <Button
             variant="outline"

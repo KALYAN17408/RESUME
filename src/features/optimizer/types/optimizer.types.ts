@@ -225,21 +225,93 @@ export interface StagedOptimizationChanges {
 /**
  * Optimization Session representation (database & local storage)
  */
+export type OptimizationSessionStatus =
+  | 'draft'
+  | 'in_progress'
+  | 'partially_applied'
+  | 'completed'
+  | 'archived';
+
+export interface OptimizationResultsState {
+  summaryResult: OptimizeSummaryResult | null;
+  bulletResults: Record<string, RewriteBulletResult>;
+  keywordResult: SuggestKeywordsResult | null;
+}
+
+export interface StagedChangesState {
+  stagedSummary: {
+    original: string;
+    selected: string;
+    tone: string;
+    approved: boolean;
+  } | null;
+  stagedBullets: Array<{
+    key: string;
+    sourceType: 'experience' | 'project';
+    sourceId: string;
+    sourceTitle: string;
+    bulletIndex: number;
+    original: string;
+    rewritten: string;
+    formula: string;
+    approved: boolean;
+  }>;
+  confirmedSkills: Array<{
+    skill: string;
+    category: string;
+    suggestedSection: 'skills' | 'experience' | 'summary' | 'projects';
+    approved: boolean;
+  }>;
+  learningGoals: string[];
+  rejectedKeywords: string[];
+}
+
+export interface CoverLetterState {
+  coverLetterResult: GenerateCoverLetterResult | null;
+  editedCoverLetter: string;
+  hiringManagerName: string;
+  additionalCoverLetterContext: string;
+  stagedCoverLetter: {
+    content: string;
+    subjectLine: string;
+    companyName: string;
+    jobTitle: string;
+    hiringManagerName?: string;
+    approved: boolean;
+  } | null;
+}
+
 export interface OptimizationSession {
   id: string;
   userId: string;
-  resumeId?: string;
-  jobTitle?: string;
-  companyName?: string;
+  resumeId: string | null;
+  resumeTitle?: string;
+  sessionName: string;
+  jobTitle: string;
+  companyName: string;
   jobDescription: string;
-  originalResumeSnapshot: Partial<ResumeData>;
-  optimizationResults: {
-    summaryResult?: OptimizeSummaryResult;
-    bulletResults?: Record<string, RewriteBulletResult>; // keyed by `${expOrProjId}_${bulletIndex}`
-    keywordResult?: SuggestKeywordsResult;
-  };
-  coverLetter?: string;
-  stagedChanges?: StagedOptimizationChanges;
+  resumeVersionId?: string | null;
+  originalResumeSnapshot: ResumeData | null;
+  optimizationResults: OptimizationResultsState;
+  stagedChanges: StagedChangesState;
+  coverLetter: CoverLetterState;
+  status: OptimizationSessionStatus;
   createdAt: string;
   updatedAt: string;
+  lastOpenedAt: string;
+}
+
+export interface OptimizationSessionListItem {
+  id: string;
+  userId: string;
+  resumeId: string | null;
+  resumeTitle?: string;
+  sessionName: string;
+  jobTitle?: string;
+  companyName?: string;
+  status: OptimizationSessionStatus;
+  stagedCount: number;
+  createdAt: string;
+  updatedAt: string;
+  lastOpenedAt: string;
 }

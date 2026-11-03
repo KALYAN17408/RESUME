@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import type { ResumeData } from '@/features/resumes/types/resume.types';
 import { ResumeService } from '@/features/resumes/services/resumeService';
 import {
@@ -12,14 +12,22 @@ import type {
   SuggestKeywordsResult,
   GenerateCoverLetterResult,
   UserTriageStatus,
+  OptimizationSession,
+  OptimizationSessionStatus,
 } from '../types/optimizer.types';
 import { AiOptimizerService } from '../services/aiOptimizerService';
+import { OptimizationSessionService } from '../services/optimizationSessionService';
 import {
   rewriteBulletInputSchema,
   optimizeSummaryInputSchema,
   suggestKeywordsInputSchema,
   generateCoverLetterInputSchema,
 } from '../validation/optimizerSchemas';
+
+export interface UseOptimizerOptions {
+  userId?: string;
+  enableAutoSave?: boolean;
+}
 
 export interface StagedBulletItem {
   key: string;
@@ -79,12 +87,23 @@ Qualifications:
 • Excellent problem-solving, communication, and cross-functional collaboration skills.
 • Bachelor’s degree in Computer Science, Software Engineering, or equivalent practical experience.`;
 
-export function useOptimizer() {
+export function useOptimizer(options?: UseOptimizerOptions) {
   const [selectedResume, setSelectedResume] = useState<ResumeData | null>(null);
   const [jobDescription, setJobDescription] = useState<string>('');
   const [jobTitle, setJobTitle] = useState<string>('');
   const [companyName, setCompanyName] = useState<string>('');
   const [validationError, setValidationError] = useState<string | null>(null);
+
+  // Session persistence state
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
+  const [sessionName, setSessionName] = useState<string>('');
+  const [sessionStatus, setSessionStatus] = useState<OptimizationSessionStatus>('draft');
+  const [originalResumeSnapshot, setOriginalResumeSnapshot] = useState<ResumeData | null>(null);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [lastSavedAt, setLastSavedAt] = useState<string | null>(null);
+  const [isStaleResumeVersion, setIsStaleResumeVersion] = useState<boolean>(false);
+  const isRestoringRef = useRef<boolean>(false);
+  const sessionCreatedAtRef = useRef<string | null>(null);
 
   // Summary generation state
   const [isOptimizingSummary, setIsOptimizingSummary] = useState(false);
@@ -122,6 +141,7 @@ export function useOptimizer() {
   // Selection handlers
   const selectResume = useCallback((resume: ResumeData) => {
     setSelectedResume(resume);
+    setOriginalResumeSnapshot((prev) => prev || resume);
     setValidationError(null);
     if (!jobTitle && resume.targetRole) {
       setJobTitle(resume.targetRole);
@@ -554,12 +574,20 @@ export function useOptimizer() {
           );
         }
 
+        const remainingResumeChanges =
+          (approvedPayload.summary ? 0 : (stagedSummary ? 1 : 0)) +
+          stagedBullets.filter((b) => !approvedPayload.bullets?.some((ab) => ab.key === b.key)).length +
+          confirmedSkills.filter((s) => !approvedPayload.skills?.some((as) => as.skill.toLowerCase() === s.skill.toLowerCase())).length;
+
+        const nextStatus: OptimizationSessionStatus = remainingResumeChanges === 0 ? 'completed' : 'partially_applied';
+        setSessionStatus(nextStatus);
+
         return mergeResult;
       } finally {
         setIsApplyingChanges(false);
       }
     },
-    [selectedResume]
+    [selectedResume, stagedSummary, stagedBullets, confirmedSkills]
   );
 
   const resetSession = useCallback(() => {
@@ -581,6 +609,218 @@ export function useOptimizer() {
     setStagedCoverLetter(null);
     setStagedSummary(null);
     setStagedBullets([]);
+    setCurrentSessionId(null);
+    setSessionName('');
+    setSessionStatus('draft');
+    setOriginalResumeSnapshot(null);
+    setIsStaleResumeVersion(false);
+    setLastSavedAt(null);
+    setSaveStatus('idle');
+    sessionCreatedAtRef.current = null;
+  }, []);
+
+  const loadSession = useCallback(
+    (session: OptimizationSession, freshResume?: ResumeData | null) => {
+      isRestoringRef.current = true;
+      setCurrentSessionId(session.id);
+      setSessionName(session.sessionName);
+      setSessionStatus(session.status);
+      sessionCreatedAtRef.current = session.createdAt;
+      setJobDescription(session.jobDescription || '');
+      setJobTitle(session.jobTitle || '');
+      setCompanyName(session.companyName || '');
+
+      // Results
+      setSummaryResult(session.optimizationResults?.summaryResult || null);
+      setBulletResults(session.optimizationResults?.bulletResults || {});
+      setKeywordResult(session.optimizationResults?.keywordResult || null);
+
+      // Staged Items
+      setStagedSummary(session.stagedChanges?.stagedSummary || null);
+      setStagedBullets(session.stagedChanges?.stagedBullets || []);
+      setConfirmedSkills(session.stagedChanges?.confirmedSkills || []);
+      setLearningGoals(session.stagedChanges?.learningGoals || []);
+      setRejectedKeywords(session.stagedChanges?.rejectedKeywords || []);
+
+      // Cover Letter
+      setCoverLetterResult(session.coverLetter?.coverLetterResult || null);
+      setEditedCoverLetter(session.coverLetter?.editedCoverLetter || '');
+      setHiringManagerName(session.coverLetter?.hiringManagerName || '');
+      setAdditionalCoverLetterContext(session.coverLetter?.additionalCoverLetterContext || '');
+      setStagedCoverLetter(session.coverLetter?.stagedCoverLetter || null);
+
+      // Snapshot & Resume
+      setOriginalResumeSnapshot(session.originalResumeSnapshot || null);
+      const activeResume = freshResume !== undefined ? freshResume : (session.originalResumeSnapshot || null);
+      if (activeResume) {
+        setSelectedResume(activeResume);
+      }
+
+      // Stale Resume Warning Detection
+      if (session.originalResumeSnapshot && freshResume) {
+        const isStale = Boolean(
+          session.originalResumeSnapshot.updatedAt &&
+          freshResume.updatedAt &&
+          session.originalResumeSnapshot.updatedAt !== freshResume.updatedAt
+        );
+        setIsStaleResumeVersion(isStale);
+      } else {
+        setIsStaleResumeVersion(false);
+      }
+
+      setLastSavedAt(session.updatedAt);
+      setSaveStatus('saved');
+      setValidationError(null);
+
+      setTimeout(() => {
+        isRestoringRef.current = false;
+      }, 100);
+    },
+    []
+  );
+
+  const saveCurrentSession = useCallback(
+    async (
+      userIdOverride?: string,
+      customStatus?: OptimizationSessionStatus
+    ): Promise<{ success: boolean; session?: OptimizationSession; error?: string }> => {
+      const effectiveUser = userIdOverride || options?.userId || 'demo_user';
+      if (!selectedResume && !jobDescription) {
+        return { success: false, error: 'Cannot save an empty session.' };
+      }
+
+      setSaveStatus('saving');
+
+      const sessionId = currentSessionId || crypto.randomUUID();
+      const now = new Date().toISOString();
+
+      const hasStagedItems = Boolean(
+        stagedSummary || stagedBullets.length > 0 || confirmedSkills.length > 0 || stagedCoverLetter
+      );
+      const calculatedStatus: OptimizationSessionStatus =
+        customStatus ||
+        sessionStatus ||
+        (hasStagedItems ? 'in_progress' : 'draft');
+
+      const sessionTitle =
+        sessionName.trim() ||
+        (selectedResume
+          ? `${selectedResume.title} - ${jobTitle || 'Optimization'}`
+          : jobTitle
+          ? `${jobTitle} Optimization`
+          : 'Untitled Session');
+
+      const sessionPayload: OptimizationSession = {
+        id: sessionId,
+        userId: effectiveUser,
+        resumeId: selectedResume?.id || null,
+        resumeTitle: selectedResume?.title,
+        sessionName: sessionTitle,
+        jobTitle: jobTitle || '',
+        companyName: companyName || '',
+        jobDescription: jobDescription || '',
+        resumeVersionId: selectedResume?.id || null,
+        originalResumeSnapshot: originalResumeSnapshot || selectedResume || null,
+        optimizationResults: {
+          summaryResult,
+          bulletResults,
+          keywordResult,
+        },
+        stagedChanges: {
+          stagedSummary,
+          stagedBullets,
+          confirmedSkills,
+          learningGoals,
+          rejectedKeywords,
+        },
+        coverLetter: {
+          coverLetterResult,
+          editedCoverLetter,
+          hiringManagerName,
+          additionalCoverLetterContext,
+          stagedCoverLetter,
+        },
+        status: calculatedStatus,
+        createdAt: sessionCreatedAtRef.current || now,
+        updatedAt: now,
+        lastOpenedAt: now,
+      };
+
+      try {
+        const res = await OptimizationSessionService.saveSession(sessionPayload);
+        if (res.success) {
+          setCurrentSessionId(sessionId);
+          setSessionName(sessionTitle);
+          setSessionStatus(calculatedStatus);
+          sessionCreatedAtRef.current = sessionPayload.createdAt;
+          setLastSavedAt(now);
+          setSaveStatus('saved');
+          return { success: true, session: sessionPayload };
+        } else {
+          setSaveStatus('error');
+          return { success: false, error: res.error };
+        }
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        setSaveStatus('error');
+        return { success: false, error: msg };
+      }
+    },
+    [
+      options?.userId,
+      selectedResume,
+      jobDescription,
+      currentSessionId,
+      sessionStatus,
+      sessionName,
+      jobTitle,
+      companyName,
+      originalResumeSnapshot,
+      summaryResult,
+      bulletResults,
+      keywordResult,
+      stagedSummary,
+      stagedBullets,
+      confirmedSkills,
+      learningGoals,
+      rejectedKeywords,
+      coverLetterResult,
+      editedCoverLetter,
+      hiringManagerName,
+      additionalCoverLetterContext,
+      stagedCoverLetter,
+    ]
+  );
+
+  // Debounced auto-save
+  useEffect(() => {
+    if (!options?.enableAutoSave || isRestoringRef.current) return;
+    if (!selectedResume && !jobDescription) return;
+
+    const timer = setTimeout(() => {
+      saveCurrentSession();
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [
+    options?.enableAutoSave,
+    selectedResume,
+    jobDescription,
+    jobTitle,
+    companyName,
+    stagedSummary,
+    stagedBullets,
+    confirmedSkills,
+    stagedCoverLetter,
+    saveCurrentSession,
+  ]);
+
+  const newSession = useCallback(() => {
+    resetSession();
+  }, [resetSession]);
+
+  const dismissStaleResumeWarning = useCallback(() => {
+    setIsStaleResumeVersion(false);
   }, []);
 
   return {
@@ -589,6 +829,14 @@ export function useOptimizer() {
     jobTitle,
     companyName,
     validationError,
+    // Session state
+    currentSessionId,
+    sessionName,
+    sessionStatus,
+    originalResumeSnapshot,
+    saveStatus,
+    lastSavedAt,
+    isStaleResumeVersion,
     // Summary
     isOptimizingSummary,
     summaryResult,
@@ -631,6 +879,12 @@ export function useOptimizer() {
     setJobDescription,
     setJobTitle,
     setCompanyName,
+    setSessionName,
+    setSessionStatus,
+    loadSession,
+    saveCurrentSession,
+    newSession,
+    dismissStaleResumeWarning,
     loadSampleJd,
     runOptimizeSummary,
     runRewriteBullet,

@@ -197,3 +197,34 @@ export const generateCoverLetterResultSchema = z.object({
   isDeterministic: z.boolean(),
   processingTimeMs: z.number().nonnegative(),
 });
+
+/**
+ * ============================================================================
+ * OPTIMIZATION SESSION SCHEMAS
+ * ============================================================================
+ */
+
+export const optimizationSessionStatusSchema = z.enum([
+  'draft',
+  'in_progress',
+  'partially_applied',
+  'completed',
+  'archived',
+]);
+
+export const saveSessionInputSchema = z.object({
+  id: z.string().optional(),
+  userId: z.string().min(1, 'User ID is required'),
+  resumeId: z.string().nullable().optional(),
+  sessionName: z.string().max(200).optional().default('Untitled Optimization'),
+  jobTitle: z.string().max(200).optional().default(''),
+  companyName: z.string().max(200).optional().default(''),
+  jobDescription: z.string().min(1, 'Job description cannot be empty').max(30000, 'Job description must not exceed 30,000 characters'),
+  resumeVersionId: z.string().nullable().optional(),
+  originalResumeSnapshot: z.any().nullable().optional(),
+  optimizationResults: z.any().optional(),
+  stagedChanges: z.any().optional(),
+  coverLetter: z.any().optional(),
+  status: optimizationSessionStatusSchema.optional().default('draft'),
+});
+
