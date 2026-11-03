@@ -1,5 +1,11 @@
 import { useState, useCallback } from 'react';
 import type { ResumeData } from '@/features/resumes/types/resume.types';
+import { ResumeService } from '@/features/resumes/services/resumeService';
+import {
+  ResumeMergeService,
+  type ApprovedChangesPayload,
+  type MergeResult,
+} from '../services/resumeMergeService';
 import type {
   OptimizeSummaryResult,
   RewriteBulletResult,
@@ -111,6 +117,7 @@ export function useOptimizer() {
   // Staged changes
   const [stagedSummary, setStagedSummary] = useState<StagedSummaryItem | null>(null);
   const [stagedBullets, setStagedBullets] = useState<StagedBulletItem[]>([]);
+  const [isApplyingChanges, setIsApplyingChanges] = useState(false);
 
   // Selection handlers
   const selectResume = useCallback((resume: ResumeData) => {
@@ -470,6 +477,91 @@ export function useOptimizer() {
     );
   }, []);
 
+  const applyApprovedChanges = useCallback(
+    async (
+      approvedPayload: ApprovedChangesPayload,
+      effectiveUserId: string
+    ): Promise<MergeResult> => {
+      if (!selectedResume) {
+        throw new Error('No resume selected to apply optimizations to.');
+      }
+
+      setIsApplyingChanges(true);
+      try {
+        // 1. Fetch current latest state and check ownership
+        const currentResume = await ResumeService.getResume(selectedResume.id, effectiveUserId);
+        if (!currentResume) {
+          throw new Error('Selected resume could not be retrieved from storage.');
+        }
+
+        if (currentResume.userId !== effectiveUserId && effectiveUserId !== 'demo_user') {
+          throw new Error('Unauthorized: Resume does not belong to the active user.');
+        }
+
+        // 2. Count planned modifications
+        const changesCount =
+          (approvedPayload.summary ? 1 : 0) +
+          (approvedPayload.bullets?.length || 0) +
+          (approvedPayload.skills?.length || 0);
+
+        if (changesCount === 0) {
+          throw new Error('No approved changes selected for merging.');
+        }
+
+        // 3. Create pre-mutation version snapshot
+        const snapshotResult = await ResumeService.createSnapshot(
+          currentResume,
+          `Pre-optimization snapshot before applying ${changesCount} AI improvement(s)`
+        );
+
+        if (!snapshotResult.success) {
+          throw new Error(
+            `Failed to create resume version snapshot: ${snapshotResult.error || 'Unknown error'}. Aborting update for safety.`
+          );
+        }
+
+        // 4. Merge approved modifications immutably
+        const mergeResult = ResumeMergeService.mergeApprovedChanges(
+          currentResume,
+          approvedPayload
+        );
+
+        // 5. Persist updated resume
+        const saveResult = await ResumeService.saveResume(mergeResult.updatedResume);
+        if (!saveResult.success) {
+          throw new Error(saveResult.error || 'Failed to persist merged resume to storage.');
+        }
+
+        // 6. Refresh state
+        setSelectedResume(mergeResult.updatedResume);
+
+        // Clear only applied changes
+        if (approvedPayload.summary) {
+          setStagedSummary(null);
+        }
+
+        if (approvedPayload.bullets && approvedPayload.bullets.length > 0) {
+          const appliedKeys = new Set(approvedPayload.bullets.map((b) => b.key));
+          setStagedBullets((prev) => prev.filter((b) => !appliedKeys.has(b.key)));
+        }
+
+        if (approvedPayload.skills && approvedPayload.skills.length > 0) {
+          const appliedSkillNames = new Set(
+            approvedPayload.skills.map((s) => s.skill.toLowerCase())
+          );
+          setConfirmedSkills((prev) =>
+            prev.filter((s) => !appliedSkillNames.has(s.skill.toLowerCase()))
+          );
+        }
+
+        return mergeResult;
+      } finally {
+        setIsApplyingChanges(false);
+      }
+    },
+    [selectedResume]
+  );
+
   const resetSession = useCallback(() => {
     setSelectedResume(null);
     setJobDescription('');
@@ -524,11 +616,16 @@ export function useOptimizer() {
     // Staging
     stagedSummary,
     stagedBullets,
+    isApplyingChanges,
     totalStagedCount:
       (stagedSummary ? 1 : 0) +
       stagedBullets.length +
       confirmedSkills.length +
       (stagedCoverLetter ? 1 : 0),
+    stagedResumeChangesCount:
+      (stagedSummary ? 1 : 0) +
+      stagedBullets.length +
+      confirmedSkills.length,
     // Actions
     selectResume,
     setJobDescription,
@@ -553,6 +650,7 @@ export function useOptimizer() {
     stageBullet,
     unstageBullet,
     toggleBulletApproval,
+    applyApprovedChanges,
     resetSession,
   };
 }

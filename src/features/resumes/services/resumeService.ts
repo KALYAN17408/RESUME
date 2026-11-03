@@ -359,4 +359,129 @@ export class ResumeService {
 
     return true;
   }
+
+  /**
+   * Create a point-in-time version snapshot of a resume before modifications
+   */
+  static async createSnapshot(
+    resume: ResumeData,
+    changeSummary = 'Pre-optimization snapshot'
+  ): Promise<{ success: boolean; versionNumber?: number; versionId?: string; error?: string }> {
+    const versionId = crypto.randomUUID();
+    const now = new Date().toISOString();
+
+    // 1. Calculate next version number from local storage cache
+    const versionsKey = `resumax_versions_${resume.id}`;
+    let nextVersionNumber = 1;
+    try {
+      const raw = localStorage.getItem(versionsKey);
+      const localVersions: ResumeVersion[] = raw ? JSON.parse(raw) : [];
+      const maxLocalNumber = localVersions.reduce((max, v) => Math.max(max, v.versionNumber), 0);
+      nextVersionNumber = maxLocalNumber + 1;
+
+      const newVersion: ResumeVersion = {
+        id: versionId,
+        resumeId: resume.id,
+        createdBy: resume.userId,
+        versionNumber: nextVersionNumber,
+        changeSummary,
+        snapshot: JSON.parse(JSON.stringify(resume)),
+        createdAt: now,
+      };
+
+      localVersions.unshift(newVersion);
+      localStorage.setItem(versionsKey, JSON.stringify(localVersions));
+    } catch (localErr) {
+      console.warn('Failed to save snapshot to local storage:', localErr);
+    }
+
+    // 2. Persist to Supabase if remote configured
+    if (this.isRemoteConfigured()) {
+      try {
+        const { data: existingVersions, error: queryError } = await (supabase as any)
+          .from('resume_versions')
+          .select('version_number')
+          .eq('resume_id', resume.id)
+          .order('version_number', { ascending: false })
+          .limit(1);
+
+        if (!queryError && existingVersions && existingVersions.length > 0) {
+          nextVersionNumber = (existingVersions[0].version_number || 0) + 1;
+        }
+
+        const { error: insertError } = await (supabase as any)
+          .from('resume_versions')
+          .insert({
+            id: versionId,
+            resume_id: resume.id,
+            created_by: resume.userId,
+            version_number: nextVersionNumber,
+            change_summary: changeSummary,
+            snapshot: resume,
+            created_at: now,
+          });
+
+        if (insertError) {
+          console.warn('Supabase version snapshot insert failed:', insertError.message);
+          return { success: false, error: insertError.message };
+        }
+
+        return { success: true, versionNumber: nextVersionNumber, versionId };
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        console.warn('Supabase remote snapshot failed:', message);
+        return { success: false, error: message };
+      }
+    }
+
+    return { success: true, versionNumber: nextVersionNumber, versionId };
+  }
+
+  /**
+   * List all point-in-time version snapshots for a resume
+   */
+  static async listVersions(resumeId: string, userId: string): Promise<ResumeVersion[]> {
+    if (this.isRemoteConfigured()) {
+      try {
+        const { data, error } = await (supabase as any)
+          .from('resume_versions')
+          .select('*')
+          .eq('resume_id', resumeId)
+          .order('version_number', { ascending: false });
+
+        if (!error && data) {
+          return (data as any[]).map((v) => ({
+            id: v.id,
+            resumeId: v.resume_id,
+            createdBy: v.created_by,
+            versionNumber: v.version_number,
+            changeSummary: v.change_summary,
+            snapshot: v.snapshot as ResumeData,
+            createdAt: v.created_at,
+          }));
+        }
+      } catch (err) {
+        console.warn('Failed to fetch remote versions, falling back to local:', err);
+      }
+    }
+
+    try {
+      const raw = localStorage.getItem(`resumax_versions_${resumeId}`);
+      if (!raw) return [];
+      const versions = JSON.parse(raw) as ResumeVersion[];
+      return versions.filter((v) => v.createdBy === userId || !v.createdBy);
+    } catch {
+      return [];
+    }
+  }
+}
+
+export interface ResumeVersion {
+  id: string;
+  resumeId: string;
+  createdBy: string;
+  versionNumber: number;
+  changeSummary: string | null;
+  snapshot: ResumeData;
+  createdAt: string;
 }

@@ -10,6 +10,7 @@ import {
   Edit3,
   ScanSearch,
   CheckCircle2,
+  Sparkles,
 } from 'lucide-react';
 
 interface OptimizerHeaderProps {
@@ -18,6 +19,8 @@ interface OptimizerHeaderProps {
   targetJobTitle?: string;
   companyName?: string;
   totalStagedCount: number;
+  stagedResumeChangesCount?: number;
+  onOpenDiffModal?: () => void;
   onChangeResume: () => void;
   onReset: () => void;
 }
@@ -28,6 +31,8 @@ export const OptimizerHeader: React.FC<OptimizerHeaderProps> = ({
   targetJobTitle,
   companyName,
   totalStagedCount,
+  stagedResumeChangesCount = 0,
+  onOpenDiffModal,
   onChangeResume,
   onReset,
 }) => {
@@ -77,6 +82,18 @@ export const OptimizerHeader: React.FC<OptimizerHeaderProps> = ({
 
         {/* Right Navigation Actions */}
         <div className="flex flex-wrap items-center gap-2">
+          {stagedResumeChangesCount > 0 && onOpenDiffModal && (
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={onOpenDiffModal}
+              className="gap-1.5 text-xs bg-zinc-900 text-white hover:bg-black shadow-xs"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Review & Apply ({stagedResumeChangesCount})</span>
+            </Button>
+          )}
+
           {resumeId && (
             <Button
               variant="outline"

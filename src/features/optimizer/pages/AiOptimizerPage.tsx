@@ -9,6 +9,8 @@ import { SummaryOptimizerCard } from '../components/SummaryOptimizerCard';
 import { BulletRewriterCard } from '../components/BulletRewriterCard';
 import { KeywordSuggestionsCard } from '../components/KeywordSuggestionsCard';
 import { CoverLetterGeneratorCard } from '../components/CoverLetterGeneratorCard';
+import { DiffComparisonModal } from '../components/DiffComparisonModal';
+import type { ApprovedChangesPayload } from '../services/resumeMergeService';
 import { useOptimizer } from '../hooks/useOptimizer';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -48,6 +50,9 @@ export const AiOptimizerPage: React.FC = () => {
     stagedSummary,
     stagedBullets,
     totalStagedCount,
+    stagedResumeChangesCount,
+    isApplyingChanges,
+    applyApprovedChanges,
     // Keywords
     isSuggestingKeywords,
     keywordResult,
@@ -89,7 +94,22 @@ export const AiOptimizerPage: React.FC = () => {
   } = useOptimizer();
 
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
+  const [isDiffModalOpen, setIsDiffModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'summary' | 'bullets' | 'keywords' | 'cover-letter'>('summary');
+
+  const handleApplyApprovedChanges = async (approvedPayload: ApprovedChangesPayload) => {
+    try {
+      const res = await applyApprovedChanges(approvedPayload, effectiveUserId);
+      addToast({
+        message: `Successfully merged ${res.appliedCount} optimization${res.appliedCount > 1 ? 's' : ''} into "${selectedResume?.title}". Version snapshot saved.`,
+        type: 'success',
+      });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      addToast({ message: `Failed to apply changes: ${msg}`, type: 'error' });
+      throw err;
+    }
+  };
 
   // Handle incoming navigation state (e.g. from ATS Analyzer "Optimize with AI")
   useEffect(() => {
@@ -139,6 +159,8 @@ export const AiOptimizerPage: React.FC = () => {
           targetJobTitle={jobTitle || selectedResume.targetRole}
           companyName={companyName}
           totalStagedCount={totalStagedCount}
+          stagedResumeChangesCount={stagedResumeChangesCount}
+          onOpenDiffModal={() => setIsDiffModalOpen(true)}
           onChangeResume={() => setIsSelectorOpen(true)}
           onReset={resetSession}
         />
@@ -327,9 +349,22 @@ export const AiOptimizerPage: React.FC = () => {
                 </div>
               </div>
 
-              <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700 shrink-0">
-                Phase 4D Memory Staging
-              </span>
+              <div className="flex items-center gap-2 shrink-0">
+                {stagedResumeChangesCount > 0 && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setIsDiffModalOpen(true)}
+                    className="bg-white text-zinc-900 border-white hover:bg-zinc-100 text-xs font-bold gap-1.5 shrink-0"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-zinc-900" />
+                    <span>Review & Apply ({stagedResumeChangesCount})</span>
+                  </Button>
+                )}
+                <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700 shrink-0">
+                  Phase 4E Safe Staging
+                </span>
+              </div>
             </div>
           )}
 
@@ -494,6 +529,20 @@ export const AiOptimizerPage: React.FC = () => {
           userId={effectiveUserId}
           selectedResumeId={selectedResume?.id}
           onSelectResume={handleSelectResumeItem}
+        />
+      )}
+
+      {/* Diff Comparison & Selective Merge Modal */}
+      {selectedResume && (
+        <DiffComparisonModal
+          isOpen={isDiffModalOpen}
+          onClose={() => setIsDiffModalOpen(false)}
+          resume={selectedResume}
+          stagedSummary={stagedSummary}
+          stagedBullets={stagedBullets}
+          confirmedSkills={confirmedSkills}
+          onApplyApprovedChanges={handleApplyApprovedChanges}
+          isApplying={isApplyingChanges}
         />
       )}
     </div>

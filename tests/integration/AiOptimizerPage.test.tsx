@@ -122,4 +122,57 @@ describe('AiOptimizerPage Integration', () => {
 
     expect(screen.getByText('AI Cover Letter Generator')).toBeInTheDocument();
   });
+
+  it('opens and closes DiffComparisonModal from Review & Apply trigger', async () => {
+    render(
+      <MemoryRouter
+        initialEntries={[
+          {
+            pathname: '/dashboard/ai-optimizer',
+            state: {
+              resumeId: sampleResume.id,
+              jobDescription: 'Senior Engineer requirements with TypeScript.',
+            },
+          },
+        ]}
+      >
+        <AiOptimizerPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText(sampleResume.title)).toBeInTheDocument();
+    });
+
+    // Generate summary rewrite
+    const generateBtn = screen.getByRole('button', { name: /generate summary rewrites/i });
+    fireEvent.click(generateBtn);
+
+    // Wait for alternatives and stage
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /apply to staged changes/i })).toBeInTheDocument();
+    });
+    const stageBtn = screen.getByRole('button', { name: /apply to staged changes/i });
+    fireEvent.click(stageBtn);
+
+    // Banner and header both display "Review & Apply"
+    await waitFor(() => {
+      expect(screen.getAllByText(/Review & Apply \(1\)/i).length).toBeGreaterThanOrEqual(1);
+    });
+
+    // Open DiffComparisonModal
+    const reviewBtn = screen.getAllByRole('button', { name: /Review & Apply/i })[0];
+    fireEvent.click(reviewBtn);
+
+    expect(screen.getByText(/Review AI Optimizations for/i)).toBeInTheDocument();
+    expect(screen.getAllByText('Professional Summary').length).toBeGreaterThanOrEqual(1);
+
+    // Cancel / Close modal
+    const cancelBtn = screen.getByRole('button', { name: /cancel/i });
+    fireEvent.click(cancelBtn);
+
+    await waitFor(() => {
+      expect(screen.queryByText(/Review AI Optimizations for/i)).not.toBeInTheDocument();
+    });
+  });
 });
