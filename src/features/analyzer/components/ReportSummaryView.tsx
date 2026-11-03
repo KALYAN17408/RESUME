@@ -17,6 +17,7 @@ import {
   AlertTriangle,
   Info,
   CheckCircle2,
+  Sparkles,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
@@ -124,6 +125,25 @@ Note: Estimated ATS compatibility score based on keyword density, skills taxonom
                 <span>Edit in Builder</span>
               </Button>
             )}
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                navigate('/dashboard/ai-optimizer', {
+                  state: {
+                    resumeId: report.resumeId,
+                    jobDescription: report.jobDescription,
+                    jobTitle: report.jobTitle,
+                    companyName: report.companyName,
+                  },
+                })
+              }
+              className="gap-1.5"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Optimize with AI</span>
+            </Button>
 
             <Button
               variant="primary"

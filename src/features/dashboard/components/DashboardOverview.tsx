@@ -53,15 +53,15 @@ export const DashboardOverview: React.FC = () => {
     },
     {
       id: 'module-c',
-      title: 'AI Job Matching & Tailoring',
+      title: 'AI Resume Optimizer & Tailoring',
       moduleTag: 'Module C',
-      phaseBadge: 'Phase 4',
-      description: 'Job description parser extracting hard/soft skill requirements and generating tailored resume variants.',
+      phaseBadge: 'Operational',
+      description: 'Job description parser extracting skill requirements and generating grounded summary and bullet rewrites.',
       features: [
-        'Raw job specification NLP parsing and keyword extraction',
-        'Semantic match scoring & missing skill identification',
-        'Dynamic resume tailoring without hallucinated claims',
-        'Automated role-aligned cover letter generation',
+        'Target job description analysis & character validation',
+        'Google XYZ formula bullet rewriter with bracketed metric placeholders',
+        '3-tone resume summary generation (Impact, Technical, Executive)',
+        'Staged suggestion approval preserving original resume data',
       ],
       icon: Target,
       color: 'text-black bg-zinc-100 border-zinc-200',
@@ -188,6 +188,18 @@ export const DashboardOverview: React.FC = () => {
                     }}
                   >
                     Open ATS Analyzer
+                  </Button>
+                )}
+                {selectedModule.id === 'module-c' && (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedModule(null);
+                      navigate('/dashboard/ai-optimizer');
+                    }}
+                  >
+                    Open AI Optimizer
                   </Button>
                 )}
               </div>
