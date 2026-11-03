@@ -109,5 +109,17 @@ describe('AiOptimizerPage Integration', () => {
     fireEvent.click(bulletsTab);
 
     expect(screen.getByText('Experience & Project Bullet Rewriter')).toBeInTheDocument();
+
+    // Switch to Skills & Keywords tab
+    const keywordsTab = screen.getByRole('button', { name: /skills & keywords/i });
+    fireEvent.click(keywordsTab);
+
+    expect(screen.getByText('Job-Specific Skills & Keyword Suggestions')).toBeInTheDocument();
+
+    // Switch to Cover Letter tab
+    const coverLetterTab = screen.getByRole('button', { name: /cover letter/i });
+    fireEvent.click(coverLetterTab);
+
+    expect(screen.getByText('AI Cover Letter Generator')).toBeInTheDocument();
   });
 });

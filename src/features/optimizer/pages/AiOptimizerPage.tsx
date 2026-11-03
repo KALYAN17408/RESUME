@@ -7,6 +7,8 @@ import { ResumeSelectorModal } from '@/features/analyzer/components/ResumeSelect
 import { OptimizerHeader } from '../components/OptimizerHeader';
 import { SummaryOptimizerCard } from '../components/SummaryOptimizerCard';
 import { BulletRewriterCard } from '../components/BulletRewriterCard';
+import { KeywordSuggestionsCard } from '../components/KeywordSuggestionsCard';
+import { CoverLetterGeneratorCard } from '../components/CoverLetterGeneratorCard';
 import { useOptimizer } from '../hooks/useOptimizer';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -46,6 +48,32 @@ export const AiOptimizerPage: React.FC = () => {
     stagedSummary,
     stagedBullets,
     totalStagedCount,
+    // Keywords
+    isSuggestingKeywords,
+    keywordResult,
+    keywordError,
+    confirmedSkills,
+    learningGoals,
+    rejectedKeywords,
+    runSuggestKeywords,
+    triageKeyword,
+    stageConfirmedSkill,
+    unstageConfirmedSkill,
+    // Cover Letter
+    isGeneratingCoverLetter,
+    coverLetterResult,
+    coverLetterError,
+    editedCoverLetter,
+    hiringManagerName,
+    additionalCoverLetterContext,
+    stagedCoverLetter,
+    runGenerateCoverLetter,
+    setEditedCoverLetter,
+    setHiringManagerName,
+    setAdditionalCoverLetterContext,
+    resetCoverLetterToGenerated,
+    stageCoverLetter,
+    unstageCoverLetter,
     selectResume,
     setJobDescription,
     setJobTitle,
@@ -288,15 +316,19 @@ export const AiOptimizerPage: React.FC = () => {
                   </p>
                   <p className="text-[11px] text-zinc-300">
                     {stagedSummary ? '1 summary rewrite' : ''}
-                    {stagedSummary && stagedBullets.length > 0 ? ', ' : ''}
+                    {stagedSummary && (stagedBullets.length > 0 || confirmedSkills.length > 0 || stagedCoverLetter) ? ', ' : ''}
                     {stagedBullets.length > 0 ? `${stagedBullets.length} bullet rewrite${stagedBullets.length > 1 ? 's' : ''}` : ''}
+                    {stagedBullets.length > 0 && (confirmedSkills.length > 0 || stagedCoverLetter) ? ', ' : ''}
+                    {confirmedSkills.length > 0 ? `${confirmedSkills.length} verified skill${confirmedSkills.length > 1 ? 's' : ''}` : ''}
+                    {confirmedSkills.length > 0 && stagedCoverLetter ? ', ' : ''}
+                    {stagedCoverLetter ? '1 cover letter' : ''}
                     {' '}(Original resume content is preserved untouched until approved in Phase 4E).
                   </p>
                 </div>
               </div>
 
               <span className="text-[10px] font-mono px-2.5 py-1 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700 shrink-0">
-                Phase 4C Memory Staging
+                Phase 4D Memory Staging
               </span>
             </div>
           )}
@@ -343,22 +375,45 @@ export const AiOptimizerPage: React.FC = () => {
               )}
             </button>
 
-            {/* Phase 4D Placeholders */}
-            <div className="flex items-center gap-1 opacity-50 cursor-not-allowed pb-3 px-3.5 text-xs font-bold text-zinc-400">
+            <button
+              onClick={() => setActiveTab('keywords')}
+              className={cn(
+                'pb-3 px-3.5 text-xs font-bold transition-all relative flex items-center gap-2',
+                activeTab === 'keywords'
+                  ? 'text-black'
+                  : 'text-zinc-500 hover:text-black'
+              )}
+            >
               <Tag className="w-3.5 h-3.5" />
               <span>Skills & Keywords</span>
-              <span className="ml-1 text-[9px] px-1.5 py-0.2 rounded-full bg-zinc-100 text-zinc-500 font-mono">
-                Phase 4D
-              </span>
-            </div>
+              {confirmedSkills.length > 0 && (
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-black text-white font-mono">
+                  {confirmedSkills.length}
+                </span>
+              )}
+              {activeTab === 'keywords' && (
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-black rounded-full" />
+              )}
+            </button>
 
-            <div className="flex items-center gap-1 opacity-50 cursor-not-allowed pb-3 px-3.5 text-xs font-bold text-zinc-400">
+            <button
+              onClick={() => setActiveTab('cover-letter')}
+              className={cn(
+                'pb-3 px-3.5 text-xs font-bold transition-all relative flex items-center gap-2',
+                activeTab === 'cover-letter'
+                  ? 'text-black'
+                  : 'text-zinc-500 hover:text-black'
+              )}
+            >
               <Mail className="w-3.5 h-3.5" />
               <span>Cover Letter</span>
-              <span className="ml-1 text-[9px] px-1.5 py-0.2 rounded-full bg-zinc-100 text-zinc-500 font-mono">
-                Phase 4D
-              </span>
-            </div>
+              {stagedCoverLetter && (
+                <span className="w-2 h-2 rounded-full bg-black" />
+              )}
+              {activeTab === 'cover-letter' && (
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-black rounded-full" />
+              )}
+            </button>
           </div>
 
           {/* Active Workspace View */}
@@ -387,6 +442,44 @@ export const AiOptimizerPage: React.FC = () => {
                 onRewrite={runRewriteBullet}
                 onStageBullet={stageBullet}
                 onUnstageBullet={unstageBullet}
+              />
+            )}
+
+            {activeTab === 'keywords' && (
+              <KeywordSuggestionsCard
+                keywordResult={keywordResult}
+                isLoading={isSuggestingKeywords}
+                error={keywordError}
+                confirmedSkills={confirmedSkills}
+                learningGoals={learningGoals}
+                rejectedKeywords={rejectedKeywords}
+                onAnalyze={runSuggestKeywords}
+                onTriage={triageKeyword}
+                onStageSkill={stageConfirmedSkill}
+                onUnstageSkill={unstageConfirmedSkill}
+              />
+            )}
+
+            {activeTab === 'cover-letter' && (
+              <CoverLetterGeneratorCard
+                jobTitle={jobTitle}
+                companyName={companyName}
+                hiringManagerName={hiringManagerName}
+                additionalContext={additionalCoverLetterContext}
+                coverLetterResult={coverLetterResult}
+                editedCoverLetter={editedCoverLetter}
+                isLoading={isGeneratingCoverLetter}
+                error={coverLetterError}
+                stagedCoverLetter={stagedCoverLetter}
+                onJobTitleChange={setJobTitle}
+                onCompanyNameChange={setCompanyName}
+                onHiringManagerChange={setHiringManagerName}
+                onAdditionalContextChange={setAdditionalCoverLetterContext}
+                onCoverLetterTextChange={setEditedCoverLetter}
+                onGenerate={runGenerateCoverLetter}
+                onResetToGenerated={resetCoverLetterToGenerated}
+                onStageCoverLetter={stageCoverLetter}
+                onUnstageCoverLetter={unstageCoverLetter}
               />
             )}
           </div>
