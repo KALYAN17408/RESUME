@@ -112,6 +112,13 @@ export const AiOptimizerPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'summary' | 'bullets' | 'keywords' | 'cover-letter'>('summary');
 
   const handleSelectSession = async (session: OptimizationSession) => {
+    if (totalStagedCount > 0) {
+      const confirmSwitch = window.confirm(
+        `You have ${totalStagedCount} staged modification(s) in your current workspace. Loading a different session will replace them. Do you want to proceed?`
+      );
+      if (!confirmSwitch) return;
+    }
+
     let freshResume = null;
     if (session.resumeId) {
       freshResume = await ResumeService.getResume(session.resumeId, effectiveUserId);
@@ -623,6 +630,7 @@ export const AiOptimizerPage: React.FC = () => {
           confirmedSkills={confirmedSkills}
           onApplyApprovedChanges={handleApplyApprovedChanges}
           isApplying={isApplyingChanges}
+          isStaleResumeVersion={isStaleResumeVersion}
         />
       )}
 

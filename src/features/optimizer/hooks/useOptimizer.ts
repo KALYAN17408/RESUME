@@ -641,17 +641,51 @@ export function useOptimizer(options?: UseOptimizerOptions) {
       setJobTitle(session.jobTitle || '');
       setCompanyName(session.companyName || '');
 
+      // Staged Items
+      const restoredConfirmedSkills = session.stagedChanges?.confirmedSkills || [];
+      const restoredLearningGoals = session.stagedChanges?.learningGoals || [];
+      const restoredRejectedKeywords = session.stagedChanges?.rejectedKeywords || [];
+
+      setStagedSummary(session.stagedChanges?.stagedSummary || null);
+      setStagedBullets(session.stagedChanges?.stagedBullets || []);
+      setConfirmedSkills(restoredConfirmedSkills);
+      setLearningGoals(restoredLearningGoals);
+      setRejectedKeywords(restoredRejectedKeywords);
+
       // Results
       setSummaryResult(session.optimizationResults?.summaryResult || null);
       setBulletResults(session.optimizationResults?.bulletResults || {});
-      setKeywordResult(session.optimizationResults?.keywordResult || null);
 
-      // Staged Items
-      setStagedSummary(session.stagedChanges?.stagedSummary || null);
-      setStagedBullets(session.stagedChanges?.stagedBullets || []);
-      setConfirmedSkills(session.stagedChanges?.confirmedSkills || []);
-      setLearningGoals(session.stagedChanges?.learningGoals || []);
-      setRejectedKeywords(session.stagedChanges?.rejectedKeywords || []);
+      // Reconcile keyword triage statuses if keywordResult is present
+      const rawKeywordResult = session.optimizationResults?.keywordResult;
+      if (rawKeywordResult) {
+        const confirmedSkillNames = new Set(restoredConfirmedSkills.map((s) => s.skill.toLowerCase()));
+        const learningGoalNames = new Set(restoredLearningGoals.map((g) => g.toLowerCase()));
+        const rejectedNames = new Set(restoredRejectedKeywords.map((r) => r.toLowerCase()));
+
+        const reconcileKw = (kw: any) => {
+          const lowerTerm = kw.term.toLowerCase();
+          let status: UserTriageStatus = kw.userTriageStatus || 'unreviewed';
+          if (confirmedSkillNames.has(lowerTerm)) {
+            status = 'already_have';
+          } else if (learningGoalNames.has(lowerTerm)) {
+            status = 'need_to_learn';
+          } else if (rejectedNames.has(lowerTerm)) {
+            status = 'not_relevant';
+          }
+          return { ...kw, userTriageStatus: status };
+        };
+
+        setKeywordResult({
+          ...rawKeywordResult,
+          allSuggestions: (rawKeywordResult.allSuggestions || []).map(reconcileKw),
+          missingKeywords: (rawKeywordResult.missingKeywords || []).map(reconcileKw),
+          matchedKeywords: (rawKeywordResult.matchedKeywords || []).map(reconcileKw),
+          underEmphasizedKeywords: (rawKeywordResult.underEmphasizedKeywords || []).map(reconcileKw),
+        });
+      } else {
+        setKeywordResult(null);
+      }
 
       // Cover Letter
       setCoverLetterResult(session.coverLetter?.coverLetterResult || null);

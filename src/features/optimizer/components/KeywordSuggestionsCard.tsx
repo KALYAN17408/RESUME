@@ -132,6 +132,25 @@ export const KeywordSuggestionsCard: React.FC<KeywordSuggestionsCardProps> = ({
         </Button>
       </div>
 
+      {/* Grounded Heuristics Explanatory Strip */}
+      {keywordResult?.isDeterministic && (
+        <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 text-xs text-zinc-700 flex items-start gap-3">
+          <Sparkles className="w-4 h-4 text-zinc-500 shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-zinc-900">Taxonomy Matcher Active</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-200 text-zinc-700">
+                Offline Safe
+              </span>
+            </div>
+            <p className="text-[11px] text-zinc-600 leading-relaxed">
+              {keywordResult.fallbackReason || 'Keywords were extracted using ResuMax AI curated technical taxonomy matcher.'}
+              {' '}To enable remote LLM keyword intelligence, deploy: <code className="bg-zinc-200 px-1 py-0.5 rounded text-zinc-900 font-mono text-[10px]">supabase functions deploy ai-optimizer</code>
+            </p>
+          </div>
+        </div>
+      )}
+
       {error && (
         <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center gap-2">
           <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />

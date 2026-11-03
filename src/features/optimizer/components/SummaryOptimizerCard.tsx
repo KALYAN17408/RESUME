@@ -15,6 +15,9 @@ import {
   Tag,
   HelpCircle,
   FileText,
+  Edit3,
+  X,
+  Undo2,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
@@ -42,6 +45,9 @@ export const SummaryOptimizerCard: React.FC<SummaryOptimizerCardProps> = ({
   const { addToast } = useUIStore();
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [selectedToneTab, setSelectedToneTab] = useState<string>('impact-driven');
+  const [isEditing, setIsEditing] = useState(false);
+  const [customTextMap, setCustomTextMap] = useState<Record<string, string>>({});
+  const [dismissedAlts, setDismissedAlts] = useState<Set<string>>(new Set());
 
   const handleCopy = (id: string, text: string) => {
     navigator.clipboard.writeText(text);
@@ -50,9 +56,39 @@ export const SummaryOptimizerCard: React.FC<SummaryOptimizerCardProps> = ({
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const alternatives = summaryResult?.alternatives || [];
+  const rawAlternatives = summaryResult?.alternatives || [];
+  const alternatives = rawAlternatives.filter((a) => !dismissedAlts.has(a.id));
   const activeAlternative =
     alternatives.find((a) => a.tone === selectedToneTab) || alternatives[0];
+
+  const currentDisplaySummary = activeAlternative
+    ? customTextMap[activeAlternative.id] ?? activeAlternative.text
+    : '';
+
+  const handleTextChange = (newText: string) => {
+    if (!activeAlternative) return;
+    setCustomTextMap((prev) => ({
+      ...prev,
+      [activeAlternative.id]: newText,
+    }));
+  };
+
+  const handleResetToOriginal = () => {
+    if (!activeAlternative) return;
+    setCustomTextMap((prev) => {
+      const copy = { ...prev };
+      delete copy[activeAlternative.id];
+      return copy;
+    });
+    addToast({ message: 'Reset summary to initial generated variation.', type: 'info' });
+  };
+
+  const handleDismissActive = () => {
+    if (!activeAlternative) return;
+    setDismissedAlts((prev) => new Set([...prev, activeAlternative.id]));
+    setIsEditing(false);
+    addToast({ message: `Dismissed ${activeAlternative.tone} summary.`, type: 'info' });
+  };
 
   return (
     <div className="space-y-6">
@@ -77,7 +113,10 @@ export const SummaryOptimizerCard: React.FC<SummaryOptimizerCardProps> = ({
         <Button
           variant="primary"
           size="sm"
-          onClick={onGenerate}
+          onClick={() => {
+            setDismissedAlts(new Set());
+            onGenerate();
+          }}
           disabled={isLoading}
           className="gap-2 shrink-0 text-xs"
         >
@@ -94,6 +133,25 @@ export const SummaryOptimizerCard: React.FC<SummaryOptimizerCardProps> = ({
           )}
         </Button>
       </div>
+
+      {/* Grounded Heuristics Explanatory Strip */}
+      {summaryResult?.isDeterministic && (
+        <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 text-xs text-zinc-700 flex items-start gap-3">
+          <Sparkles className="w-4 h-4 text-zinc-500 shrink-0 mt-0.5" />
+          <div className="space-y-0.5">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-zinc-900">Grounded Heuristics Active</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-200 text-zinc-700">
+                Offline Safe
+              </span>
+            </div>
+            <p className="text-[11px] text-zinc-600 leading-relaxed">
+              {summaryResult.fallbackReason || 'Remote AI Edge Function is offline or unconfigured. Summaries were synthesized using deterministic rule-based algorithms.'}
+              {' '}To enable remote LLM intelligence, deploy the edge function using: <code className="bg-zinc-200 px-1 py-0.5 rounded text-zinc-900 font-mono text-[10px]">supabase functions deploy ai-optimizer</code>
+            </p>
+          </div>
+        </div>
+      )}
 
       {error && (
         <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center gap-2">
@@ -184,6 +242,18 @@ export const SummaryOptimizerCard: React.FC<SummaryOptimizerCardProps> = ({
                 Enforcing Google XYZ formula and truthfulness safeguards
               </p>
             </div>
+          ) : alternatives.length === 0 ? (
+            <div className="p-8 text-center rounded-3xl bg-white border border-zinc-200 shadow-xs space-y-3">
+              <p className="text-xs font-bold text-zinc-700">All generated alternatives were dismissed.</p>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setDismissedAlts(new Set())}
+                className="text-xs"
+              >
+                Restore Dismissed Alternatives
+              </Button>
+            </div>
           ) : (
             <div className="p-6 rounded-3xl bg-white border border-zinc-200 shadow-xs space-y-5">
               {/* Tone Selection Tabs */}
@@ -192,7 +262,10 @@ export const SummaryOptimizerCard: React.FC<SummaryOptimizerCardProps> = ({
                   {alternatives.map((alt) => (
                     <button
                       key={alt.id}
-                      onClick={() => setSelectedToneTab(alt.tone)}
+                      onClick={() => {
+                        setSelectedToneTab(alt.tone);
+                        setIsEditing(false);
+                      }}
                       className={cn(
                         'px-3 py-1.5 rounded-xl text-xs font-bold transition-all capitalize flex items-center gap-1.5',
                         selectedToneTab === alt.tone
@@ -201,31 +274,81 @@ export const SummaryOptimizerCard: React.FC<SummaryOptimizerCardProps> = ({
                       )}
                     >
                       <span>{alt.tone.replace('-', ' ')}</span>
-                      {stagedSummary?.selected === alt.text && (
+                      {stagedSummary?.selected === (customTextMap[alt.id] ?? alt.text) && (
                         <Check className="w-3 h-3 text-white" />
                       )}
                     </button>
                   ))}
                 </div>
 
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={onGenerate}
-                  className="text-xs text-zinc-500 hover:text-black gap-1"
-                >
-                  <RotateCcw className="w-3 h-3" />
-                  <span>Regenerate</span>
-                </Button>
+                <div className="flex items-center gap-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setDismissedAlts(new Set());
+                      onGenerate();
+                    }}
+                    className="text-xs text-zinc-500 hover:text-black gap-1"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    <span>Regenerate</span>
+                  </Button>
+                </div>
               </div>
 
               {/* Active Alternative Card */}
               {activeAlternative && (
                 <div className="space-y-4 animate-fade-in">
+                  {/* Summary Text (View or Inline Edit Mode) */}
                   <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 space-y-3">
-                    <p className="text-xs sm:text-sm text-zinc-900 leading-relaxed font-sans">
-                      {activeAlternative.text}
-                    </p>
+                    <div className="flex items-center justify-between text-[11px] font-bold text-zinc-500 uppercase tracking-wider">
+                      <span>{activeAlternative.tone.replace('-', ' ')} Variation</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-[10px] text-zinc-400">
+                          {currentDisplaySummary.length} chars
+                        </span>
+                        {customTextMap[activeAlternative.id] && (
+                          <Badge variant="outline" size="sm" className="text-[9px] bg-white text-zinc-700">
+                            Custom Edited
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+
+                    {isEditing ? (
+                      <div className="space-y-2">
+                        <textarea
+                          value={currentDisplaySummary}
+                          onChange={(e) => handleTextChange(e.target.value)}
+                          rows={4}
+                          className="w-full p-3 rounded-xl bg-white border border-zinc-300 text-xs sm:text-sm text-zinc-900 leading-relaxed font-sans focus:outline-hidden focus:ring-2 focus:ring-black"
+                          placeholder="Edit your professional summary..."
+                        />
+                        <div className="flex items-center justify-between pt-1">
+                          <button
+                            type="button"
+                            onClick={handleResetToOriginal}
+                            className="text-[11px] text-zinc-500 hover:text-zinc-900 flex items-center gap-1"
+                          >
+                            <Undo2 className="w-3 h-3" />
+                            <span>Reset to Generated</span>
+                          </button>
+                          <Button
+                            variant="primary"
+                            size="sm"
+                            onClick={() => setIsEditing(false)}
+                            className="text-xs py-1 px-3"
+                          >
+                            Done Editing
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <p className="text-xs sm:text-sm text-zinc-900 leading-relaxed font-sans">
+                        {currentDisplaySummary}
+                      </p>
+                    )}
 
                     {/* Keywords Used */}
                     {activeAlternative.keywordsUsed.length > 0 && (
@@ -263,33 +386,56 @@ export const SummaryOptimizerCard: React.FC<SummaryOptimizerCardProps> = ({
                         <span>Requires Metric Confirmation</span>
                       </div>
                       <p className="text-[11px] text-amber-800 leading-relaxed">
-                        To protect candidate truthfulness, placeholders like <code className="bg-amber-100 px-1 py-0.5 rounded text-amber-900 font-mono text-[10px]">[add measurable impact...]</code> were inserted instead of inventing fake statistics. Verify before finalizing.
+                        To protect candidate truthfulness, placeholders like <code className="bg-amber-100 px-1 py-0.5 rounded text-amber-900 font-mono text-[10px]">[add measurable impact...]</code> were inserted instead of inventing fake statistics. Click <strong>Edit & Customize</strong> to insert your actual numbers.
                       </p>
                     </div>
                   )}
 
                   {/* Actions Bar */}
                   <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleCopy(activeAlternative.id, activeAlternative.text)}
-                      className="gap-1.5 text-xs"
-                    >
-                      {copiedId === activeAlternative.id ? (
-                        <>
-                          <Check className="w-3.5 h-3.5 text-zinc-900" />
-                          <span>Copied</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3.5 h-3.5" />
-                          <span>Copy Text</span>
-                        </>
-                      )}
-                    </Button>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleCopy(activeAlternative.id, currentDisplaySummary)}
+                        className="gap-1.5 text-xs"
+                      >
+                        {copiedId === activeAlternative.id ? (
+                          <>
+                            <Check className="w-3.5 h-3.5 text-zinc-900" />
+                            <span>Copied</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-3.5 h-3.5" />
+                            <span>Copy Text</span>
+                          </>
+                        )}
+                      </Button>
 
-                    {stagedSummary?.selected === activeAlternative.text ? (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setIsEditing(!isEditing)}
+                        className="gap-1.5 text-xs text-zinc-700"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                        <span>{isEditing ? 'Done' : 'Edit & Customize'}</span>
+                      </Button>
+
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleDismissActive}
+                        className="text-xs text-zinc-400 hover:text-rose-600 gap-1 p-2"
+                        title="Dismiss this alternative"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                        <span>Dismiss</span>
+                      </Button>
+                    </div>
+
+                    {stagedSummary?.selected === currentDisplaySummary ? (
                       <Button
                         variant="outline"
                         size="sm"
@@ -303,7 +449,7 @@ export const SummaryOptimizerCard: React.FC<SummaryOptimizerCardProps> = ({
                       <Button
                         variant="primary"
                         size="sm"
-                        onClick={() => onStage(activeAlternative.text, activeAlternative.tone)}
+                        onClick={() => onStage(currentDisplaySummary, activeAlternative.tone)}
                         className="gap-1.5 text-xs"
                       >
                         <Check className="w-3.5 h-3.5" />

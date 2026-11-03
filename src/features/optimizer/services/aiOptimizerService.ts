@@ -88,6 +88,8 @@ export class AiOptimizerService {
       console.warn('Potential prompt injection detected in JD and neutralized:', injectionCheck.matchedPattern);
     }
 
+    let fallbackDiagnostic = '';
+
     // 3. Try Remote Server-Side Edge Function if available
     if (this.isRemoteConfigured()) {
       try {
@@ -119,12 +121,23 @@ export class AiOptimizerService {
 
           return validatedOutput;
         }
-      } catch (remoteErr) {
-        console.warn('Edge Function ai-optimizer failed or is offline:', remoteErr);
+
+        if (error) {
+          fallbackDiagnostic = `Remote Edge Function unavailable: ${error.message || 'Function not deployed or offline'}. Using local Grounded Heuristics engine.`;
+          console.warn('[AiOptimizerService] Edge function optimize-summary returned error:', error);
+          if (!validatedInput.allowDeterministicFallback) {
+            throw new Error(`AI service is unreachable: ${error.message || 'Remote edge function not found'}. Deploy with: supabase functions deploy ai-optimizer`);
+          }
+        }
+      } catch (remoteErr: any) {
+        fallbackDiagnostic = `Remote Edge Function offline or unreachable: ${remoteErr?.message || 'Connection error'}. Using local Grounded Heuristics engine.`;
+        console.warn('[AiOptimizerService] Edge Function ai-optimizer failed or is offline:', remoteErr);
         if (!validatedInput.allowDeterministicFallback) {
-          throw new Error('AI service is currently unreachable and deterministic fallback was disabled.');
+          throw new Error(`AI service is currently unreachable: ${remoteErr?.message || 'Remote edge function offline'}. Deploy with: supabase functions deploy ai-optimizer`);
         }
       }
+    } else {
+      fallbackDiagnostic = 'Remote AI credentials are not configured. Using local Grounded Heuristics engine.';
     }
 
     // 4. Deterministic Grounded Fallback
@@ -138,7 +151,10 @@ export class AiOptimizerService {
       currentSummary: sanitizedCurrentSummary,
     });
 
-    return optimizeSummaryResultSchema.parse(fallbackResult);
+    return optimizeSummaryResultSchema.parse({
+      ...fallbackResult,
+      fallbackReason: fallbackDiagnostic || 'Using local Grounded Heuristics engine.',
+    });
   }
 
   /**
@@ -151,6 +167,8 @@ export class AiOptimizerService {
     // 2. Sanitize untrusted text
     const sanitizedBullet = sanitizeUntrustedText(validatedInput.originalBullet);
     const sanitizedJD = sanitizeUntrustedText(validatedInput.jobDescription);
+
+    let fallbackDiagnostic = '';
 
     // 3. Try Remote Server-Side Edge Function
     if (this.isRemoteConfigured()) {
@@ -184,12 +202,23 @@ export class AiOptimizerService {
 
           return validatedOutput;
         }
-      } catch (remoteErr) {
+
+        if (error) {
+          fallbackDiagnostic = `Remote Edge Function unavailable: ${error.message || 'Function not deployed or offline'}. Using local Grounded Heuristics engine.`;
+          console.warn('[AiOptimizerService] Edge function rewrite-bullet returned error:', error);
+          if (!validatedInput.allowDeterministicFallback) {
+            throw new Error(`AI service is unreachable: ${error.message || 'Remote edge function not found'}. Deploy with: supabase functions deploy ai-optimizer`);
+          }
+        }
+      } catch (remoteErr: any) {
+        fallbackDiagnostic = `Remote Edge Function offline or unreachable: ${remoteErr?.message || 'Connection error'}. Using local Grounded Heuristics engine.`;
         console.warn('Edge Function rewrite-bullet failed:', remoteErr);
         if (!validatedInput.allowDeterministicFallback) {
-          throw new Error('AI service is currently unreachable and deterministic fallback was disabled.');
+          throw new Error(`AI service is currently unreachable: ${remoteErr?.message || 'Remote edge function offline'}. Deploy with: supabase functions deploy ai-optimizer`);
         }
       }
+    } else {
+      fallbackDiagnostic = 'Remote AI credentials are not configured. Using local Grounded Heuristics engine.';
     }
 
     // 4. Deterministic Grounded Fallback
@@ -203,7 +232,10 @@ export class AiOptimizerService {
       jobDescription: sanitizedJD,
     });
 
-    return rewriteBulletResultSchema.parse(fallbackResult);
+    return rewriteBulletResultSchema.parse({
+      ...fallbackResult,
+      fallbackReason: fallbackDiagnostic || 'Using local Grounded Heuristics engine.',
+    });
   }
 
   /**
@@ -216,6 +248,8 @@ export class AiOptimizerService {
     // 2. Sanitize
     const sanitizedJD = sanitizeUntrustedText(validatedInput.jobDescription);
     const sanitizedResume = sanitizeUntrustedText(validatedInput.resumeTextOrSkills);
+
+    let fallbackDiagnostic = '';
 
     // 3. Try Remote Server-Side Edge Function
     if (this.isRemoteConfigured()) {
@@ -234,12 +268,23 @@ export class AiOptimizerService {
         if (!error && data) {
           return suggestKeywordsResultSchema.parse(data);
         }
-      } catch (remoteErr) {
+
+        if (error) {
+          fallbackDiagnostic = `Remote Edge Function unavailable: ${error.message || 'Function not deployed or offline'}. Using local Grounded Heuristics engine.`;
+          console.warn('[AiOptimizerService] Edge function suggest-keywords returned error:', error);
+          if (!validatedInput.allowDeterministicFallback) {
+            throw new Error(`AI service is unreachable: ${error.message || 'Remote edge function not found'}. Deploy with: supabase functions deploy ai-optimizer`);
+          }
+        }
+      } catch (remoteErr: any) {
+        fallbackDiagnostic = `Remote Edge Function offline or unreachable: ${remoteErr?.message || 'Connection error'}. Using local Grounded Heuristics engine.`;
         console.warn('Edge Function suggest-keywords failed:', remoteErr);
         if (!validatedInput.allowDeterministicFallback) {
-          throw new Error('AI service is currently unreachable and deterministic fallback was disabled.');
+          throw new Error(`AI service is currently unreachable: ${remoteErr?.message || 'Remote edge function offline'}. Deploy with: supabase functions deploy ai-optimizer`);
         }
       }
+    } else {
+      fallbackDiagnostic = 'Remote AI credentials are not configured. Using local Grounded Heuristics engine.';
     }
 
     // 4. Deterministic Grounded Fallback
@@ -253,7 +298,10 @@ export class AiOptimizerService {
       resumeTextOrSkills: sanitizedResume,
     });
 
-    return suggestKeywordsResultSchema.parse(fallbackResult);
+    return suggestKeywordsResultSchema.parse({
+      ...fallbackResult,
+      fallbackReason: fallbackDiagnostic || 'Using local Grounded Heuristics engine.',
+    });
   }
 
   /**
@@ -266,6 +314,8 @@ export class AiOptimizerService {
     // 2. Sanitize
     const sanitizedJD = sanitizeUntrustedText(validatedInput.jobDescription);
     const sanitizedSummary = sanitizeUntrustedText(validatedInput.summary || '');
+
+    let fallbackDiagnostic = '';
 
     // 3. Try Remote Server-Side Edge Function
     if (this.isRemoteConfigured()) {
@@ -284,12 +334,23 @@ export class AiOptimizerService {
         if (!error && data) {
           return generateCoverLetterResultSchema.parse(data);
         }
-      } catch (remoteErr) {
+
+        if (error) {
+          fallbackDiagnostic = `Remote Edge Function unavailable: ${error.message || 'Function not deployed or offline'}. Using local Grounded Heuristics engine.`;
+          console.warn('[AiOptimizerService] Edge function generate-cover-letter returned error:', error);
+          if (!validatedInput.allowDeterministicFallback) {
+            throw new Error(`AI service is unreachable: ${error.message || 'Remote edge function not found'}. Deploy with: supabase functions deploy ai-optimizer`);
+          }
+        }
+      } catch (remoteErr: any) {
+        fallbackDiagnostic = `Remote Edge Function offline or unreachable: ${remoteErr?.message || 'Connection error'}. Using local Grounded Heuristics engine.`;
         console.warn('Edge Function generate-cover-letter failed:', remoteErr);
         if (!validatedInput.allowDeterministicFallback) {
-          throw new Error('AI service is currently unreachable and deterministic fallback was disabled.');
+          throw new Error(`AI service is currently unreachable: ${remoteErr?.message || 'Remote edge function offline'}. Deploy with: supabase functions deploy ai-optimizer`);
         }
       }
+    } else {
+      fallbackDiagnostic = 'Remote AI credentials are not configured. Using local Grounded Heuristics engine.';
     }
 
     // 4. Deterministic Grounded Fallback
@@ -303,6 +364,9 @@ export class AiOptimizerService {
       summary: sanitizedSummary,
     });
 
-    return generateCoverLetterResultSchema.parse(fallbackResult);
+    return generateCoverLetterResultSchema.parse({
+      ...fallbackResult,
+      fallbackReason: fallbackDiagnostic || 'Using local Grounded Heuristics engine.',
+    });
   }
 }

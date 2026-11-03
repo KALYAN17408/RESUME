@@ -29,6 +29,7 @@ export interface DiffComparisonModalProps {
   confirmedSkills: ConfirmedSkillItem[];
   onApplyApprovedChanges: (approvedPayload: ApprovedChangesPayload) => Promise<void>;
   isApplying?: boolean;
+  isStaleResumeVersion?: boolean;
 }
 
 export const DiffComparisonModal: React.FC<DiffComparisonModalProps> = ({
@@ -40,6 +41,7 @@ export const DiffComparisonModal: React.FC<DiffComparisonModalProps> = ({
   confirmedSkills,
   onApplyApprovedChanges,
   isApplying = false,
+  isStaleResumeVersion = false,
 }) => {
   // Selection state: Set of approved item keys
   // Summary: 'summary'
@@ -248,6 +250,19 @@ export const DiffComparisonModal: React.FC<DiffComparisonModalProps> = ({
           <div className="mx-6 mt-4 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
             <span>{actionError}</span>
+          </div>
+        )}
+
+        {/* Stale Resume Warning */}
+        {isStaleResumeVersion && (
+          <div className="mx-6 mt-4 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-start gap-3">
+            <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+            <div>
+              <p className="font-bold text-amber-950">Notice: Underlying Resume Was Modified Outside This Session</p>
+              <p className="text-[11px] text-amber-800 mt-0.5 leading-relaxed">
+                The resume was edited after this optimization session was opened. Applying these changes will overwrite the affected sections with your staged versions. An automatic snapshot will still be captured for safety.
+              </p>
+            </div>
           </div>
         )}
 

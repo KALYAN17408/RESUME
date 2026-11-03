@@ -136,6 +136,7 @@ export const optimizeSummaryResultSchema = z.object({
   provider: providerTypeSchema,
   isDeterministic: z.boolean(),
   processingTimeMs: z.number().nonnegative(),
+  fallbackReason: z.string().optional(),
 });
 
 export const bulletAlternativeSchema = z.object({
@@ -155,6 +156,7 @@ export const rewriteBulletResultSchema = z.object({
   provider: providerTypeSchema,
   isDeterministic: z.boolean(),
   processingTimeMs: z.number().nonnegative(),
+  fallbackReason: z.string().optional(),
 });
 
 export const suggestedKeywordSchema = z.object({
@@ -185,6 +187,7 @@ export const suggestKeywordsResultSchema = z.object({
   provider: providerTypeSchema,
   isDeterministic: z.boolean(),
   processingTimeMs: z.number().nonnegative(),
+  fallbackReason: z.string().optional(),
 });
 
 export const generateCoverLetterResultSchema = z.object({
@@ -196,6 +199,7 @@ export const generateCoverLetterResultSchema = z.object({
   provider: providerTypeSchema,
   isDeterministic: z.boolean(),
   processingTimeMs: z.number().nonnegative(),
+  fallbackReason: z.string().optional(),
 });
 
 /**

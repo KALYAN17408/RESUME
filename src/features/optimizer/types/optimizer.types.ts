@@ -116,6 +116,7 @@ export interface OptimizeSummaryResult {
   provider: ProviderType;
   isDeterministic: boolean;
   processingTimeMs: number;
+  fallbackReason?: string;
 }
 
 export interface BulletAlternative {
@@ -135,6 +136,7 @@ export interface RewriteBulletResult {
   provider: ProviderType;
   isDeterministic: boolean;
   processingTimeMs: number;
+  fallbackReason?: string;
 }
 
 export interface SuggestedKeyword {
@@ -157,6 +159,7 @@ export interface SuggestKeywordsResult {
   provider: ProviderType;
   isDeterministic: boolean;
   processingTimeMs: number;
+  fallbackReason?: string;
 }
 
 export interface GenerateCoverLetterResult {
@@ -168,6 +171,7 @@ export interface GenerateCoverLetterResult {
   provider: ProviderType;
   isDeterministic: boolean;
   processingTimeMs: number;
+  fallbackReason?: string;
 }
 
 /**

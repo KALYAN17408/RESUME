@@ -94,4 +94,76 @@ describe('BulletRewriterCard Component', () => {
       })
     );
   });
+
+  it('allows inline editing to replace placeholder brackets and stages customized bullet text', () => {
+    const handleStage = vi.fn();
+    const bulletKey = `experience_${expId}_0`;
+
+    render(
+      <BulletRewriterCard
+        resume={sampleResume}
+        bulletResults={{ [bulletKey]: mockRewriteResult }}
+        activeBulletKey={null}
+        isLoading={false}
+        error={null}
+        stagedBullets={[]}
+        onRewrite={vi.fn()}
+        onStageBullet={handleStage}
+        onUnstageBullet={vi.fn()}
+      />
+    );
+
+    // Click "Edit & Fill Metric" on the first alternative
+    const editBtns = screen.getAllByRole('button', { name: /edit & fill metric/i });
+    fireEvent.click(editBtns[0]);
+
+    // Textarea is shown
+    const textarea = screen.getByPlaceholderText(/edit bullet point and replace bracketed placeholders/i);
+    expect(textarea).toBeInTheDocument();
+
+    // Fill in actual metric
+    fireEvent.change(textarea, {
+      target: {
+        value: 'Engineered and delivered database query optimizations, resulting in 42% latency reduction and $12k server savings.',
+      },
+    });
+
+    // Click "Done"
+    const doneBtn = screen.getByRole('button', { name: /done editing/i });
+    fireEvent.click(doneBtn);
+
+    // Click stage button
+    const stageBtns = screen.getAllByRole('button', { name: /apply to staged changes/i });
+    fireEvent.click(stageBtns[0]);
+
+    expect(handleStage).toHaveBeenCalledWith(
+      expect.objectContaining({
+        formula: 'XYZ',
+        rewritten: 'Engineered and delivered database query optimizations, resulting in 42% latency reduction and $12k server savings.',
+      })
+    );
+  });
+
+  it('allows dismissing a bullet alternative', () => {
+    const bulletKey = `experience_${expId}_0`;
+
+    render(
+      <BulletRewriterCard
+        resume={sampleResume}
+        bulletResults={{ [bulletKey]: mockRewriteResult }}
+        activeBulletKey={null}
+        isLoading={false}
+        error={null}
+        stagedBullets={[]}
+        onRewrite={vi.fn()}
+        onStageBullet={vi.fn()}
+        onUnstageBullet={vi.fn()}
+      />
+    );
+
+    const dismissBtns = screen.getAllByTitle('Dismiss this alternative');
+    fireEvent.click(dismissBtns[0]);
+
+    expect(screen.queryByText(mockRewriteResult.alternatives[0].text)).not.toBeInTheDocument();
+  });
 });

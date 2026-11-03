@@ -45,6 +45,17 @@ describe('AiOptimizerService — PII Sanitization & Resilience', () => {
       expect(result.isDeterministic).toBe(true);
       expect(result.alternatives).toHaveLength(3);
       expect(result.alternatives[0].text).toContain('[add measurable result if available');
+      expect(result.fallbackReason).toBeTruthy();
+    });
+
+    it('populates fallbackReason when falling back to Grounded Heuristics engine', async () => {
+      const summaryResult = await AiOptimizerService.optimizeSummary({
+        jobDescription: 'Senior Software Engineer with React and TypeScript.',
+        allowDeterministicFallback: true,
+      });
+
+      expect(summaryResult.isDeterministic).toBe(true);
+      expect(summaryResult.fallbackReason).toContain('Grounded Heuristics');
     });
 
     it('throws a descriptive error when deterministic fallback is disabled and remote is unconfigured', async () => {

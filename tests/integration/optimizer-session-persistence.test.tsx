@@ -245,4 +245,142 @@ describe('Optimizer Session Persistence & Restoration Safety', () => {
 
     expect(result.current.isStaleResumeVersion).toBe(false);
   });
+
+  it('reconciles keyword triage statuses against restored confirmed, learning, and rejected keywords', () => {
+    const mockSessionWithKeywords: OptimizationSession = {
+      id: 'session-kw-reconcile',
+      userId: 'user_persist',
+      resumeId: sampleResume.id,
+      resumeTitle: sampleResume.title,
+      sessionName: 'Session with Keywords',
+      jobTitle: 'Backend Engineer',
+      companyName: 'Tech Corp',
+      jobDescription: 'Go and Redis backend systems.',
+      resumeVersionId: sampleResume.id,
+      originalResumeSnapshot: sampleResume,
+      optimizationResults: {
+        summaryResult: null,
+        bulletResults: {},
+        keywordResult: {
+          matchedKeywords: [],
+          missingKeywords: [
+            {
+              id: 'kw-1',
+              term: 'Redis',
+              category: 'Databases & Cloud',
+              importance: 'critical',
+              evidenceStatus: 'missing',
+              frequencyInJD: 3,
+              whyItMatters: 'Key caching requirement',
+              suggestedSection: 'skills',
+              userTriageStatus: 'unreviewed',
+            },
+            {
+              id: 'kw-2',
+              term: 'Docker',
+              category: 'Tools & DevOps',
+              importance: 'important',
+              evidenceStatus: 'missing',
+              frequencyInJD: 2,
+              whyItMatters: 'Containerization standard',
+              suggestedSection: 'skills',
+              userTriageStatus: 'unreviewed',
+            },
+            {
+              id: 'kw-3',
+              term: 'COBOL',
+              category: 'Languages',
+              importance: 'nice_to_have',
+              evidenceStatus: 'missing',
+              frequencyInJD: 1,
+              whyItMatters: 'Legacy mention',
+              suggestedSection: 'skills',
+              userTriageStatus: 'unreviewed',
+            },
+          ],
+          underEmphasizedKeywords: [],
+          allSuggestions: [
+            {
+              id: 'kw-1',
+              term: 'Redis',
+              category: 'Databases & Cloud',
+              importance: 'critical',
+              evidenceStatus: 'missing',
+              frequencyInJD: 3,
+              whyItMatters: 'Key caching requirement',
+              suggestedSection: 'skills',
+              userTriageStatus: 'unreviewed',
+            },
+            {
+              id: 'kw-2',
+              term: 'Docker',
+              category: 'Tools & DevOps',
+              importance: 'important',
+              evidenceStatus: 'missing',
+              frequencyInJD: 2,
+              whyItMatters: 'Containerization standard',
+              suggestedSection: 'skills',
+              userTriageStatus: 'unreviewed',
+            },
+            {
+              id: 'kw-3',
+              term: 'COBOL',
+              category: 'Languages',
+              importance: 'nice_to_have',
+              evidenceStatus: 'missing',
+              frequencyInJD: 1,
+              whyItMatters: 'Legacy mention',
+              suggestedSection: 'skills',
+              userTriageStatus: 'unreviewed',
+            },
+          ],
+          provider: 'deterministic',
+          isDeterministic: true,
+          processingTimeMs: 40,
+        },
+      },
+      stagedChanges: {
+        stagedSummary: null,
+        stagedBullets: [],
+        confirmedSkills: [
+          {
+            skill: 'Redis',
+            category: 'Databases & Cloud',
+            suggestedSection: 'skills',
+            approved: true,
+          },
+        ],
+        learningGoals: ['Docker'],
+        rejectedKeywords: ['COBOL'],
+      },
+      coverLetter: {
+        coverLetterResult: null,
+        editedCoverLetter: '',
+        hiringManagerName: '',
+        additionalCoverLetterContext: '',
+        stagedCoverLetter: null,
+      },
+      status: 'in_progress',
+      createdAt: '2026-11-01T10:00:00Z',
+      updatedAt: '2026-11-01T10:30:00Z',
+      lastOpenedAt: '2026-11-01T10:30:00Z',
+    };
+
+    const { result } = renderHook(() => useOptimizer({ userId: 'user_persist' }));
+
+    act(() => {
+      result.current.loadSession(mockSessionWithKeywords, sampleResume);
+    });
+
+    const suggestions = result.current.keywordResult?.allSuggestions || [];
+    expect(suggestions).toHaveLength(3);
+
+    const redis = suggestions.find((k) => k.term === 'Redis');
+    const docker = suggestions.find((k) => k.term === 'Docker');
+    const cobol = suggestions.find((k) => k.term === 'COBOL');
+
+    expect(redis?.userTriageStatus).toBe('already_have');
+    expect(docker?.userTriageStatus).toBe('need_to_learn');
+    expect(cobol?.userTriageStatus).toBe('not_relevant');
+  });
 });

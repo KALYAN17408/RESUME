@@ -114,4 +114,67 @@ describe('SummaryOptimizerCard Component', () => {
     expect(screen.getByText('Network error generating summaries.')).toBeInTheDocument();
     expect(screen.getByText(/Grounding summary alternatives/i)).toBeInTheDocument();
   });
+
+  it('allows inline editing of summary alternative and stages customized text', () => {
+    const handleStage = vi.fn();
+    render(
+      <SummaryOptimizerCard
+        originalSummary="Experienced engineer."
+        summaryResult={mockResult}
+        isLoading={false}
+        error={null}
+        stagedSummary={null}
+        onGenerate={vi.fn()}
+        onStage={handleStage}
+        onUnstage={vi.fn()}
+      />
+    );
+
+    // Click "Edit & Customize"
+    const editBtn = screen.getByRole('button', { name: /edit & customize/i });
+    fireEvent.click(editBtn);
+
+    // Textarea should now be present
+    const textarea = screen.getByPlaceholderText(/edit your professional summary/i);
+    expect(textarea).toBeInTheDocument();
+
+    // Type customized summary
+    fireEvent.change(textarea, {
+      target: { value: 'Custom tailored summary with verified 40% performance gain.' },
+    });
+
+    // Click "Done"
+    const doneBtn = screen.getByRole('button', { name: /done editing/i });
+    fireEvent.click(doneBtn);
+
+    // Staging should now pass the custom edited text
+    const stageBtn = screen.getByRole('button', { name: /apply to staged changes/i });
+    fireEvent.click(stageBtn);
+
+    expect(handleStage).toHaveBeenCalledWith(
+      'Custom tailored summary with verified 40% performance gain.',
+      'impact-driven'
+    );
+  });
+
+  it('allows dismissing an alternative', () => {
+    render(
+      <SummaryOptimizerCard
+        originalSummary="Experienced engineer."
+        summaryResult={mockResult}
+        isLoading={false}
+        error={null}
+        stagedSummary={null}
+        onGenerate={vi.fn()}
+        onStage={vi.fn()}
+        onUnstage={vi.fn()}
+      />
+    );
+
+    const dismissBtn = screen.getByTitle('Dismiss this alternative');
+    fireEvent.click(dismissBtn);
+
+    // Should switch or show dismissed notice if all dismissed
+    expect(screen.queryByText(mockResult.alternatives[0].text)).not.toBeInTheDocument();
+  });
 });

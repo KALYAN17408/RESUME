@@ -178,4 +178,23 @@ describe('DiffComparisonModal Component', () => {
     expect(handleClose).toHaveBeenCalled();
     expect(handleApply).not.toHaveBeenCalled();
   });
+
+  it('displays stale resume warning banner when isStaleResumeVersion is true', () => {
+    render(
+      <DiffComparisonModal
+        isOpen={true}
+        onClose={vi.fn()}
+        resume={sampleResume}
+        stagedSummary={mockSummary}
+        stagedBullets={mockBullets}
+        confirmedSkills={mockSkills}
+        onApplyApprovedChanges={vi.fn()}
+        isStaleResumeVersion={true}
+      />
+    );
+
+    expect(
+      screen.getByText(/Notice: Underlying Resume Was Modified Outside This Session/i)
+    ).toBeInTheDocument();
+  });
 });
