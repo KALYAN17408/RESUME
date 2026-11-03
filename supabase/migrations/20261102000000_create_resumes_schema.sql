@@ -1,6 +1,7 @@
 -- Migration: 20261102000000_create_resumes_schema.sql
--- Description: Creates resumes, resume_sections, resume_templates, and resume_versions tables with Row Level Security (RLS)
+-- Description: Creates resume_templates, resumes, resume_sections, and resume_versions tables with Row Level Security (RLS)
 -- Phase: Phase 2 Core Resume Builder
+-- Dependency: 20261101000000_create_profiles_schema.sql (requires public.profiles and public.handle_updated_at)
 
 -- 1. Create resume_templates catalog table
 CREATE TABLE IF NOT EXISTS public.resume_templates (
@@ -14,14 +15,20 @@ CREATE TABLE IF NOT EXISTS public.resume_templates (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Seed standard ATS-compliant templates
+-- Seed standard ATS-compliant templates (Preserving all 4 core template identifiers)
 INSERT INTO public.resume_templates (id, name, category, description, is_pro_only, config)
 VALUES 
     ('jakes-technical', 'Jake''s Technical', 'tech', 'Minimalist single-column format favored by Big Tech recruiters. High density and zero ATS parsing tables.', FALSE, '{"fontFamily": "Inter", "accentColor": "#0f172a", "spacing": "compact"}'::jsonb),
     ('harvard-classic', 'Harvard Classic', 'academic', 'Traditional serif layout with centered hierarchy, formal section dividers, and conservative margins.', FALSE, '{"fontFamily": "Merriweather", "accentColor": "#1e293b", "spacing": "normal"}'::jsonb),
     ('stanford-editorial', 'Stanford Editorial', 'modern', 'Refined visual hierarchy with subtle ink accents, left-aligned headings, and contemporary spacing.', FALSE, '{"fontFamily": "Inter", "accentColor": "#4338ca", "spacing": "normal"}'::jsonb),
     ('modern-tech-clean', 'Modern Tech Clean', 'modern', 'Crisp sans-serif presentation with subtle accent branding, structured skills tags, and clear project links.', FALSE, '{"fontFamily": "Inter", "accentColor": "#2563eb", "spacing": "relaxed"}'::jsonb)
-ON CONFLICT (id) DO NOTHING;
+ON CONFLICT (id) DO UPDATE
+SET
+    name = EXCLUDED.name,
+    category = EXCLUDED.category,
+    description = EXCLUDED.description,
+    is_pro_only = EXCLUDED.is_pro_only,
+    config = EXCLUDED.config;
 
 -- 2. Create resumes master table
 CREATE TABLE IF NOT EXISTS public.resumes (
@@ -64,12 +71,17 @@ CREATE TABLE IF NOT EXISTS public.resumes (
 CREATE TABLE IF NOT EXISTS public.resume_sections (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     resume_id UUID NOT NULL REFERENCES public.resumes(id) ON DELETE CASCADE,
-    section_type TEXT NOT NULL CHECK (section_type IN ('personal', 'summary', 'experience', 'education', 'skills', 'projects', 'certifications', 'achievements', 'awards', 'languages', 'publications', 'volunteer', 'interests')),
+    section_type TEXT NOT NULL CHECK (section_type IN (
+        'personal', 'summary', 'experience', 'education', 'skills',
+        'projects', 'certifications', 'achievements', 'awards',
+        'languages', 'publications', 'volunteer', 'interests'
+    )),
     section_title TEXT NOT NULL,
     display_order INTEGER NOT NULL DEFAULT 0,
     content JSONB NOT NULL DEFAULT '{}'::jsonb,
     is_visible BOOLEAN NOT NULL DEFAULT TRUE,
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT uq_resume_sections_resume_type UNIQUE (resume_id, section_type)
 );
 
 -- 4. Create resume_versions table for point-in-time snapshots
@@ -80,17 +92,38 @@ CREATE TABLE IF NOT EXISTS public.resume_versions (
     version_number INTEGER NOT NULL,
     change_summary TEXT,
     snapshot JSONB NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CONSTRAINT uq_resume_versions_number UNIQUE (resume_id, version_number)
 );
 
--- 5. Indexes for fast query performance
+-- 5. Safeguard constraint application in case tables already exist
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'uq_resume_sections_resume_type'
+    ) THEN
+        ALTER TABLE public.resume_sections 
+            ADD CONSTRAINT uq_resume_sections_resume_type UNIQUE (resume_id, section_type);
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'uq_resume_versions_number'
+    ) THEN
+        ALTER TABLE public.resume_versions 
+            ADD CONSTRAINT uq_resume_versions_number UNIQUE (resume_id, version_number);
+    END IF;
+END $$;
+
+-- 6. Indexes for fast query performance
+CREATE INDEX IF NOT EXISTS idx_templates_category ON public.resume_templates(category);
 CREATE INDEX IF NOT EXISTS idx_resumes_user_id ON public.resumes(user_id);
 CREATE INDEX IF NOT EXISTS idx_resumes_updated_at ON public.resumes(user_id, updated_at DESC);
+CREATE INDEX IF NOT EXISTS idx_resumes_template_id ON public.resumes(template_id);
 CREATE INDEX IF NOT EXISTS idx_resume_sections_resume_order ON public.resume_sections(resume_id, display_order ASC);
 CREATE INDEX IF NOT EXISTS idx_resume_sections_content_gin ON public.resume_sections USING GIN (content);
 CREATE INDEX IF NOT EXISTS idx_resume_versions_resume_num ON public.resume_versions(resume_id, version_number DESC);
 
--- 6. Trigger to automatically update updated_at on resumes
+-- 7. Ensure handle_updated_at helper function exists
 CREATE OR REPLACE FUNCTION public.handle_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -99,28 +132,57 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- 8. Triggers to automatically update updated_at timestamps
 DROP TRIGGER IF EXISTS trigger_resumes_updated_at ON public.resumes;
 CREATE TRIGGER trigger_resumes_updated_at
     BEFORE UPDATE ON public.resumes
     FOR EACH ROW
     EXECUTE FUNCTION public.handle_updated_at();
 
--- 7. Enable Row Level Security (RLS) on all tables
+DROP TRIGGER IF EXISTS trigger_resume_sections_updated_at ON public.resume_sections;
+CREATE TRIGGER trigger_resume_sections_updated_at
+    BEFORE UPDATE ON public.resume_sections
+    FOR EACH ROW
+    EXECUTE FUNCTION public.handle_updated_at();
+
+-- 9. Enable Row Level Security (RLS) on all tables
 ALTER TABLE public.resume_templates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.resumes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.resume_sections ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.resume_versions ENABLE ROW LEVEL SECURITY;
 
--- 8. RLS Policies
+-- 10. Idempotent Policy Drops
+DO $$ 
+BEGIN
+    -- resume_templates
+    DROP POLICY IF EXISTS "Templates are viewable by all users" ON public.resume_templates;
+    DROP POLICY IF EXISTS "Templates are viewable by authenticated users" ON public.resume_templates;
 
--- resume_templates: Read access for all authenticated users, writes restricted
-CREATE POLICY "Templates are viewable by authenticated users"
+    -- resumes
+    DROP POLICY IF EXISTS "Users can view their own resumes" ON public.resumes;
+    DROP POLICY IF EXISTS "Users can insert their own resumes" ON public.resumes;
+    DROP POLICY IF EXISTS "Users can update their own resumes" ON public.resumes;
+    DROP POLICY IF EXISTS "Users can delete their own resumes" ON public.resumes;
+
+    -- resume_sections
+    DROP POLICY IF EXISTS "Users can view sections of their own resumes" ON public.resume_sections;
+    DROP POLICY IF EXISTS "Users can insert sections to their own resumes" ON public.resume_sections;
+    DROP POLICY IF EXISTS "Users can update sections of their own resumes" ON public.resume_sections;
+    DROP POLICY IF EXISTS "Users can delete sections of their own resumes" ON public.resume_sections;
+
+    -- resume_versions
+    DROP POLICY IF EXISTS "Users can view versions of their own resumes" ON public.resume_versions;
+    DROP POLICY IF EXISTS "Users can create versions for their own resumes" ON public.resume_versions;
+    DROP POLICY IF EXISTS "Users can delete versions of their own resumes" ON public.resume_versions;
+END $$;
+
+-- 11. RLS Policies: resume_templates (Public read-only catalog; mutations restricted)
+CREATE POLICY "Templates are viewable by all users"
     ON public.resume_templates
     FOR SELECT
-    TO authenticated
     USING (TRUE);
 
--- resumes: Users can CRUD only their own resumes
+-- 12. RLS Policies: resumes (Owner-restricted CRUD)
 CREATE POLICY "Users can view their own resumes"
     ON public.resumes
     FOR SELECT
@@ -146,7 +208,7 @@ CREATE POLICY "Users can delete their own resumes"
     TO authenticated
     USING (auth.uid() = user_id);
 
--- resume_sections: Access allowed only if the parent resume belongs to the user
+-- 13. RLS Policies: resume_sections (Inherited document ownership)
 CREATE POLICY "Users can view sections of their own resumes"
     ON public.resume_sections
     FOR SELECT
@@ -202,7 +264,7 @@ CREATE POLICY "Users can delete sections of their own resumes"
         )
     );
 
--- resume_versions: Read/Write restricted to owner of the parent resume
+-- 14. RLS Policies: resume_versions (Owner-restricted audit snapshots)
 CREATE POLICY "Users can view versions of their own resumes"
     ON public.resume_versions
     FOR SELECT
@@ -221,6 +283,18 @@ CREATE POLICY "Users can create versions for their own resumes"
     TO authenticated
     WITH CHECK (
         auth.uid() = created_by AND
+        EXISTS (
+            SELECT 1 FROM public.resumes
+            WHERE public.resumes.id = public.resume_versions.resume_id
+              AND public.resumes.user_id = auth.uid()
+        )
+    );
+
+CREATE POLICY "Users can delete versions of their own resumes"
+    ON public.resume_versions
+    FOR DELETE
+    TO authenticated
+    USING (
         EXISTS (
             SELECT 1 FROM public.resumes
             WHERE public.resumes.id = public.resume_versions.resume_id
