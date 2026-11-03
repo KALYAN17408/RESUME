@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ResumeListPage } from '@/features/resumes/pages/ResumeListPage';
@@ -15,6 +15,7 @@ function renderResumeList() {
 describe('ResumeListPage Integration', () => {
   beforeEach(() => {
     localStorage.clear();
+    vi.spyOn(ResumeService, 'isRemoteConfigured').mockReturnValue(false);
   });
 
   it('renders empty state when user has no resumes', async () => {

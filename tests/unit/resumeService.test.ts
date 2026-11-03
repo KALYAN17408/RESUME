@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ResumeService } from '@/features/resumes/services/resumeService';
 
 describe('ResumeService', () => {
@@ -6,6 +6,7 @@ describe('ResumeService', () => {
 
   beforeEach(() => {
     localStorage.clear();
+    vi.spyOn(ResumeService, 'isRemoteConfigured').mockReturnValue(false);
   });
 
   it('creates and lists resumes', async () => {

@@ -12,6 +12,7 @@ describe('Auto-Save & Persistence Audit Suite', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     localStorage.clear();
+    vi.spyOn(ResumeService, 'isRemoteConfigured').mockReturnValue(false);
     initialResume = createSampleResume(userId, 'jakes-technical');
   });
 
