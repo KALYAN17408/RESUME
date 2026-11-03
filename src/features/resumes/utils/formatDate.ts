@@ -75,3 +75,12 @@ export function formatResumeDateRange(
   }
   return '';
 }
+
+/**
+ * Formats an ISO date into a localized date string
+ */
+export function formatDate(dateStr?: string): string {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return isNaN(d.getTime()) ? dateStr : d.toLocaleDateString();
+}

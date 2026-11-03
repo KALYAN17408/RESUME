@@ -40,16 +40,16 @@ export const DashboardOverview: React.FC = () => {
       id: 'module-b',
       title: 'ATS Resume Analyzer',
       moduleTag: 'Module B',
-      phaseBadge: 'Phase 3',
-      description: 'PDF/DOCX ingestion with 5-vector recruiter-grade scoring and actionable diagnostic fix recommendations.',
+      phaseBadge: 'Operational',
+      description: 'PDF/DOCX ingestion with 4-vector recruiter-grade scoring, deterministic keyword density analysis, and actionable diagnostic fix recommendations.',
       features: [
-        'PDF/DOCX text extraction into structured AST',
-        '5-vector scoring (Parseability, Impact, Brevity, Style, Skills)',
+        'PDF vector text extraction and scanned document detection',
+        '4-vector scoring (Keywords 40%, Skills 25%, Sections 15%, Formatting 20%)',
         'Quantified metric detection & Google XYZ formula checks',
-        'One-click bullet rewriter with contextual suggestions',
+        'Direct alignment against target job descriptions with copyable recommendations',
       ],
       icon: ScanSearch,
-      color: 'text-emerald-600 bg-emerald-50 border-emerald-200/60',
+      color: 'text-black bg-zinc-100 border-zinc-200',
     },
     {
       id: 'module-c',
@@ -176,6 +176,18 @@ export const DashboardOverview: React.FC = () => {
                     }}
                   >
                     Open Resume Builder
+                  </Button>
+                )}
+                {selectedModule.id === 'module-b' && (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedModule(null);
+                      navigate('/dashboard/analyzer');
+                    }}
+                  >
+                    Open ATS Analyzer
                   </Button>
                 )}
               </div>

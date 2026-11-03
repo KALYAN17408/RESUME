@@ -12,6 +12,7 @@ import { DashboardOverview } from '@/features/dashboard/components/DashboardOver
 import { SettingsPage } from '@/pages/SettingsPage';
 import { ResumeListPage } from '@/features/resumes/pages/ResumeListPage';
 import { ResumeEditorPage } from '@/features/resumes/pages/ResumeEditorPage';
+import { AtsAnalyzerPage } from '@/features/analyzer/pages/AtsAnalyzerPage';
 import { Spinner } from '@/components/ui/Spinner';
 import { Sparkles } from 'lucide-react';
 
@@ -121,7 +122,8 @@ export const AppRouter: React.FC = () => {
         <Route path="settings" element={<SettingsPage />} />
         {/* Module A route redirect */}
         <Route path="builder" element={<Navigate to="/dashboard/resumes" replace />} />
-        <Route path="analyzer" element={<DashboardOverview />} />
+        {/* Module B ATS Analyzer */}
+        <Route path="analyzer" element={<AtsAnalyzerPage />} />
         <Route path="jobs" element={<DashboardOverview />} />
         <Route path="copilot" element={<DashboardOverview />} />
         <Route path="interviews" element={<DashboardOverview />} />
