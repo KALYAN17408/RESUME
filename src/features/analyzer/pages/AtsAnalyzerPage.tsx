@@ -478,6 +478,15 @@ export const AtsAnalyzerPage: React.FC = () => {
                 </div>
               )}
 
+              {/* Accessible Live Announcement Region for Screen Readers */}
+              <div className="sr-only" aria-live="polite" role="status">
+                {isAnalyzing
+                  ? `Analyzing: ${analysisStep}`
+                  : currentReport
+                  ? `Analysis completed with overall score of ${(currentReport as any).overallScore} out of 100.`
+                  : ''}
+              </div>
+
               {/* Analysis CTA Button */}
               <div className="pt-2">
                 <Button

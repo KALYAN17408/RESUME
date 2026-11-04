@@ -47,16 +47,19 @@ export const CustomizationModal: React.FC<CustomizationModalProps> = ({
           <label className="text-xs font-bold text-slate-900 uppercase tracking-wider block">
             Accent Color
           </label>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3" role="radiogroup" aria-label="Accent Color">
             {ACCENT_COLORS.map((color) => {
               const isSelected = customization.accentColor === color.value;
               return (
                 <button
                   key={color.value}
                   type="button"
+                  role="radio"
+                  aria-checked={isSelected}
+                  aria-label={`Accent color: ${color.name}`}
                   onClick={() => onUpdate({ accentColor: color.value })}
-                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
-                    isSelected ? 'ring-2 ring-offset-2 ring-black scale-110 shadow-sm' : 'hover:scale-105'
+                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-all focus-ring ${
+                    isSelected ? 'ring-2 ring-offset-2 ring-slate-950 scale-110 shadow-xs' : 'hover:scale-105'
                   }`}
                   style={{ backgroundColor: color.value }}
                   title={color.name}
@@ -73,23 +76,26 @@ export const CustomizationModal: React.FC<CustomizationModalProps> = ({
           <label className="text-xs font-bold text-slate-900 uppercase tracking-wider block">
             Typography Family
           </label>
-          <div className="space-y-2">
+          <div className="space-y-2" role="radiogroup" aria-label="Typography Family">
             {FONTS.map((font) => {
               const isSelected = customization.fontFamily === font.value;
               return (
-                <div
+                <button
                   key={font.value}
+                  type="button"
+                  role="radio"
+                  aria-checked={isSelected}
                   onClick={() => onUpdate({ fontFamily: font.value })}
-                  className={`p-3 rounded-xl border text-sm cursor-pointer transition-all flex items-center justify-between ${
+                  className={`w-full p-3 rounded-radius-sm border text-sm text-left transition-all flex items-center justify-between focus-ring ${
                     isSelected
-                      ? 'border-black bg-zinc-50 font-bold text-black'
-                      : 'border-slate-200 hover:border-slate-300 text-slate-700'
+                      ? 'border-slate-900 bg-slate-50 font-bold text-slate-900 shadow-xs'
+                      : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
                   }`}
                   style={{ fontFamily: font.value }}
                 >
                   <span>{font.name}</span>
-                  {isSelected && <span className="text-black font-semibold text-xs">Active</span>}
-                </div>
+                  {isSelected && <span className="text-slate-900 font-semibold text-xs">Active</span>}
+                </button>
               );
             })}
           </div>
@@ -100,18 +106,20 @@ export const CustomizationModal: React.FC<CustomizationModalProps> = ({
           <label className="text-xs font-bold text-slate-900 uppercase tracking-wider block">
             Line Spacing Density
           </label>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Line Spacing Density">
             {(['compact', 'normal', 'relaxed'] as const).map((spacing) => {
               const isSelected = customization.lineSpacing === spacing;
               return (
                 <button
                   key={spacing}
                   type="button"
+                  role="radio"
+                  aria-checked={isSelected}
                   onClick={() => onUpdate({ lineSpacing: spacing })}
-                  className={`py-2 px-3 rounded-xl border text-xs font-medium capitalize transition-all ${
+                  className={`py-2 px-3 rounded-radius-sm border text-xs font-medium capitalize transition-all focus-ring ${
                     isSelected
-                      ? 'border-black bg-zinc-100 text-black font-bold'
-                      : 'border-slate-200 hover:border-slate-300 text-slate-700'
+                      ? 'border-slate-900 bg-slate-100 text-slate-900 font-bold'
+                      : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white'
                   }`}
                 >
                   {spacing}

@@ -224,3 +224,4 @@ export const CoverLetterPdfDocument: React.FC<CoverLetterPdfProps> = ({
     </Document>
   );
 };
+

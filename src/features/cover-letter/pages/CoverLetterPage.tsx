@@ -147,6 +147,15 @@ export const CoverLetterPage: React.FC = () => {
       </div>
 
       {/* Main 2-Column Responsive Layout */}
+      {/* Accessible Live Announcement Region for Screen Readers */}
+      <div className="sr-only" aria-live="polite" role="status">
+        {isLoading
+          ? 'Generating tailored cover letter...'
+          : editedContent
+          ? 'Cover letter generated and ready for review.'
+          : ''}
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column: Source Selection & Parameters */}
         <div className="lg:col-span-5 space-y-5">

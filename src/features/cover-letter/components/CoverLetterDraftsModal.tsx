@@ -165,3 +165,4 @@ export const CoverLetterDraftsModal: React.FC<CoverLetterDraftsModalProps> = ({
     </Modal>
   );
 };
+

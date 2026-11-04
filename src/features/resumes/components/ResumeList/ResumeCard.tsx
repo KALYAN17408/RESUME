@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { Tooltip } from '@/components/ui/Tooltip';
 import type { ResumeListItem } from '../../types/resume.types';
 import { TEMPLATE_REGISTRY } from '../../templates/templateRegistry';
 import {
@@ -40,7 +41,7 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({
         {/* Header: Title and Template Badge */}
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-start gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-zinc-100 text-black flex items-center justify-center shrink-0 border border-zinc-200 group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 rounded-radius-sm bg-slate-100 text-slate-900 flex items-center justify-center shrink-0 border border-slate-200 group-hover:scale-105 transition-transform">
               <FileText className="w-5 h-5" />
             </div>
             <div>
@@ -58,12 +59,12 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({
         </div>
 
         {/* Metadata */}
-        <div className="flex items-center gap-3 text-[11px] text-slate-400 pt-1">
+        <div className="flex items-center gap-3 text-[11px] text-slate-500 pt-1">
           <span className="flex items-center gap-1">
             <Clock className="w-3.5 h-3.5" /> Updated {formattedDate}
           </span>
           {resume.atsScore && resume.atsScore > 0 ? (
-            <span className="text-emerald-600 font-semibold">
+            <span className="text-emerald-700 font-semibold">
               Score: {resume.atsScore}/100
             </span>
           ) : null}
@@ -79,30 +80,38 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({
         </Link>
 
         <div className="flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => onDuplicate(resume.id)}
-            className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
-            title="Duplicate Resume"
-          >
-            <Copy className="w-4 h-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => onRename(resume.id, resume.title)}
-            className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
-            title="Rename Resume"
-          >
-            <Edit3 className="w-4 h-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => onDelete(resume.id, resume.title)}
-            className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-            title="Delete Resume"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
+          <Tooltip content="Duplicate Resume">
+            <button
+              type="button"
+              onClick={() => onDuplicate(resume.id)}
+              className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-radius-xs transition-colors focus-ring"
+              aria-label={`Duplicate ${resume.title}`}
+            >
+              <Copy className="w-4 h-4" />
+            </button>
+          </Tooltip>
+
+          <Tooltip content="Rename Resume">
+            <button
+              type="button"
+              onClick={() => onRename(resume.id, resume.title)}
+              className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-radius-xs transition-colors focus-ring"
+              aria-label={`Rename ${resume.title}`}
+            >
+              <Edit3 className="w-4 h-4" />
+            </button>
+          </Tooltip>
+
+          <Tooltip content="Delete Resume">
+            <button
+              type="button"
+              onClick={() => onDelete(resume.id, resume.title)}
+              className="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-radius-xs transition-colors focus-ring"
+              aria-label={`Delete ${resume.title}`}
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          </Tooltip>
         </div>
       </div>
     </Card>

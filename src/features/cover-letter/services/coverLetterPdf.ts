@@ -56,3 +56,4 @@ export async function downloadCoverLetterPdf(
 
   return filename;
 }
+

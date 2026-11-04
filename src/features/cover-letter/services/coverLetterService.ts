@@ -174,3 +174,4 @@ export class CoverLetterService {
     return drafts.find((d) => d.id === draftId) || null;
   }
 }
+

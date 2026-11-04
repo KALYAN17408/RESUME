@@ -283,3 +283,4 @@ export class CoverLetterAiService {
     return generateCoverLetterDeterministic(params);
   }
 }
+

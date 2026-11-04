@@ -85,7 +85,7 @@ export const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({ data, onChan
           value={data.summary}
           onChange={(e) => onChange({ summary: e.target.value })}
           placeholder="High-impact summary highlighting years of experience, core domains, and major quantified achievements..."
-          className="w-full text-xs rounded-xl border border-slate-300 p-3 text-slate-900 placeholder:text-slate-400 focus:border-black focus:ring-2 focus:ring-black/10 focus:outline-none transition-all leading-relaxed"
+          className="w-full text-xs rounded-radius-sm border border-slate-300 p-3 text-slate-900 placeholder:text-slate-400 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 focus:outline-none transition-all leading-relaxed"
         />
         <p className="text-[11px] text-slate-500">
           Tip: Keep summary under 3-4 sentences focusing on quantified impact.

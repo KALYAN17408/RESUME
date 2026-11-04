@@ -87,3 +87,4 @@ export interface CoverLetterGenerationResult {
   fallbackReason?: string;
   processingTimeMs: number;
 }
+

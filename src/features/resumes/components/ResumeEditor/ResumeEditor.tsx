@@ -109,14 +109,18 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({
           <button
             type="button"
             onClick={() => setReorderModalOpen(true)}
-            className="text-xs text-black font-semibold flex items-center gap-1 hover:underline"
+            className="text-xs text-slate-900 font-semibold flex items-center gap-1 hover:underline focus-ring rounded-radius-xs"
           >
             <ArrowUpDown className="w-3.5 h-3.5" /> Reorder Sections
           </button>
         </div>
 
         {/* Scrollable pill tabs */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+        <div
+          role="tablist"
+          aria-label="Resume Form Sections"
+          className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar"
+        >
           {TABS.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -124,10 +128,14 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({
               <button
                 key={tab.id}
                 type="button"
+                role="tab"
+                aria-selected={isActive}
+                aria-controls={`tabpanel-${tab.id}`}
+                id={`tab-${tab.id}`}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-radius-sm text-xs font-semibold whitespace-nowrap transition-all focus-ring ${
                   isActive
-                    ? 'bg-black text-white shadow-xs'
+                    ? 'bg-slate-950 text-white shadow-xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200/70 hover:text-slate-900'
                 }`}
               >
@@ -141,7 +149,12 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({
 
       {/* Editor Content Workspace */}
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-50">
-        <div className="max-w-2xl mx-auto bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs">
+        <div
+          role="tabpanel"
+          id={`tabpanel-${activeTab}`}
+          aria-labelledby={`tab-${activeTab}`}
+          className="max-w-2xl mx-auto bg-white p-5 sm:p-6 rounded-radius-md border border-slate-200/80 shadow-xs"
+        >
           {activeTab === 'personal' && (
             <PersonalInfoForm
               data={data.personalInfo}
@@ -209,7 +222,7 @@ export const ResumeEditor: React.FC<ResumeEditorProps> = ({
         </div>
       </div>
 
-      {/* Section Reorder Modal */}
+      {/* Reorder Modal */}
       <SectionReorderModal
         isOpen={reorderModalOpen}
         onClose={() => setReorderModalOpen(false)}

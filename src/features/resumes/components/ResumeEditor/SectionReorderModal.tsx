@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
+import { Tooltip } from '@/components/ui/Tooltip';
 import type { ResumeData, SectionType } from '../../types/resume.types';
 import { ArrowUp, ArrowDown } from 'lucide-react';
 
@@ -54,7 +55,7 @@ export const SectionReorderModal: React.FC<SectionReorderModalProps> = ({
           return (
             <div
               key={sectionType}
-              className={`p-3 rounded-xl border flex items-center justify-between transition-all ${
+              className={`p-3 rounded-radius-sm border flex items-center justify-between transition-all ${
                 isEnabled
                   ? 'border-slate-200 bg-white shadow-xs'
                   : 'border-slate-200/60 bg-slate-50/50 opacity-60'
@@ -66,7 +67,7 @@ export const SectionReorderModal: React.FC<SectionReorderModalProps> = ({
                   id={`sec-${sectionType}`}
                   checked={isEnabled}
                   onChange={(e) => onToggleEnabled(sectionType, e.target.checked)}
-                  className="rounded border-slate-300 text-black focus:ring-black w-4 h-4 cursor-pointer"
+                  className="rounded-radius-xs border-slate-300 text-slate-900 focus:ring-slate-900 w-4 h-4 cursor-pointer"
                 />
                 <label
                   htmlFor={`sec-${sectionType}`}
@@ -77,24 +78,29 @@ export const SectionReorderModal: React.FC<SectionReorderModalProps> = ({
               </div>
 
               <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  disabled={isFirst}
-                  onClick={() => onMoveUp(index)}
-                  className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded disabled:opacity-30 disabled:hover:bg-transparent"
-                  title="Move section up"
-                >
-                  <ArrowUp className="w-4 h-4" />
-                </button>
-                <button
-                  type="button"
-                  disabled={isLast}
-                  onClick={() => onMoveDown(index)}
-                  className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded disabled:opacity-30 disabled:hover:bg-transparent"
-                  title="Move section down"
-                >
-                  <ArrowDown className="w-4 h-4" />
-                </button>
+                <Tooltip content={`Move ${label} up`}>
+                  <button
+                    type="button"
+                    disabled={isFirst}
+                    onClick={() => onMoveUp(index)}
+                    aria-label={`Move ${label} up`}
+                    className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-radius-xs disabled:opacity-30 disabled:hover:bg-transparent transition-colors focus-ring"
+                  >
+                    <ArrowUp className="w-4 h-4" />
+                  </button>
+                </Tooltip>
+
+                <Tooltip content={`Move ${label} down`}>
+                  <button
+                    type="button"
+                    disabled={isLast}
+                    onClick={() => onMoveDown(index)}
+                    aria-label={`Move ${label} down`}
+                    className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-radius-xs disabled:opacity-30 disabled:hover:bg-transparent transition-colors focus-ring"
+                  >
+                    <ArrowDown className="w-4 h-4" />
+                  </button>
+                </Tooltip>
               </div>
             </div>
           );
