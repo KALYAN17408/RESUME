@@ -1,16 +1,22 @@
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 import type { ResumeData } from '@/features/resumes/types/resume.types';
 
-// Configure worker safely for browser and Node test environments
+// Configure worker safely for browser and Node/Vitest test environments
 if (typeof window !== 'undefined') {
-  try {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-      'pdfjs-dist/legacy/build/pdf.worker.min.mjs',
-      import.meta.url
-    ).toString();
-  } catch {
-    // Fallback if URL resolution fails in specific environments
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '';
+  if (typeof process !== 'undefined' && process.versions?.node) {
+    // In Node / jsdom (Vitest): use file:// protocol so Node's ESM loader can load the worker
+    const normalizedPath = process.cwd().replace(/\\/g, '/');
+    pdfjsLib.GlobalWorkerOptions.workerSrc = `file:///${normalizedPath}/node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs`;
+  } else {
+    // In real browser: use Vite bundled worker asset
+    try {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+        'pdfjs-dist/legacy/build/pdf.worker.min.mjs',
+        import.meta.url
+      ).toString();
+    } catch {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = '';
+    }
   }
 }
 

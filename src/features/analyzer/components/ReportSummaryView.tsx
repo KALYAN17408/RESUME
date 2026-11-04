@@ -17,7 +17,7 @@ import {
   AlertTriangle,
   Info,
   CheckCircle2,
-  Sparkles,
+  Mail,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
@@ -130,7 +130,7 @@ Note: Estimated ATS compatibility score based on keyword density, skills taxonom
               variant="outline"
               size="sm"
               onClick={() =>
-                navigate('/dashboard/ai-optimizer', {
+                navigate('/dashboard/cover-letter', {
                   state: {
                     resumeId: report.resumeId,
                     jobDescription: report.jobDescription,
@@ -141,8 +141,8 @@ Note: Estimated ATS compatibility score based on keyword density, skills taxonom
               }
               className="gap-1.5"
             >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Optimize with AI</span>
+              <Mail className="w-3.5 h-3.5" />
+              <span>Generate Cover Letter</span>
             </Button>
 
             <Button

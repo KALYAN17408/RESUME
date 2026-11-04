@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/Button';
 import {
   FileText,
   ScanSearch,
-  Target,
+  Mail,
   Bot,
   MessageSquare,
   CheckCircle2,
@@ -53,17 +53,17 @@ export const DashboardOverview: React.FC = () => {
     },
     {
       id: 'module-c',
-      title: 'AI Resume Optimizer & Tailoring',
-      moduleTag: 'Module C',
+      title: 'AI Cover Letter Generator',
+      moduleTag: 'Cover Letters',
       phaseBadge: 'Operational',
-      description: 'Job description parser extracting skill requirements and generating grounded summary and bullet rewrites.',
+      description: 'Role-tailored, grounded cover letter generator with 4 tones, draft persistence, and instant ATS-compliant vector PDF export.',
       features: [
-        'Target job description analysis & character validation',
-        'Google XYZ formula bullet rewriter with bracketed metric placeholders',
-        '3-tone resume summary generation (Impact, Technical, Executive)',
-        'Staged suggestion approval preserving original resume data',
+        'Candidate evidence grounded strictly in selected resume (skills, projects, education)',
+        '4 distinct tones (Professional, Confident, Concise, Enthusiastic)',
+        'In-browser editable letter text with live word & character metrics',
+        'Multi-page ATS-friendly PDF download & local draft persistence',
       ],
-      icon: Target,
+      icon: Mail,
       color: 'text-black bg-zinc-100 border-zinc-200',
     },
     {
@@ -196,10 +196,10 @@ export const DashboardOverview: React.FC = () => {
                     size="sm"
                     onClick={() => {
                       setSelectedModule(null);
-                      navigate('/dashboard/ai-optimizer');
+                      navigate('/dashboard/cover-letter');
                     }}
                   >
-                    Open AI Optimizer
+                    Open Cover Letter Generator
                   </Button>
                 )}
               </div>

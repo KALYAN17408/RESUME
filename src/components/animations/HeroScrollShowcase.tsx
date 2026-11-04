@@ -96,7 +96,7 @@ export const HeroScrollShowcase: React.FC = () => {
               <div className="flex items-center justify-between text-brand-700 font-bold text-xs">
                 <span className="flex items-center gap-1.5">
                   <Sparkles className="w-4 h-4 text-brand-600" />
-                  Google XYZ Formula Optimizer
+                  Tailored AI Writing Assistant
                 </span>
                 <span className="text-[10px] text-brand-600 font-mono bg-brand-100/60 px-2 py-0.5 rounded-full">
                   Instant Fix
