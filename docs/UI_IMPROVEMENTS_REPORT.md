@@ -78,3 +78,4 @@
 5. **Cover Letter Generator (`CoverLetterPage.tsx`):**
    - Added live status region for generation states.
    - Cleaned typography, input spacing, and responsive wrapping.
+

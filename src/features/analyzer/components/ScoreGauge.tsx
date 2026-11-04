@@ -7,6 +7,7 @@ interface ScoreGaugeProps {
   size?: 'sm' | 'md' | 'lg';
   grade?: string;
   subtitle?: string;
+  variant?: 'violet' | 'dynamic' | 'blue' | 'teal';
   className?: string;
 }
 
@@ -16,6 +17,7 @@ export const ScoreGauge: React.FC<ScoreGaugeProps> = ({
   size = 'md',
   grade,
   subtitle,
+  variant = 'dynamic',
   className,
 }) => {
   const clampedScore = Math.max(0, Math.min(100, Math.round(score)));
@@ -26,6 +28,22 @@ export const ScoreGauge: React.FC<ScoreGaugeProps> = ({
   const radius = (dimension - strokeWidth * 2) / 2;
   const circumference = 2 * Math.PI * radius;
   const offset = circumference - (clampedScore / 100) * circumference;
+
+  const getStrokeColor = () => {
+    if (variant === 'violet') return 'stroke-violet-600';
+    if (variant === 'blue') return 'stroke-blue-600';
+    if (variant === 'teal') return 'stroke-teal-600';
+    // Dynamic score-based
+    if (clampedScore >= 80) return 'stroke-emerald-600';
+    if (clampedScore >= 60) return 'stroke-amber-500';
+    return 'stroke-red-500';
+  };
+
+  const getGradeBadgeClass = () => {
+    if (clampedScore >= 80) return 'bg-emerald-50 text-emerald-800 border border-emerald-200';
+    if (clampedScore >= 60) return 'bg-amber-50 text-amber-800 border border-amber-200';
+    return 'bg-red-50 text-red-700 border border-red-200';
+  };
 
   return (
     <div className={cn('flex flex-col items-center justify-center text-center', className)}>
@@ -41,16 +59,16 @@ export const ScoreGauge: React.FC<ScoreGaugeProps> = ({
             cx={dimension / 2}
             cy={dimension / 2}
             r={radius}
-            className="stroke-zinc-200"
+            className={variant === 'violet' ? 'stroke-violet-100' : 'stroke-slate-200/80'}
             strokeWidth={strokeWidth}
             fill="transparent"
           />
-          {/* Progress circle in sleek black */}
+          {/* Progress circle */}
           <circle
             cx={dimension / 2}
             cy={dimension / 2}
             r={radius}
-            className="stroke-black transition-all duration-700 ease-out"
+            className={cn('transition-all duration-700 ease-out', getStrokeColor())}
             strokeWidth={strokeWidth}
             strokeDasharray={circumference}
             strokeDashoffset={offset}
@@ -60,7 +78,7 @@ export const ScoreGauge: React.FC<ScoreGaugeProps> = ({
         </svg>
 
         {/* Center score readout */}
-        <div className="absolute flex flex-col items-center justify-center text-zinc-900">
+        <div className="absolute flex flex-col items-center justify-center text-slate-900">
           <span
             className={cn(
               'font-black tracking-tight leading-none',
@@ -69,18 +87,18 @@ export const ScoreGauge: React.FC<ScoreGaugeProps> = ({
           >
             {clampedScore}
           </span>
-          <span className="text-[10px] uppercase font-bold text-zinc-400 mt-0.5">/ 100</span>
+          <span className="text-[10px] uppercase font-bold text-slate-400 mt-0.5">/ 100</span>
         </div>
       </div>
 
       <div className="mt-2 text-center">
-        <p className="text-xs font-bold text-zinc-900 uppercase tracking-wider">{label}</p>
+        <p className="text-xs font-bold text-slate-900 uppercase tracking-wider">{label}</p>
         {grade && (
-          <span className="inline-block mt-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-zinc-900 text-white">
-            {grade}
+          <span className={cn('inline-block mt-1 text-[11px] font-bold px-2 py-0.5 rounded-full', getGradeBadgeClass())}>
+            Grade {grade}
           </span>
         )}
-        {subtitle && <p className="text-[11px] text-zinc-500 mt-0.5">{subtitle}</p>}
+        {subtitle && <p className="text-[11px] text-slate-500 mt-0.5">{subtitle}</p>}
       </div>
     </div>
   );

@@ -146,7 +146,7 @@ Note: Estimated ATS compatibility score based on keyword density, skills taxonom
             </Button>
 
             <Button
-              variant="primary"
+              variant="violet"
               size="sm"
               onClick={onReset}
               className="gap-1.5"
@@ -160,10 +160,11 @@ Note: Estimated ATS compatibility score based on keyword density, skills taxonom
         {/* Score Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
           {/* Big Score Gauge */}
-          <div className="lg:col-span-4 flex flex-col items-center justify-center p-4 bg-zinc-50/60 rounded-3xl border border-zinc-200">
+          <div className="lg:col-span-4 flex flex-col items-center justify-center p-6 bg-gradient-to-b from-violet-50/50 to-indigo-50/30 rounded-3xl border border-violet-100 shadow-xs">
             <ScoreGauge
               score={report.scores.overallScore}
               size="lg"
+              variant="violet"
               label="Overall ATS Score"
               grade={report.scores.scoreGrade}
               subtitle="Deterministic 4-vector score"
@@ -172,71 +173,75 @@ Note: Estimated ATS compatibility score based on keyword density, skills taxonom
 
           {/* Sub-scores breakdown */}
           <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 flex flex-col items-center justify-between text-center">
+            <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 flex flex-col items-center justify-between text-center hover:border-violet-200 transition-colors">
               <ScoreGauge
                 score={report.scores.keywordScore}
                 size="sm"
+                variant="dynamic"
                 label="Keywords"
               />
-              <p className="text-[10px] text-zinc-400 font-bold uppercase mt-2">Weight: 40%</p>
+              <p className="text-[10px] text-slate-400 font-bold uppercase mt-2">Weight: 40%</p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 flex flex-col items-center justify-between text-center">
+            <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 flex flex-col items-center justify-between text-center hover:border-violet-200 transition-colors">
               <ScoreGauge
                 score={report.scores.skillsScore}
                 size="sm"
+                variant="dynamic"
                 label="Tech Skills"
               />
-              <p className="text-[10px] text-zinc-400 font-bold uppercase mt-2">Weight: 25%</p>
+              <p className="text-[10px] text-slate-400 font-bold uppercase mt-2">Weight: 25%</p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 flex flex-col items-center justify-between text-center">
+            <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 flex flex-col items-center justify-between text-center hover:border-violet-200 transition-colors">
               <ScoreGauge
                 score={report.scores.sectionScore}
                 size="sm"
+                variant="dynamic"
                 label="Sections"
               />
-              <p className="text-[10px] text-zinc-400 font-bold uppercase mt-2">Weight: 15%</p>
+              <p className="text-[10px] text-slate-400 font-bold uppercase mt-2">Weight: 15%</p>
             </div>
 
-            <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 flex flex-col items-center justify-between text-center">
+            <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-200/80 flex flex-col items-center justify-between text-center hover:border-violet-200 transition-colors">
               <ScoreGauge
                 score={report.scores.formattingScore}
                 size="sm"
+                variant="dynamic"
                 label="Formatting"
               />
-              <p className="text-[10px] text-zinc-400 font-bold uppercase mt-2">Weight: 20%</p>
+              <p className="text-[10px] text-slate-400 font-bold uppercase mt-2">Weight: 20%</p>
             </div>
           </div>
         </div>
 
         {/* Commercial Disclaimer Notice */}
-        <div className="p-3.5 rounded-2xl bg-zinc-50 border border-zinc-200 flex items-start gap-2.5 text-zinc-600 text-[11px] leading-relaxed">
-          <Info className="w-4 h-4 text-zinc-500 shrink-0 mt-0.5" />
+        <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-2.5 text-slate-600 text-[11px] leading-relaxed">
+          <Info className="w-4 h-4 text-violet-600 shrink-0 mt-0.5" />
           <p>
-            <span className="font-bold text-zinc-900">Estimated ATS Score: </span>
+            <span className="font-bold text-slate-900">Estimated ATS Score: </span>
             {report.scores.explanation}
           </p>
         </div>
       </div>
 
       {/* Tabs Navigation */}
-      <div className="border-b border-zinc-200 flex gap-2">
+      <div className="border-b border-slate-200 flex gap-2">
         <button
           onClick={() => setActiveTab('keywords')}
           className={cn(
             'pb-3 px-3 text-xs font-bold transition-all relative',
             activeTab === 'keywords'
-              ? 'text-black'
-              : 'text-zinc-500 hover:text-black'
+              ? 'text-violet-700'
+              : 'text-slate-500 hover:text-slate-900'
           )}
         >
           <span>Keywords & Skills</span>
-          <span className="ml-1.5 text-[10px] px-1.5 py-0.2 rounded-full bg-zinc-100 text-zinc-600">
+          <span className={cn('ml-1.5 text-[10px] px-1.5 py-0.2 rounded-full font-mono', activeTab === 'keywords' ? 'bg-violet-100 text-violet-700' : 'bg-slate-100 text-slate-600')}>
             {report.matchedKeywords.length}/{report.allDetectedKeywords.length}
           </span>
           {activeTab === 'keywords' && (
-            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-black rounded-full" />
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-violet-600 rounded-full" />
           )}
         </button>
 
@@ -245,18 +250,18 @@ Note: Estimated ATS compatibility score based on keyword density, skills taxonom
           className={cn(
             'pb-3 px-3 text-xs font-bold transition-all relative',
             activeTab === 'recommendations'
-              ? 'text-black'
-              : 'text-zinc-500 hover:text-black'
+              ? 'text-violet-700'
+              : 'text-slate-500 hover:text-slate-900'
           )}
         >
           <span>Actionable Fixes</span>
           {highPriorityRecs.length > 0 && (
-            <span className="ml-1.5 text-[10px] px-1.5 py-0.2 rounded-full bg-black text-white font-mono">
+            <span className="ml-1.5 text-[10px] px-1.5 py-0.2 rounded-full bg-violet-600 text-white font-mono">
               {highPriorityRecs.length} high
             </span>
           )}
           {activeTab === 'recommendations' && (
-            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-black rounded-full" />
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-violet-600 rounded-full" />
           )}
         </button>
 
@@ -265,13 +270,13 @@ Note: Estimated ATS compatibility score based on keyword density, skills taxonom
           className={cn(
             'pb-3 px-3 text-xs font-bold transition-all relative',
             activeTab === 'sections'
-              ? 'text-black'
-              : 'text-zinc-500 hover:text-black'
+              ? 'text-violet-700'
+              : 'text-slate-500 hover:text-slate-900'
           )}
         >
           <span>Section Completeness</span>
           {activeTab === 'sections' && (
-            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-black rounded-full" />
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-violet-600 rounded-full" />
           )}
         </button>
 
@@ -280,13 +285,13 @@ Note: Estimated ATS compatibility score based on keyword density, skills taxonom
           className={cn(
             'pb-3 px-3 text-xs font-bold transition-all relative',
             activeTab === 'formatting'
-              ? 'text-black'
-              : 'text-zinc-500 hover:text-black'
+              ? 'text-violet-700'
+              : 'text-slate-500 hover:text-slate-900'
           )}
         >
           <span>Formatting & Metrics</span>
           {activeTab === 'formatting' && (
-            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-black rounded-full" />
+            <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-violet-600 rounded-full" />
           )}
         </button>
       </div>

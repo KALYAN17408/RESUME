@@ -9,36 +9,36 @@ export const WelcomeBanner: React.FC = () => {
   const tier = profile?.tier || 'free';
 
   return (
-    <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-black via-zinc-900 to-black p-8 text-white shadow-elevated">
-      {/* Decorative gradient overlay */}
-      <div className="absolute top-0 right-0 -z-0 h-64 w-64 rounded-full bg-white/5 blur-3xl" />
-      <div className="absolute bottom-0 left-1/3 -z-0 h-48 w-48 rounded-full bg-white/5 blur-2xl" />
+    <div className="relative overflow-hidden rounded-radius-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 p-6 sm:p-8 text-white shadow-elevated">
+      {/* Atmospheric subtle radial glow elements */}
+      <div className="absolute top-0 right-0 -z-0 h-64 w-64 rounded-full bg-white/10 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-1/4 -z-0 h-48 w-48 rounded-full bg-teal-400/15 blur-2xl pointer-events-none" />
 
       <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div className="space-y-2">
-          <div className="flex items-center gap-2.5">
-            <Badge variant="brand" size="sm" className="bg-white/10 text-white border-white/20 uppercase tracking-wider text-[10px]">
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <Badge variant="outline" size="sm" className="bg-white/15 text-white border-white/30 uppercase tracking-wider text-[10px] font-semibold backdrop-blur-xs">
               {tier} Tier Workspace
             </Badge>
-            <Badge variant="success" size="sm" className="bg-emerald-500/20 text-emerald-300 border-emerald-400/30 text-[10px] gap-1">
-              <ShieldCheck className="w-3 h-3" /> ATS Resume Builder Live
+            <Badge variant="outline" size="sm" className="bg-emerald-400/20 text-emerald-100 border-emerald-300/40 text-[10px] gap-1 font-semibold backdrop-blur-xs">
+              <ShieldCheck className="w-3 h-3 text-emerald-300" /> ATS Resume Builder Live
             </Badge>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white drop-shadow-xs">
             Welcome back, {userName}! 👋
           </h1>
-          <p className="text-xs sm:text-sm text-slate-300 max-w-xl leading-relaxed">
-            Your career command center is ready. The ATS Resume Builder is live with 4 single-column templates and real-time vector PDF export.
+          <p className="text-xs sm:text-sm text-blue-50/90 max-w-xl leading-relaxed">
+            Your career command center is ready. Build ATS-compliant resumes with live vector PDF export, scan match scores, and generate tailored cover letters.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-md text-left shrink-0">
-            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block">
+          <div className="rounded-radius-md border border-white/20 bg-white/10 p-4 backdrop-blur-md text-left shrink-0 shadow-xs">
+            <span className="text-[10px] font-semibold text-blue-100 uppercase tracking-wider block">
               Active Security Model
             </span>
             <span className="text-xs font-bold text-white flex items-center gap-1.5 mt-1">
-              <Sparkles className="w-3.5 h-3.5 text-zinc-300" /> Cloud Sync Verified
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" /> Cloud Sync Verified
             </span>
           </div>
         </div>

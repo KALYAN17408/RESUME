@@ -78,9 +78,9 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
           <div
             className={cn(
               'flex h-10 w-10 shrink-0 items-center justify-center rounded-radius-md',
-              variant === 'danger' && 'bg-rose-50 text-rose-600 border border-rose-100',
+              variant === 'danger' && 'bg-red-50 text-red-600 border border-red-100',
               variant === 'warning' && 'bg-amber-50 text-amber-600 border border-amber-100',
-              variant === 'primary' && 'bg-slate-100 text-slate-900 border border-slate-200'
+              variant === 'primary' && 'bg-blue-50 text-blue-600 border border-blue-200'
             )}
           >
             <AlertTriangle className="h-5 w-5" aria-hidden="true" />
@@ -136,3 +136,4 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
     </div>
   );
 };
+

@@ -135,3 +135,4 @@ We have fully implemented the five-phase UX and Design System transformation acr
 
 1. **Vite Bundle Chunk Optimization:** Vite emits a non-blocking informational advisory that the main client chunk exceeds 500 kB after minification due to inclusion of PDF rendering libraries. As recommended by the BAMA performance skill, future maintenance can configure `build.rollupOptions.output.manualChunks` for finer-grained code splitting.
 2. **All Functional Requirements Met:** No functional code was replaced by mocks; resume parsing, PDF generation, and ATS scoring engines remain completely intact and verified.
+

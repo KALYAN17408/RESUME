@@ -89,7 +89,7 @@ export const ResumeToolbar: React.FC<ResumeToolbarProps> = ({
             <Tooltip content="Back to My Resumes">
               <Link
                 to="/dashboard/resumes"
-                className="p-1.5 rounded-radius-sm hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors focus-ring"
+                className="p-1.5 rounded-radius-sm hover:bg-blue-50 text-slate-500 hover:text-blue-700 transition-colors focus-ring"
                 aria-label="Back to Resumes"
               >
                 <ArrowLeft className="w-5 h-5" />
@@ -112,7 +112,7 @@ export const ResumeToolbar: React.FC<ResumeToolbarProps> = ({
                     }
                   }}
                   autoFocus
-                  className="text-sm sm:text-base font-bold text-slate-900 border-b-2 border-slate-900 px-1 py-0.5 outline-none bg-slate-100 rounded-radius-xs"
+                  className="text-sm sm:text-base font-bold text-slate-900 border-b-2 border-blue-600 px-1 py-0.5 outline-none bg-blue-50/50 rounded-radius-xs"
                 />
               ) : (
                 <h1
@@ -173,7 +173,7 @@ export const ResumeToolbar: React.FC<ResumeToolbarProps> = ({
               type="button"
               onClick={() => onTabChange('editor')}
               className={`flex-1 py-1.5 text-xs font-semibold rounded-radius-xs transition-all ${
-                activeTab === 'editor' ? 'bg-white shadow-xs text-slate-900' : 'text-slate-600'
+                activeTab === 'editor' ? 'bg-blue-600 shadow-xs text-white' : 'text-slate-600'
               }`}
             >
               Editor
@@ -182,7 +182,7 @@ export const ResumeToolbar: React.FC<ResumeToolbarProps> = ({
               type="button"
               onClick={() => onTabChange('preview')}
               className={`flex-1 py-1.5 text-xs font-semibold rounded-radius-xs transition-all ${
-                activeTab === 'preview' ? 'bg-white shadow-xs text-slate-900' : 'text-slate-600'
+                activeTab === 'preview' ? 'bg-blue-600 shadow-xs text-white' : 'text-slate-600'
               }`}
             >
               Preview

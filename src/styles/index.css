@@ -11,13 +11,13 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    color: #0f172a;
-    background-color: #f8fafc;
+    color: #172033;
+    background-color: #f4f7fc;
   }
 
   /* Accessible focus indicators for all interactive elements */
   :focus-visible {
-    outline: 2px solid #0f172a;
+    outline: 2px solid #2563eb;
     outline-offset: 2px;
   }
 }
@@ -37,6 +37,7 @@
 /* Custom smooth scroll and scrollbar */
 html {
   scroll-behavior: smooth;
+  background-color: #f4f7fc;
 }
 
 ::-webkit-scrollbar {
@@ -59,10 +60,10 @@ html {
 
 /* Glassmorphism helpers */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  border: 1px solid rgba(226, 232, 240, 0.85);
 }
 
 .glass-panel-dark {
@@ -72,10 +73,10 @@ html {
   border: 1px solid rgba(30, 41, 59, 0.8);
 }
 
-/* Reusable BAMA Utility Classes */
+/* Reusable BAMA & Multi-Color Utility Classes */
 @layer utilities {
   .focus-ring {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2;
   }
 
   .touch-target {

@@ -35,3 +35,4 @@ This audit evaluates the application-wide user experience, interactive semantics
   - Mobile: Full-width stacked layout with dedicated Editor/Preview toggle toolbar.
   - Tablet: Adaptive 2-column forms with responsive grid auto-fill.
   - Desktop: Dual split-screen workspace with sticky actions toolbar.
+

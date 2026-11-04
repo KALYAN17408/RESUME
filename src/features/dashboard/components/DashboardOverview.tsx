@@ -34,7 +34,8 @@ export const DashboardOverview: React.FC = () => {
         'Full section reordering and customization engine',
       ],
       icon: FileText,
-      color: 'text-black bg-zinc-100 border-zinc-200',
+      color: 'text-blue-600 bg-blue-50 border-blue-200/80',
+      badgeVariant: 'brand',
     },
     {
       id: 'module-b',
@@ -49,7 +50,8 @@ export const DashboardOverview: React.FC = () => {
         'Direct alignment against target job descriptions with copyable recommendations',
       ],
       icon: ScanSearch,
-      color: 'text-black bg-zinc-100 border-zinc-200',
+      color: 'text-violet-600 bg-violet-50 border-violet-200/80',
+      badgeVariant: 'violet',
     },
     {
       id: 'module-c',
@@ -64,7 +66,8 @@ export const DashboardOverview: React.FC = () => {
         'Multi-page ATS-friendly PDF download & local draft persistence',
       ],
       icon: Mail,
-      color: 'text-black bg-zinc-100 border-zinc-200',
+      color: 'text-teal-600 bg-teal-50 border-teal-200/80',
+      badgeVariant: 'teal',
     },
     {
       id: 'module-d',
@@ -79,7 +82,8 @@ export const DashboardOverview: React.FC = () => {
         'Offer evaluation and market compensation insights',
       ],
       icon: Bot,
-      color: 'text-purple-600 bg-purple-50 border-purple-200/60',
+      color: 'text-amber-600 bg-amber-50 border-amber-200/80',
+      badgeVariant: 'amber',
     },
     {
       id: 'module-e',
@@ -94,7 +98,8 @@ export const DashboardOverview: React.FC = () => {
         'Scored AI feedback and model answer walkthroughs',
       ],
       icon: MessageSquare,
-      color: 'text-rose-600 bg-rose-50 border-rose-200/60',
+      color: 'text-indigo-600 bg-indigo-50 border-indigo-200/80',
+      badgeVariant: 'default',
     },
   ];
 
@@ -121,8 +126,8 @@ export const DashboardOverview: React.FC = () => {
               Production modules planned in the Phase 0 architectural roadmap.
             </p>
           </div>
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200 flex items-center gap-1.5">
-            <Layers className="w-3.5 h-3.5 text-black" />
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1.5">
+            <Layers className="w-3.5 h-3.5 text-blue-600" />
             5 Modules Scheduled
           </span>
         </div>
@@ -151,7 +156,7 @@ export const DashboardOverview: React.FC = () => {
               <ul className="space-y-2 text-xs text-slate-700">
                 {selectedModule.features.map((feat, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-black shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                     <span>{feat}</span>
                   </li>
                 ))}

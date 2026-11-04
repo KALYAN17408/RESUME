@@ -3,7 +3,7 @@ import { cn } from '@/utils/cn';
 import { Spinner } from './Spinner';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'violet' | 'teal';
   size?: 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
@@ -26,19 +26,23 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-medium transition-all duration-standard focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none rounded-radius-sm';
+      'inline-flex items-center justify-center font-medium transition-all duration-standard focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed select-none rounded-radius-sm';
 
     const variants = {
       primary:
-        'bg-slate-950 text-white hover:bg-slate-850 active:bg-black focus-visible:ring-slate-950 shadow-xs hover:shadow-subtle',
+        'bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 focus-visible:ring-blue-600 shadow-sm shadow-blue-500/20 hover:shadow-md hover:shadow-blue-500/25',
       secondary:
         'bg-slate-900 text-white hover:bg-slate-800 active:bg-slate-950 focus-visible:ring-slate-700 shadow-xs',
       outline:
-        'border border-slate-300 bg-white text-slate-800 hover:bg-slate-50 active:bg-slate-100 focus-visible:ring-slate-950 shadow-xs',
+        'border border-slate-200 bg-white text-slate-800 hover:bg-blue-50/70 hover:text-blue-700 hover:border-blue-200 active:bg-blue-100/60 focus-visible:ring-blue-600 shadow-xs',
       ghost:
-        'bg-transparent text-slate-700 hover:bg-slate-100 active:bg-slate-200 focus-visible:ring-slate-400',
+        'bg-transparent text-slate-700 hover:bg-blue-50/70 hover:text-blue-700 active:bg-blue-100/70 focus-visible:ring-blue-400',
       danger:
-        'bg-rose-600 text-white hover:bg-rose-700 active:bg-rose-800 focus-visible:ring-rose-500 shadow-xs',
+        'bg-red-600 text-white hover:bg-red-700 active:bg-red-800 focus-visible:ring-red-500 shadow-xs shadow-red-500/20',
+      violet:
+        'bg-violet-600 text-white hover:bg-violet-700 active:bg-violet-800 focus-visible:ring-violet-600 shadow-sm shadow-violet-500/20 hover:shadow-md hover:shadow-violet-500/25',
+      teal:
+        'bg-teal-600 text-white hover:bg-teal-700 active:bg-teal-800 focus-visible:ring-teal-600 shadow-sm shadow-teal-500/20 hover:shadow-md hover:shadow-teal-500/25',
     };
 
     const sizes = {

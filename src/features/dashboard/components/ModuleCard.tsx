@@ -13,6 +13,7 @@ export interface ModuleCardProps {
   features: string[];
   icon: React.ComponentType<{ className?: string }>;
   color: string;
+  badgeVariant?: 'default' | 'brand' | 'violet' | 'teal' | 'amber' | 'success';
   onExplore?: () => void;
 }
 
@@ -24,6 +25,7 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
   features,
   icon: Icon,
   color,
+  badgeVariant = 'brand',
   onExplore,
 }) => {
   return (
@@ -38,7 +40,7 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
               <Badge variant="outline" size="sm" className="text-[10px] uppercase font-mono">
                 {moduleTag}
               </Badge>
-              <Badge variant="brand" size="sm" className="text-[10px] font-bold">
+              <Badge variant={badgeVariant} size="sm" className="text-[10px] font-bold">
                 {phaseBadge}
               </Badge>
             </div>
@@ -53,7 +55,7 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
             <ul className="space-y-1.5 text-xs text-slate-600">
               {features.map((feature, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-black shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5" />
                   <span className="leading-tight">{feature}</span>
                 </li>
               ))}

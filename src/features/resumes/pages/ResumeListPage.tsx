@@ -145,7 +145,7 @@ export const ResumeListPage: React.FC = () => {
             variant="outline"
             size="sm"
             onClick={() => setIsImportModalOpen(true)}
-            leftIcon={<UploadCloud className="w-3.5 h-3.5 text-black" />}
+            leftIcon={<UploadCloud className="w-3.5 h-3.5 text-blue-600" />}
           >
             Import Resume
           </Button>
@@ -154,7 +154,7 @@ export const ResumeListPage: React.FC = () => {
             size="sm"
             onClick={handleCreateSample}
             isLoading={isCreating}
-            leftIcon={<Sparkles className="w-3.5 h-3.5 text-black" />}
+            leftIcon={<Sparkles className="w-3.5 h-3.5 text-blue-600" />}
           >
             Load Sample
           </Button>
@@ -180,7 +180,7 @@ export const ResumeListPage: React.FC = () => {
               placeholder="Search resumes by title or role..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-black focus:ring-1 focus:ring-black"
+              className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 transition-colors"
             />
           </div>
         </div>
@@ -189,13 +189,13 @@ export const ResumeListPage: React.FC = () => {
       {/* Main Content Area */}
       {loading ? (
         <div className="py-20 text-center space-y-3">
-          <Spinner size="lg" className="mx-auto text-black" />
+          <Spinner size="lg" className="mx-auto text-blue-600" />
           <p className="text-xs text-slate-500 font-medium">Loading your resumes...</p>
         </div>
       ) : resumes.length === 0 ? (
         /* Empty State */
-        <div className="rounded-3xl border-2 border-dashed border-slate-200 bg-slate-50/50 p-10 sm:p-16 text-center max-w-2xl mx-auto space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-zinc-100 border border-zinc-200 text-black flex items-center justify-center mx-auto shadow-xs">
+        <div className="rounded-3xl border-2 border-dashed border-blue-200 bg-blue-50/30 p-10 sm:p-16 text-center max-w-2xl mx-auto space-y-4">
+          <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center mx-auto shadow-xs">
             <FileText className="w-7 h-7" />
           </div>
           <div className="space-y-1">
@@ -215,14 +215,14 @@ export const ResumeListPage: React.FC = () => {
             <Button
               variant="outline"
               onClick={() => setIsImportModalOpen(true)}
-              leftIcon={<UploadCloud className="w-4 h-4 text-black" />}
+              leftIcon={<UploadCloud className="w-4 h-4 text-blue-600" />}
             >
               Import from Device
             </Button>
             <Button
               variant="outline"
               onClick={handleCreateSample}
-              leftIcon={<Sparkles className="w-4 h-4 text-black" />}
+              leftIcon={<Sparkles className="w-4 h-4 text-blue-600" />}
             >
               Start with Sample Data
             </Button>
@@ -233,7 +233,7 @@ export const ResumeListPage: React.FC = () => {
               <ShieldCheck className="w-4 h-4 text-emerald-600" /> 100% Vector Stream PDF
             </span>
             <span className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-black" /> Auto-saved in Real Time
+              <ShieldCheck className="w-4 h-4 text-blue-600" /> Auto-saved in Real Time
             </span>
           </div>
         </div>

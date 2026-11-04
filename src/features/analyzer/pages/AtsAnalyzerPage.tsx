@@ -203,17 +203,17 @@ export const AtsAnalyzerPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-zinc-900 tracking-wider uppercase">
+            <span className="text-xs font-bold text-violet-700 tracking-wider uppercase">
               ATS Optimization Engine
             </span>
-            <Badge variant="outline" size="sm" className="font-mono text-[10px]">
+            <Badge variant="violet" size="sm" className="font-mono text-[10px]">
               Recruiter-Grade AST
             </Badge>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-zinc-900 mt-1">
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 mt-1">
             ATS Resume Analyzer
           </h1>
-          <p className="text-xs sm:text-sm text-zinc-500 mt-1 max-w-2xl leading-relaxed">
+          <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed">
             Audit your resume against real target job descriptions with deterministic keyword density, technical taxonomy matching, and recruiter-grade formatting checks.
           </p>
         </div>
@@ -223,9 +223,9 @@ export const AtsAnalyzerPage: React.FC = () => {
             variant="outline"
             size="sm"
             onClick={() => setShowHistory(!showHistory)}
-            className="gap-2 shrink-0"
+            className="gap-2 shrink-0 hover:text-violet-700 hover:border-violet-200"
           >
-            <History className="w-4 h-4 text-zinc-600" />
+            <History className="w-4 h-4 text-violet-600" />
             <span>{showHistory ? 'Hide Past Reports' : `Past Reports (${pastReports.length})`}</span>
           </Button>
         )}
@@ -236,11 +236,11 @@ export const AtsAnalyzerPage: React.FC = () => {
         <ReportSummaryView report={currentReport} onReset={handleReset} />
       ) : showHistory ? (
         /* History Drawer/List */
-        <div className="p-6 rounded-3xl bg-white border border-zinc-200 shadow-xs space-y-4">
-          <div className="flex items-center justify-between pb-4 border-b border-zinc-100">
+        <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
+          <div className="flex items-center justify-between pb-4 border-b border-slate-100">
             <div>
-              <h3 className="text-sm font-bold text-zinc-900">Your Past ATS Reports</h3>
-              <p className="text-xs text-zinc-500">Access previously generated ATS diagnostic reports.</p>
+              <h3 className="text-sm font-bold text-slate-900">Your Past ATS Reports</h3>
+              <p className="text-xs text-slate-500">Access previously generated ATS diagnostic reports.</p>
             </div>
             <Button variant="outline" size="sm" onClick={() => setShowHistory(false)}>
               Back to Analyzer
@@ -255,29 +255,29 @@ export const AtsAnalyzerPage: React.FC = () => {
                   setCurrentReport(item);
                   setShowHistory(false);
                 }}
-                className="p-4 rounded-2xl border border-zinc-200 hover:border-black bg-white hover:bg-zinc-50 cursor-pointer transition-all flex items-center justify-between gap-4"
+                className="p-4 rounded-2xl border border-slate-200 hover:border-violet-400 bg-white hover:bg-violet-50/30 cursor-pointer transition-all flex items-center justify-between gap-4"
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 rounded-2xl bg-black text-white flex items-center justify-center font-black text-xs shrink-0">
+                  <div className="w-10 h-10 rounded-2xl bg-violet-600 text-white flex items-center justify-center font-black text-xs shrink-0 shadow-xs shadow-violet-500/20">
                     {item.scores.overallScore}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-bold text-zinc-900 truncate">
+                    <p className="text-xs font-bold text-slate-900 truncate">
                       {item.resumeTitle || item.fileName || 'Resume Analysis'}
                     </p>
-                    <p className="text-[11px] text-zinc-500 truncate">
+                    <p className="text-[11px] text-slate-500 truncate">
                       {item.jobTitle || 'Target Position'} • {new Date(item.createdAt).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-800">
-                    {item.scores.scoreGrade}
-                  </span>
+                  <Badge variant="violet" size="sm" className="text-[10px] font-bold">
+                    Grade {item.scores.scoreGrade}
+                  </Badge>
                   <button
                     onClick={(e) => handleDeleteReport(item.id, e)}
-                    className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-600 hover:bg-zinc-100 transition-colors"
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
                     aria-label="Delete report"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -293,26 +293,26 @@ export const AtsAnalyzerPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Resume Selection */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="p-6 rounded-3xl bg-white border border-zinc-200 shadow-xs space-y-4">
+            <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
               <div>
-                <h2 className="text-sm font-bold text-zinc-900 tracking-tight">
+                <h2 className="text-sm font-bold text-slate-900 tracking-tight">
                   1. Select Resume Source
                 </h2>
-                <p className="text-xs text-zinc-500 mt-0.5">
+                <p className="text-xs text-slate-500 mt-0.5">
                   Analyze an existing ResuMax resume or upload a custom PDF document.
                 </p>
               </div>
 
               {/* Source Type Selector */}
-              <div className="grid grid-cols-2 gap-2 p-1 bg-zinc-100 rounded-2xl border border-zinc-200">
+              <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-2xl border border-slate-200">
                 <button
                   type="button"
                   onClick={() => setSourceType('existing_resume')}
                   className={cn(
                     'py-2 px-3 text-xs font-semibold rounded-xl transition-all flex items-center justify-center gap-2',
                     sourceType === 'existing_resume'
-                      ? 'bg-black text-white shadow-sm'
-                      : 'text-zinc-600 hover:text-black'
+                      ? 'bg-violet-600 text-white shadow-sm shadow-violet-500/20'
+                      : 'text-slate-600 hover:text-slate-900'
                   )}
                 >
                   <FileText className="w-3.5 h-3.5" />
@@ -325,8 +325,8 @@ export const AtsAnalyzerPage: React.FC = () => {
                   className={cn(
                     'py-2 px-3 text-xs font-semibold rounded-xl transition-all flex items-center justify-center gap-2',
                     sourceType === 'uploaded_pdf'
-                      ? 'bg-black text-white shadow-sm'
-                      : 'text-zinc-600 hover:text-black'
+                      ? 'bg-violet-600 text-white shadow-sm shadow-violet-500/20'
+                      : 'text-slate-600 hover:text-slate-900'
                   )}
                 >
                   <UploadCloud className="w-3.5 h-3.5" />
@@ -338,16 +338,16 @@ export const AtsAnalyzerPage: React.FC = () => {
               {sourceType === 'existing_resume' ? (
                 <div className="space-y-3">
                   {selectedResumeItem ? (
-                    <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 flex items-center justify-between gap-3">
+                    <div className="p-4 rounded-2xl bg-violet-50/50 border border-violet-200 flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3 min-w-0">
-                        <div className="w-8 h-8 rounded-xl bg-black text-white flex items-center justify-center shrink-0">
+                        <div className="w-8 h-8 rounded-xl bg-violet-600 text-white flex items-center justify-center shrink-0 shadow-xs shadow-violet-500/20">
                           <FileText className="w-4 h-4" />
                         </div>
                         <div className="min-w-0">
-                          <p className="text-xs font-bold text-zinc-900 truncate">
+                          <p className="text-xs font-bold text-slate-900 truncate">
                             {selectedResumeItem.title}
                           </p>
-                          <p className="text-[10px] text-zinc-500 truncate">
+                          <p className="text-[10px] text-slate-500 truncate">
                             {selectedResumeItem.targetRole || 'General Template'}
                           </p>
                         </div>
@@ -357,7 +357,7 @@ export const AtsAnalyzerPage: React.FC = () => {
                         variant="outline"
                         size="sm"
                         onClick={() => setIsSelectorOpen(true)}
-                        className="text-xs shrink-0"
+                        className="text-xs shrink-0 hover:text-violet-700 hover:border-violet-300"
                       >
                         Change
                       </Button>
@@ -365,13 +365,13 @@ export const AtsAnalyzerPage: React.FC = () => {
                   ) : (
                     <div
                       onClick={() => setIsSelectorOpen(true)}
-                      className="border-2 border-dashed border-zinc-200 hover:border-black rounded-2xl p-6 text-center cursor-pointer bg-zinc-50/50 hover:bg-zinc-50 transition-all"
+                      className="border-2 border-dashed border-violet-200 hover:border-violet-500 rounded-2xl p-6 text-center cursor-pointer bg-violet-50/20 hover:bg-violet-50/40 transition-all"
                     >
-                      <div className="w-10 h-10 rounded-2xl bg-zinc-200/80 flex items-center justify-center mx-auto text-zinc-900 mb-2">
+                      <div className="w-10 h-10 rounded-2xl bg-violet-100 flex items-center justify-center mx-auto text-violet-700 mb-2">
                         <FileText className="w-5 h-5" />
                       </div>
-                      <p className="text-xs font-bold text-zinc-900">Choose from Saved Resumes</p>
-                      <p className="text-[11px] text-zinc-500 mt-1">
+                      <p className="text-xs font-bold text-slate-900">Choose from Saved Resumes</p>
+                      <p className="text-[11px] text-slate-500 mt-1">
                         Select a resume you built inside ResuMax AI
                       </p>
                     </div>
@@ -386,39 +386,39 @@ export const AtsAnalyzerPage: React.FC = () => {
             </div>
 
             {/* Optional Target Metadata */}
-            <div className="p-6 rounded-3xl bg-white border border-zinc-200 shadow-xs space-y-3">
-              <h3 className="text-xs font-bold text-zinc-900 uppercase tracking-wider">
+            <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-3">
+              <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
                 Optional Target Role Details
               </h3>
               <div className="space-y-3">
                 <div>
-                  <label className="block text-[11px] font-semibold text-zinc-700 mb-1">
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">
                     Target Job Title
                   </label>
                   <div className="relative">
-                    <Briefcase className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
+                    <Briefcase className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       type="text"
                       placeholder="e.g. Senior Full-Stack Engineer"
                       value={jobTitle}
                       onChange={(e) => setJobTitle(e.target.value)}
-                      className="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-zinc-200 focus:outline-none focus:ring-1 focus:ring-black focus:border-black"
+                      className="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-1 focus:ring-violet-600 focus:border-violet-600 transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-semibold text-zinc-700 mb-1">
+                  <label className="block text-[11px] font-semibold text-slate-700 mb-1">
                     Company Name
                   </label>
                   <div className="relative">
-                    <Building className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
+                    <Building className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                     <input
                       type="text"
                       placeholder="e.g. Stripe, Google, Datadog"
                       value={companyName}
                       onChange={(e) => setCompanyName(e.target.value)}
-                      className="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-zinc-200 focus:outline-none focus:ring-1 focus:ring-black focus:border-black"
+                      className="w-full pl-8 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-1 focus:ring-violet-600 focus:border-violet-600 transition-colors"
                     />
                   </div>
                 </div>
@@ -428,13 +428,13 @@ export const AtsAnalyzerPage: React.FC = () => {
 
           {/* Right Column: Job Description Input */}
           <div className="lg:col-span-7 space-y-6">
-            <div className="p-6 sm:p-8 rounded-3xl bg-white border border-zinc-200 shadow-xs space-y-4">
+            <div className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4">
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-sm font-bold text-zinc-900 tracking-tight">
+                  <h2 className="text-sm font-bold text-slate-900 tracking-tight">
                     2. Target Job Description
                   </h2>
-                  <p className="text-xs text-zinc-500 mt-0.5">
+                  <p className="text-xs text-slate-500 mt-0.5">
                     Paste the complete job posting text to extract key skills and requirements.
                   </p>
                 </div>
@@ -443,9 +443,9 @@ export const AtsAnalyzerPage: React.FC = () => {
                   variant="outline"
                   size="sm"
                   onClick={handleLoadSampleJd}
-                  className="gap-1.5 text-xs shrink-0"
+                  className="gap-1.5 text-xs shrink-0 hover:text-violet-700 hover:border-violet-300"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-zinc-600" />
+                  <Sparkles className="w-3.5 h-3.5 text-violet-600" />
                   <span>Load Sample JD</span>
                 </Button>
               </div>
@@ -456,14 +456,14 @@ export const AtsAnalyzerPage: React.FC = () => {
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
                   placeholder="Paste the target job description here (responsibilities, required skills, technical requirements, qualifications)..."
-                  className="w-full p-4 text-xs font-mono rounded-2xl border border-zinc-200 focus:outline-none focus:ring-1 focus:ring-black focus:border-black leading-relaxed resize-y placeholder:font-sans"
+                  className="w-full p-4 text-xs font-mono rounded-2xl border border-slate-200 focus:outline-none focus:ring-1 focus:ring-violet-600 focus:border-violet-600 leading-relaxed resize-y placeholder:font-sans transition-colors"
                 />
-                <div className="flex items-center justify-between mt-1 text-[11px] text-zinc-400">
+                <div className="flex items-center justify-between mt-1 text-[11px] text-slate-400">
                   <span>{jobDescription.length} characters</span>
                   {jobDescription.length > 0 && (
                     <button
                       onClick={() => setJobDescription('')}
-                      className="text-zinc-500 hover:text-black underline"
+                      className="text-slate-500 hover:text-violet-700 underline"
                     >
                       Clear
                     </button>
@@ -490,7 +490,7 @@ export const AtsAnalyzerPage: React.FC = () => {
               {/* Analysis CTA Button */}
               <div className="pt-2">
                 <Button
-                  variant="primary"
+                  variant="violet"
                   size="lg"
                   onClick={handleRunAnalysis}
                   disabled={isAnalyzing}

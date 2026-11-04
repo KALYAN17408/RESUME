@@ -56,7 +56,7 @@ export const CoverLetterDraftsModal: React.FC<CoverLetterDraftsModalProps> = ({
               placeholder="Search drafts by company, role, or keywords..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-zinc-200 focus:outline-none focus:ring-1 focus:ring-black"
+              className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-1 focus:ring-teal-600 focus:border-teal-600 transition-colors"
             />
           </div>
           <Button
@@ -66,7 +66,7 @@ export const CoverLetterDraftsModal: React.FC<CoverLetterDraftsModalProps> = ({
               onNewDraft();
               onClose();
             }}
-            className="text-xs shrink-0"
+            className="text-xs shrink-0 hover:text-teal-700 hover:border-teal-300"
           >
             Start New
           </Button>
@@ -74,15 +74,15 @@ export const CoverLetterDraftsModal: React.FC<CoverLetterDraftsModalProps> = ({
 
         {/* Drafts List */}
         {drafts.length === 0 ? (
-          <div className="p-8 text-center rounded-2xl border border-dashed border-zinc-200 space-y-2">
-            <FileText className="w-8 h-8 text-zinc-300 mx-auto" />
-            <p className="text-xs font-semibold text-zinc-700">No saved drafts yet</p>
-            <p className="text-[11px] text-zinc-400">
+          <div className="p-8 text-center rounded-2xl border border-dashed border-teal-200 bg-teal-50/20 space-y-2">
+            <FileText className="w-8 h-8 text-teal-400 mx-auto" />
+            <p className="text-xs font-semibold text-slate-700">No saved drafts yet</p>
+            <p className="text-[11px] text-slate-400">
               When you generate or write a cover letter, click "Save Draft" to keep it here.
             </p>
           </div>
         ) : filteredDrafts.length === 0 ? (
-          <div className="p-6 text-center text-xs text-zinc-500">
+          <div className="p-6 text-center text-xs text-slate-500">
             No drafts match "{searchTerm}".
           </div>
         ) : (
@@ -100,36 +100,36 @@ export const CoverLetterDraftsModal: React.FC<CoverLetterDraftsModalProps> = ({
                   key={draft.id}
                   className={`p-3.5 rounded-2xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
                     isActive
-                      ? 'border-black bg-zinc-50 shadow-xs'
-                      : 'border-zinc-200 hover:border-zinc-300 bg-white'
+                      ? 'border-teal-500 bg-teal-50/50 shadow-xs'
+                      : 'border-slate-200 hover:border-teal-200 bg-white'
                   }`}
                 >
                   <div className="space-y-1 min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-bold text-zinc-900 truncate">
+                      <span className="text-xs font-bold text-slate-900 truncate">
                         {draft.title}
                       </span>
                       {isActive && (
-                        <span className="text-[10px] bg-black text-white px-2 py-0.5 rounded-full font-mono">
+                        <Badge variant="teal" size="sm" className="text-[10px] font-mono">
                           Current
-                        </span>
+                        </Badge>
                       )}
                       <Badge variant="outline" size="sm" className="capitalize text-[10px]">
                         {draft.tone}
                       </Badge>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-3 text-[11px] text-zinc-500">
+                    <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-500">
                       <span className="flex items-center gap-1">
-                        <Building className="w-3 h-3 text-zinc-400" />
+                        <Building className="w-3 h-3 text-slate-400" />
                         {draft.companyName}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Briefcase className="w-3 h-3 text-zinc-400" />
+                        <Briefcase className="w-3 h-3 text-slate-400" />
                         {draft.jobTitle}
                       </span>
                       <span className="flex items-center gap-1 font-mono text-[10px]">
-                        <Calendar className="w-3 h-3 text-zinc-400" />
+                        <Calendar className="w-3 h-3 text-slate-400" />
                         {formattedDate}
                       </span>
                     </div>
@@ -137,7 +137,7 @@ export const CoverLetterDraftsModal: React.FC<CoverLetterDraftsModalProps> = ({
 
                   <div className="flex items-center gap-2 shrink-0 self-end sm:self-center">
                     <Button
-                      variant={isActive ? 'secondary' : 'primary'}
+                      variant={isActive ? 'teal' : 'primary'}
                       size="sm"
                       onClick={() => onLoadDraft(draft.id)}
                       className="gap-1 text-xs py-1 px-3"

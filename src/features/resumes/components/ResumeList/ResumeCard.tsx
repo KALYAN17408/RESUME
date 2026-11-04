@@ -36,12 +36,12 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({
   });
 
   return (
-    <Card className="p-5 flex flex-col justify-between hover:shadow-elevated transition-all border-slate-200 group">
+    <Card className="p-5 flex flex-col justify-between hover:border-blue-300 hover:shadow-elevated transition-all border-slate-200 group">
       <div className="space-y-3">
         {/* Header: Title and Template Badge */}
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-start gap-2.5">
-            <div className="w-9 h-9 rounded-radius-sm bg-slate-100 text-slate-900 flex items-center justify-center shrink-0 border border-slate-200 group-hover:scale-105 transition-transform">
+            <div className="w-9 h-9 rounded-radius-sm bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 border border-blue-100 group-hover:scale-105 transition-transform">
               <FileText className="w-5 h-5" />
             </div>
             <div>
@@ -53,7 +53,7 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({
               )}
             </div>
           </div>
-          <Badge variant="default" size="sm" className="shrink-0 text-[10px]">
+          <Badge variant="outline" size="sm" className="shrink-0 text-[10px]">
             {template.name}
           </Badge>
         </div>
@@ -64,9 +64,9 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({
             <Clock className="w-3.5 h-3.5" /> Updated {formattedDate}
           </span>
           {resume.atsScore && resume.atsScore > 0 ? (
-            <span className="text-emerald-700 font-semibold">
+            <Badge variant="success" size="sm" className="text-[10px]">
               Score: {resume.atsScore}/100
-            </span>
+            </Badge>
           ) : null}
         </div>
       </div>
@@ -84,7 +84,7 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({
             <button
               type="button"
               onClick={() => onDuplicate(resume.id)}
-              className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-radius-xs transition-colors focus-ring"
+              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-radius-xs transition-colors focus-ring"
               aria-label={`Duplicate ${resume.title}`}
             >
               <Copy className="w-4 h-4" />
@@ -95,7 +95,7 @@ export const ResumeCard: React.FC<ResumeCardProps> = ({
             <button
               type="button"
               onClick={() => onRename(resume.id, resume.title)}
-              className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-radius-xs transition-colors focus-ring"
+              className="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-radius-xs transition-colors focus-ring"
               aria-label={`Rename ${resume.title}`}
             >
               <Edit3 className="w-4 h-4" />

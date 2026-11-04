@@ -71,3 +71,4 @@ In earlier iterations prior to line-reconstruction fixes, PDF text extraction jo
 - **Unit & Integration Tests:** 26 test suites, **121/121 tests passing**.
 - **TypeScript:** `npx tsc --noEmit` passed with **0 errors**.
 - **Production Build:** `npm run build` completed successfully in 16.07s.
+

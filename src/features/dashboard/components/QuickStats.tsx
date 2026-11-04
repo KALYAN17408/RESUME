@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/Card';
-import { FileText, ScanSearch, Target, Zap } from 'lucide-react';
+import { FileText, ScanSearch, Mail, Zap } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore';
 import { ResumeService } from '@/features/resumes/services/resumeService';
 
@@ -28,30 +28,38 @@ export const QuickStats: React.FC = () => {
     {
       name: 'Resumes Saved',
       value: String(resumeCount),
-      quota: 'Workspace Active',
+      quota: 'ATS Engine Active',
       icon: FileText,
-      color: 'text-slate-900 bg-slate-100 border-slate-200',
+      color: 'text-blue-600 bg-blue-50/80 border-blue-200',
+      badgeColor: 'text-blue-700 bg-blue-50',
+      accentGlow: 'hover:border-blue-300 hover:shadow-md hover:shadow-blue-500/5',
     },
     {
       name: 'ATS Score Scans',
-      value: '1',
-      quota: 'Ready to Run',
+      value: '1 Ready',
+      quota: 'Recruiter AST Checks',
       icon: ScanSearch,
-      color: 'text-emerald-700 bg-emerald-50 border-emerald-200/60',
+      color: 'text-violet-600 bg-violet-50/80 border-violet-200',
+      badgeColor: 'text-violet-700 bg-violet-50',
+      accentGlow: 'hover:border-violet-300 hover:shadow-md hover:shadow-violet-500/5',
     },
     {
-      name: 'Tailored Letters',
-      value: 'Ready',
-      quota: 'Pro Included',
-      icon: Target,
-      color: 'text-blue-700 bg-blue-50 border-blue-200/60',
+      name: 'Cover Letters',
+      value: 'Active',
+      quota: 'Tailored Synthesis',
+      icon: Mail,
+      color: 'text-teal-600 bg-teal-50/80 border-teal-200',
+      badgeColor: 'text-teal-700 bg-teal-50',
+      accentGlow: 'hover:border-teal-300 hover:shadow-md hover:shadow-teal-500/5',
     },
     {
       name: 'AI Quota Balance',
       value: '100%',
       quota: 'Monthly Reset Cycle',
       icon: Zap,
-      color: 'text-amber-700 bg-amber-50 border-amber-200/60',
+      color: 'text-amber-600 bg-amber-50/80 border-amber-200',
+      badgeColor: 'text-amber-800 bg-amber-50',
+      accentGlow: 'hover:border-amber-300 hover:shadow-md hover:shadow-amber-500/5',
     },
   ];
 
@@ -60,13 +68,18 @@ export const QuickStats: React.FC = () => {
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (
-          <Card key={stat.name} className="p-5 flex items-center justify-between">
-            <div className="space-y-1 text-left">
-              <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">{stat.name}</p>
+          <Card
+            key={stat.name}
+            className={`p-5 flex items-center justify-between border-slate-200 bg-white transition-all duration-standard ${stat.accentGlow}`}
+          >
+            <div className="space-y-1.5 text-left">
+              <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">{stat.name}</p>
               <p className="text-2xl font-black text-slate-900 tracking-tight">{stat.value}</p>
-              <p className="text-[11px] text-slate-500 font-medium">{stat.quota}</p>
+              <span className={`inline-block text-[11px] font-semibold px-2 py-0.5 rounded-radius-xs ${stat.badgeColor}`}>
+                {stat.quota}
+              </span>
             </div>
-            <div className={`w-12 h-12 rounded-radius-md border flex items-center justify-center shrink-0 ${stat.color}`}>
+            <div className={`w-12 h-12 rounded-radius-md border flex items-center justify-center shrink-0 ${stat.color} shadow-xs`}>
               <Icon className="w-6 h-6" />
             </div>
           </Card>
