@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { ResumeData } from '@/features/resumes/types/resume.types';
-import type { RewriteBulletResult } from '../types/optimizer.types';
+import type { RewriteBulletResult, BulletStrategy } from '../types/optimizer.types';
 import type { StagedBulletItem } from '../hooks/useOptimizer';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
@@ -33,7 +33,8 @@ interface BulletRewriterCardProps {
     sourceId: string,
     sourceTitle: string,
     bulletIndex: number,
-    bulletText: string
+    bulletText: string,
+    strategy?: BulletStrategy
   ) => void;
   onStageBullet: (item: {
     sourceType: 'experience' | 'project';
@@ -64,6 +65,7 @@ export const BulletRewriterCard: React.FC<BulletRewriterCardProps> = ({
     resume.experiences?.[0]?.id || resume.projects?.[0]?.id || ''
   );
   const [selectedBulletIndex, setSelectedBulletIndex] = useState<number>(0);
+  const [selectedStrategy, setSelectedStrategy] = useState<BulletStrategy | 'diverse'>('diverse');
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [editingAltId, setEditingAltId] = useState<string | null>(null);
   const [editedBulletMap, setEditedBulletMap] = useState<Record<string, string>>({});
@@ -115,7 +117,8 @@ export const BulletRewriterCard: React.FC<BulletRewriterCardProps> = ({
       currentItem.id,
       currentItemTitle,
       selectedBulletIndex,
-      activeBulletText
+      activeBulletText,
+      selectedStrategy === 'diverse' ? undefined : selectedStrategy
     );
   };
 
@@ -165,27 +168,43 @@ export const BulletRewriterCard: React.FC<BulletRewriterCardProps> = ({
           </p>
         </div>
 
-        {activeBulletText && (
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={handleTriggerRewrite}
-            disabled={isLoading}
-            className="gap-2 shrink-0 text-xs"
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0">
+          <select
+            value={selectedStrategy}
+            onChange={(e) => setSelectedStrategy(e.target.value as any)}
+            className="text-xs px-3 py-1.5 rounded-xl border border-zinc-200 bg-white text-zinc-800 font-semibold focus:outline-none focus:ring-1 focus:ring-black shadow-xs"
           >
-            {isLoading && activeBulletKey === currentBulletKey ? (
-              <>
-                <Spinner size="sm" />
-                <span>Rewriting Bullet...</span>
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>{activeResult ? 'Regenerate Rewrites' : 'Rewrite Selected Bullet'}</span>
-              </>
-            )}
-          </Button>
-        )}
+            <option value="diverse">All Strategies (Diverse Rotation)</option>
+            <option value="action-oriented">Action-Oriented (Strong Leadership)</option>
+            <option value="impact-oriented">Impact-Oriented (Outcome & Value)</option>
+            <option value="technical-oriented">Technical-Oriented (Stack & Architecture)</option>
+            <option value="concise-oriented">Concise-Oriented (Zero Fluff)</option>
+            <option value="achievement-oriented">Achievement-Oriented (Google XYZ)</option>
+            <option value="job-targeted">Job-Targeted (JD Alignment)</option>
+          </select>
+
+          {activeBulletText && (
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={handleTriggerRewrite}
+              disabled={isLoading}
+              className="gap-2 shrink-0 text-xs"
+            >
+              {isLoading && activeBulletKey === currentBulletKey ? (
+                <>
+                  <Spinner size="sm" />
+                  <span>Rewriting Bullet...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>{activeResult ? 'Regenerate Rewrites' : 'Rewrite Selected Bullet'}</span>
+                </>
+              )}
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Grounded Heuristics Explanatory Strip */}

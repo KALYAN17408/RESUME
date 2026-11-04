@@ -48,7 +48,7 @@ export const KeywordSuggestionsCard: React.FC<KeywordSuggestionsCardProps> = ({
   onUnstageSkill,
 }) => {
   const { addToast } = useUIStore();
-  const [filterTab, setFilterTab] = useState<'all' | 'missing' | 'matched' | 'under_emphasized'>('missing');
+  const [filterTab, setFilterTab] = useState<'all' | 'missing' | 'matched' | 'under_emphasized' | 'transferable' | 'learning_goals'>('missing');
   const [importanceFilter, setImportanceFilter] = useState<'all' | 'critical' | 'important'>('all');
   const [confirmingSkill, setConfirmingSkill] = useState<SuggestedKeyword | null>(null);
 
@@ -56,6 +56,8 @@ export const KeywordSuggestionsCard: React.FC<KeywordSuggestionsCardProps> = ({
   const missingKeywords = keywordResult?.missingKeywords || [];
   const matchedKeywords = keywordResult?.matchedKeywords || [];
   const underEmphasizedKeywords = keywordResult?.underEmphasizedKeywords || [];
+  const transferableKeywords = keywordResult?.transferableKeywords || [];
+  const learningGoalKeywords = keywordResult?.learningGoalKeywords || [];
 
   const getFilteredList = () => {
     let list: SuggestedKeyword[] = [];
@@ -63,6 +65,8 @@ export const KeywordSuggestionsCard: React.FC<KeywordSuggestionsCardProps> = ({
     else if (filterTab === 'missing') list = missingKeywords;
     else if (filterTab === 'matched') list = matchedKeywords;
     else if (filterTab === 'under_emphasized') list = underEmphasizedKeywords;
+    else if (filterTab === 'transferable') list = transferableKeywords;
+    else if (filterTab === 'learning_goals') list = learningGoalKeywords;
 
     if (importanceFilter !== 'all') {
       list = list.filter((k) => k.importance === importanceFilter);
@@ -226,7 +230,7 @@ export const KeywordSuggestionsCard: React.FC<KeywordSuggestionsCardProps> = ({
       ) : (
         <div className="space-y-5">
           {/* Metrics Strip */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
             <div className="p-4 rounded-2xl bg-white border border-zinc-200 text-center">
               <span className="text-2xl font-black text-zinc-900">{missingKeywords.length}</span>
               <p className="text-[10px] font-bold uppercase text-zinc-400 mt-0.5">Missing in Resume</p>
@@ -236,12 +240,16 @@ export const KeywordSuggestionsCard: React.FC<KeywordSuggestionsCardProps> = ({
               <p className="text-[10px] font-bold uppercase text-zinc-400 mt-0.5">Verified Matched</p>
             </div>
             <div className="p-4 rounded-2xl bg-white border border-zinc-200 text-center">
-              <span className="text-2xl font-black text-zinc-900">{confirmedSkills.length}</span>
-              <p className="text-[10px] font-bold uppercase text-zinc-400 mt-0.5">Confirmed & Staged</p>
+              <span className="text-2xl font-black text-zinc-900">{transferableKeywords.length}</span>
+              <p className="text-[10px] font-bold uppercase text-zinc-400 mt-0.5">Transferable Skills</p>
             </div>
             <div className="p-4 rounded-2xl bg-white border border-zinc-200 text-center">
-              <span className="text-2xl font-black text-zinc-900">{learningGoals.length}</span>
+              <span className="text-2xl font-black text-zinc-900">{learningGoalKeywords.length}</span>
               <p className="text-[10px] font-bold uppercase text-zinc-400 mt-0.5">Learning Goals</p>
+            </div>
+            <div className="p-4 rounded-2xl bg-white border border-zinc-200 text-center col-span-2 sm:col-span-1">
+              <span className="text-2xl font-black text-zinc-900">{confirmedSkills.length}</span>
+              <p className="text-[10px] font-bold uppercase text-zinc-400 mt-0.5">Confirmed & Staged</p>
             </div>
           </div>
 
@@ -291,6 +299,36 @@ export const KeywordSuggestionsCard: React.FC<KeywordSuggestionsCardProps> = ({
                 <span>Under-Emphasized</span>
                 <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-zinc-800 text-zinc-300 font-mono">
                   {underEmphasizedKeywords.length}
+                </span>
+              </button>
+
+              <button
+                onClick={() => setFilterTab('transferable')}
+                className={cn(
+                  'px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5',
+                  filterTab === 'transferable'
+                    ? 'bg-black text-white shadow-xs'
+                    : 'bg-zinc-100 text-zinc-600 hover:text-black hover:bg-zinc-200'
+                )}
+              >
+                <span>Transferable</span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-zinc-800 text-zinc-300 font-mono">
+                  {transferableKeywords.length}
+                </span>
+              </button>
+
+              <button
+                onClick={() => setFilterTab('learning_goals')}
+                className={cn(
+                  'px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5',
+                  filterTab === 'learning_goals'
+                    ? 'bg-black text-white shadow-xs'
+                    : 'bg-zinc-100 text-zinc-600 hover:text-black hover:bg-zinc-200'
+                )}
+              >
+                <span>Learning Goals</span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-zinc-800 text-zinc-300 font-mono">
+                  {learningGoalKeywords.length}
                 </span>
               </button>
 
@@ -376,6 +414,13 @@ export const KeywordSuggestionsCard: React.FC<KeywordSuggestionsCardProps> = ({
                       <p className="text-xs text-zinc-600 leading-relaxed max-w-2xl">
                         {kw.whyItMatters}
                       </p>
+
+                      {kw.suggestedAction && (
+                        <div className="flex items-center gap-1.5 text-xs text-zinc-700 bg-zinc-50 border border-zinc-200 px-3 py-1.5 rounded-xl max-w-2xl">
+                          <Compass className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
+                          <span><strong className="font-semibold text-zinc-900">Suggested Action:</strong> {kw.suggestedAction}</span>
+                        </div>
+                      )}
 
                       <div className="flex flex-wrap items-center gap-3 pt-1 text-[11px] text-zinc-500">
                         <span className="flex items-center gap-1">

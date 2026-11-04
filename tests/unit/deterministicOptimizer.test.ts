@@ -54,13 +54,13 @@ describe('Deterministic Grounded Optimizer', () => {
       expect(result.alternatives).toHaveLength(3);
 
       const tones = result.alternatives.map((a) => a.tone);
-      expect(tones).toContain('impact-driven');
-      expect(tones).toContain('technical-focus');
-      expect(tones).toContain('executive');
+      expect(tones).toContain('professional-concise');
+      expect(tones).toContain('skills-focused');
+      expect(tones).toContain('role-aligned');
 
-      const impactAlt = result.alternatives.find((a) => a.tone === 'impact-driven');
-      expect(impactAlt?.text).toContain('Senior Full-Stack Engineer at Stripe');
-      expect(impactAlt?.text).toContain('React');
+      const conciseAlt = result.alternatives.find((a) => a.tone === 'professional-concise');
+      expect(conciseAlt?.text).toContain('Senior Full-Stack Engineer at Stripe');
+      expect(conciseAlt?.text).toContain('React');
     });
   });
 

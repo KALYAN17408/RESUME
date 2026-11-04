@@ -11,6 +11,7 @@ import type {
   GenerateCoverLetterInput,
   GenerateCoverLetterResult,
   SanitizedResumeContext,
+  BulletStrategy,
 } from '../types/optimizer.types';
 import {
   optimizeSummaryInputSchema,
@@ -79,11 +80,11 @@ export class AiOptimizerService {
     const validatedInput = optimizeSummaryInputSchema.parse(input);
 
     // 2. Sanitize untrusted input text
-    const sanitizedJD = sanitizeUntrustedText(validatedInput.jobDescription);
+    const sanitizedJD = sanitizeUntrustedText(validatedInput.jobDescription || '');
     const sanitizedCurrentSummary = sanitizeUntrustedText(validatedInput.currentSummary || '');
 
     // Check injection warnings
-    const injectionCheck = detectPromptInjection(validatedInput.jobDescription);
+    const injectionCheck = detectPromptInjection(validatedInput.jobDescription || '');
     if (injectionCheck.isSuspicious) {
       console.warn('Potential prompt injection detected in JD and neutralized:', injectionCheck.matchedPattern);
     }
@@ -166,7 +167,7 @@ export class AiOptimizerService {
 
     // 2. Sanitize untrusted text
     const sanitizedBullet = sanitizeUntrustedText(validatedInput.originalBullet);
-    const sanitizedJD = sanitizeUntrustedText(validatedInput.jobDescription);
+    const sanitizedJD = sanitizeUntrustedText(validatedInput.jobDescription || '');
 
     let fallbackDiagnostic = '';
 
@@ -200,7 +201,7 @@ export class AiOptimizerService {
             }
           }
 
-          return validatedOutput;
+          return validatedOutput as unknown as RewriteBulletResult;
         }
 
         if (error) {
@@ -228,6 +229,7 @@ export class AiOptimizerService {
 
     const fallbackResult = rewriteBulletDeterministic({
       ...validatedInput,
+      strategy: validatedInput.strategy as BulletStrategy | undefined,
       originalBullet: sanitizedBullet,
       jobDescription: sanitizedJD,
     });
@@ -235,7 +237,7 @@ export class AiOptimizerService {
     return rewriteBulletResultSchema.parse({
       ...fallbackResult,
       fallbackReason: fallbackDiagnostic || 'Using local Grounded Heuristics engine.',
-    });
+    }) as unknown as RewriteBulletResult;
   }
 
   /**
@@ -312,7 +314,7 @@ export class AiOptimizerService {
     const validatedInput = generateCoverLetterInputSchema.parse(input);
 
     // 2. Sanitize
-    const sanitizedJD = sanitizeUntrustedText(validatedInput.jobDescription);
+    const sanitizedJD = sanitizeUntrustedText(validatedInput.jobDescription || '');
     const sanitizedSummary = sanitizeUntrustedText(validatedInput.summary || '');
 
     let fallbackDiagnostic = '';

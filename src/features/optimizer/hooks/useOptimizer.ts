@@ -15,6 +15,7 @@ import type {
   UserTriageStatus,
   OptimizationSession,
   OptimizationSessionStatus,
+  BulletStrategy,
 } from '../types/optimizer.types';
 import { AiOptimizerService } from '../services/aiOptimizerService';
 import { OptimizationSessionService } from '../services/optimizationSessionService';
@@ -120,12 +121,14 @@ export function useOptimizer(options?: UseOptimizerOptions) {
   const [isOptimizingSummary, setIsOptimizingSummary] = useState(false);
   const [summaryResult, setSummaryResult] = useState<OptimizeSummaryResult | null>(null);
   const [summaryError, setSummaryError] = useState<string | null>(null);
+  const [summaryGenerationsHistory, setSummaryGenerationsHistory] = useState<string[]>([]);
 
   // Bullet rewriting state
   const [isRewritingBullet, setIsRewritingBullet] = useState(false);
   const [activeBulletKey, setActiveBulletKey] = useState<string | null>(null);
   const [bulletResults, setBulletResults] = useState<Record<string, RewriteBulletResult>>({});
   const [bulletError, setBulletError] = useState<string | null>(null);
+  const [bulletGenerationsHistory, setBulletGenerationsHistory] = useState<Record<string, string[]>>({});
 
   // Keyword suggestions state
   const [isSuggestingKeywords, setIsSuggestingKeywords] = useState(false);
@@ -143,6 +146,7 @@ export function useOptimizer(options?: UseOptimizerOptions) {
   const [hiringManagerName, setHiringManagerName] = useState<string>('');
   const [additionalCoverLetterContext, setAdditionalCoverLetterContext] = useState<string>('');
   const [stagedCoverLetter, setStagedCoverLetter] = useState<StagedCoverLetterItem | null>(null);
+  const [coverLetterGenerationsHistory, setCoverLetterGenerationsHistory] = useState<string[]>([]);
 
   // Staged changes
   const [stagedSummary, setStagedSummary] = useState<StagedSummaryItem | null>(null);
@@ -170,19 +174,23 @@ export function useOptimizer(options?: UseOptimizerOptions) {
   const runOptimizeSummary = useCallback(async () => {
     if (!selectedResume) {
       setValidationError('Please select a resume first.');
+      setSummaryError('Please select a resume first.');
       return;
     }
 
     try {
       optimizeSummaryInputSchema.parse({
-        jobDescription,
+        jobDescription: jobDescription || '',
         currentSummary: selectedResume.personalInfo.summary || '',
         targetJobTitle: jobTitle,
         targetCompany: companyName,
       });
       setValidationError(null);
+      setSummaryError(null);
     } catch (err: unknown) {
-      setValidationError(getErrorMessage(err, 'Invalid job description or input'));
+      const msg = getErrorMessage(err, 'Invalid input for summary optimization');
+      setValidationError(msg);
+      setSummaryError(msg);
       return;
     }
 
@@ -191,22 +199,39 @@ export function useOptimizer(options?: UseOptimizerOptions) {
 
     try {
       const skills = (selectedResume.skillCategories || []).flatMap((c) => c.skills);
+      const experiences = selectedResume.experiences || [];
+      const isFresher = experiences.length === 0 || experiences.every((e) => /intern|trainee|apprentice|student/i.test(e.jobTitle));
+      const educations = (selectedResume.educations || []).map((e) => `${e.degree} from ${e.institution}`);
+      const projects = (selectedResume.projects || []).map((p) => p.name);
+
       const result = await AiOptimizerService.optimizeSummary({
         currentSummary: selectedResume.personalInfo.summary || '',
         targetJobTitle: jobTitle || selectedResume.targetRole,
         targetCompany: companyName,
-        jobDescription,
+        jobDescription: jobDescription || '',
         skills,
+        previousGenerations: summaryGenerationsHistory,
+        candidateProfile: {
+          isFresher,
+          totalYearsExperience: isFresher ? 0 : experiences.length,
+          educations,
+          projects,
+          careerObjective: selectedResume.personalInfo.summary || '',
+        },
         allowDeterministicFallback: true,
       });
       setSummaryResult(result);
+      setSummaryGenerationsHistory((prev) => [
+        ...prev,
+        ...result.alternatives.map((a) => a.text),
+      ]);
     } catch (err: unknown) {
       console.error('Summary optimization error:', err);
       setSummaryError(getErrorMessage(err, 'Failed to generate optimized summary alternatives.'));
     } finally {
       setIsOptimizingSummary(false);
     }
-  }, [selectedResume, jobDescription, jobTitle, companyName]);
+  }, [selectedResume, jobDescription, jobTitle, companyName, summaryGenerationsHistory]);
 
   // Bullet rewriting
   const runRewriteBullet = useCallback(
@@ -215,7 +240,8 @@ export function useOptimizer(options?: UseOptimizerOptions) {
       sourceId: string,
       _sourceTitle: string,
       bulletIndex: number,
-      bulletText: string
+      bulletText: string,
+      strategy?: BulletStrategy
     ) => {
       const bulletKey = `${sourceType}_${sourceId}_${bulletIndex}`;
       setActiveBulletKey(bulletKey);
@@ -224,10 +250,14 @@ export function useOptimizer(options?: UseOptimizerOptions) {
         rewriteBulletInputSchema.parse({
           originalBullet: bulletText,
           jobDescription: jobDescription || 'Standard technical evaluation',
+          strategy,
         });
         setBulletError(null);
+        setValidationError(null);
       } catch (err: unknown) {
-        setBulletError(getErrorMessage(err, 'Bullet text must be at least 5 characters'));
+        const msg = getErrorMessage(err, 'Bullet text must be at least 5 characters');
+        setBulletError(msg);
+        setValidationError(msg);
         return;
       }
 
@@ -236,18 +266,33 @@ export function useOptimizer(options?: UseOptimizerOptions) {
 
       try {
         const knownSkills = (selectedResume?.skillCategories || []).flatMap((c) => c.skills);
+        const prevGenForBullet = bulletGenerationsHistory[bulletKey] || [];
         const result = await AiOptimizerService.rewriteBullet({
           originalBullet: bulletText,
           jobTitle: jobTitle || selectedResume?.targetRole,
           company: companyName,
           jobDescription: jobDescription || 'Standard technical evaluation',
           knownSkills,
+          strategy,
+          previousGenerations: prevGenForBullet,
+          resumeContext: {
+            jobTitle: jobTitle || selectedResume?.targetRole,
+            company: companyName,
+            skills: knownSkills,
+          },
           allowDeterministicFallback: true,
         });
 
         setBulletResults((prev) => ({
           ...prev,
           [bulletKey]: result,
+        }));
+        setBulletGenerationsHistory((prev) => ({
+          ...prev,
+          [bulletKey]: [
+            ...(prev[bulletKey] || []),
+            ...result.alternatives.map((a) => a.text),
+          ],
         }));
       } catch (err: unknown) {
         console.error('Bullet rewrite error:', err);
@@ -256,24 +301,28 @@ export function useOptimizer(options?: UseOptimizerOptions) {
         setIsRewritingBullet(false);
       }
     },
-    [selectedResume, jobDescription, jobTitle, companyName]
+    [selectedResume, jobDescription, jobTitle, companyName, bulletGenerationsHistory]
   );
 
   // Keyword suggestions
   const runSuggestKeywords = useCallback(async () => {
     if (!selectedResume) {
       setValidationError('Please select a resume first.');
+      setKeywordError('Please select a resume first.');
       return;
     }
 
     try {
       suggestKeywordsInputSchema.parse({
-        jobDescription,
-        resumeTextOrSkills: selectedResume.personalInfo.summary || selectedResume.title,
+        jobDescription: jobDescription || '',
+        resumeTextOrSkills: selectedResume.personalInfo.summary || selectedResume.title || 'Technical Candidate Profile',
       });
       setValidationError(null);
+      setKeywordError(null);
     } catch (err: unknown) {
-      setValidationError(getErrorMessage(err, 'Invalid job description'));
+      const msg = getErrorMessage(err, 'Please paste a target job description (minimum 10 characters)');
+      setValidationError(msg);
+      setKeywordError(msg);
       return;
     }
 
@@ -292,7 +341,7 @@ export function useOptimizer(options?: UseOptimizerOptions) {
 
       const result = await AiOptimizerService.suggestKeywords({
         jobDescription,
-        resumeTextOrSkills: resumeContext,
+        resumeTextOrSkills: resumeContext || 'Technical Candidate',
         existingSkills,
         allowDeterministicFallback: true,
       });
@@ -370,11 +419,12 @@ export function useOptimizer(options?: UseOptimizerOptions) {
   const runGenerateCoverLetter = useCallback(async () => {
     if (!selectedResume) {
       setValidationError('Please select a resume first.');
+      setCoverLetterError('Please select a resume first.');
       return;
     }
 
     const effectiveTitle = jobTitle || selectedResume.targetRole || 'Software Professional';
-    const effectiveCompany = companyName || 'Hiring Company';
+    const effectiveCompany = companyName || 'Target Company';
 
     try {
       generateCoverLetterInputSchema.parse({
@@ -383,11 +433,14 @@ export function useOptimizer(options?: UseOptimizerOptions) {
         jobTitle: effectiveTitle,
         companyName: effectiveCompany,
         hiringManagerName: hiringManagerName || 'Hiring Team',
-        jobDescription,
+        jobDescription: jobDescription || '',
       });
       setValidationError(null);
+      setCoverLetterError(null);
     } catch (err: unknown) {
-      setValidationError(getErrorMessage(err, 'Invalid job description or parameters'));
+      const msg = getErrorMessage(err, 'Please specify both Role Title and Company Name');
+      setValidationError(msg);
+      setCoverLetterError(msg);
       return;
     }
 
@@ -399,6 +452,20 @@ export function useOptimizer(options?: UseOptimizerOptions) {
       const keyAchievements = (selectedResume.achievements || []).map((a) => a.title).concat(
         (selectedResume.experiences || []).flatMap((e) => e.highlights || []).slice(0, 2)
       );
+      const educations = (selectedResume.educations || []).map((e) => ({
+        degree: e.degree,
+        institution: e.institution,
+      }));
+      const projects = (selectedResume.projects || []).map((p) => ({
+        name: p.name,
+        description: p.description,
+        technologies: p.technologies || [],
+      }));
+      const experiences = (selectedResume.experiences || []).map((e) => ({
+        jobTitle: e.jobTitle,
+        company: e.company,
+        highlights: e.highlights || [],
+      }));
 
       const result = await AiOptimizerService.generateCoverLetter({
         candidateName: selectedResume.personalInfo.fullName || 'Candidate',
@@ -406,10 +473,14 @@ export function useOptimizer(options?: UseOptimizerOptions) {
         jobTitle: effectiveTitle,
         companyName: effectiveCompany,
         hiringManagerName: hiringManagerName || 'Hiring Team',
-        jobDescription,
+        jobDescription: jobDescription || '',
         summary: selectedResume.personalInfo.summary,
         skills,
         keyAchievements,
+        educations,
+        projects,
+        experiences,
+        previousGenerations: coverLetterGenerationsHistory,
         allowDeterministicFallback: true,
       });
 
@@ -421,13 +492,14 @@ export function useOptimizer(options?: UseOptimizerOptions) {
 
       setCoverLetterResult(result);
       setEditedCoverLetter(finalContent);
+      setCoverLetterGenerationsHistory((prev) => [...prev, result.content]);
     } catch (err: unknown) {
       console.error('Cover letter generation error:', err);
       setCoverLetterError(getErrorMessage(err, 'Failed to generate tailored cover letter.'));
     } finally {
       setIsGeneratingCoverLetter(false);
     }
-  }, [selectedResume, jobTitle, companyName, hiringManagerName, jobDescription, additionalCoverLetterContext]);
+  }, [selectedResume, jobTitle, companyName, hiringManagerName, jobDescription, additionalCoverLetterContext, coverLetterGenerationsHistory]);
 
   const resetCoverLetterToGenerated = useCallback(() => {
     if (coverLetterResult) {

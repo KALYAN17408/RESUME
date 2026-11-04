@@ -8,9 +8,33 @@ export type OptimizerOperation =
 
 export type ProviderType = 'supabase-edge' | 'deterministic' | 'external-llm';
 
-export type ToneType = 'impact-driven' | 'technical-focus' | 'executive';
+export type ToneType =
+  | 'professional-concise'
+  | 'skills-focused'
+  | 'role-aligned'
+  | 'impact-driven'
+  | 'technical-focus'
+  | 'executive';
 
-export type FormulaType = 'XYZ' | 'Action-Result' | 'Leadership-Scope';
+export type BulletStrategy =
+  | 'action-oriented'
+  | 'impact-oriented'
+  | 'technical-oriented'
+  | 'concise-oriented'
+  | 'achievement-oriented'
+  | 'job-targeted';
+
+export type FormulaType =
+  | 'XYZ'
+  | 'Action-Result'
+  | 'Leadership-Scope'
+  | 'Action-Oriented'
+  | 'Impact-Oriented'
+  | 'Technical-Oriented'
+  | 'Concise'
+  | 'Achievement'
+  | 'Job-Targeted'
+  | (string & {});
 
 export type KeywordCategory =
   | 'Languages'
@@ -62,9 +86,17 @@ export interface OptimizeSummaryInput {
   currentSummary?: string;
   targetJobTitle?: string;
   targetCompany?: string;
-  jobDescription: string;
+  jobDescription?: string;
   skills?: string[];
   experiencesSummary?: string;
+  previousGenerations?: string[];
+  candidateProfile?: {
+    isFresher?: boolean;
+    totalYearsExperience?: number;
+    educations?: any[];
+    projects?: any[];
+    careerObjective?: string;
+  };
   allowDeterministicFallback?: boolean;
 }
 
@@ -72,8 +104,16 @@ export interface RewriteBulletInput {
   originalBullet: string;
   jobTitle?: string;
   company?: string;
-  jobDescription: string;
+  jobDescription?: string;
   knownSkills?: string[];
+  strategy?: BulletStrategy;
+  previousGenerations?: string[];
+  resumeContext?: {
+    jobTitle?: string;
+    company?: string;
+    skills?: string[];
+    projectHighlights?: string[];
+  };
   allowDeterministicFallback?: boolean;
 }
 
@@ -90,10 +130,14 @@ export interface GenerateCoverLetterInput {
   jobTitle: string;
   companyName: string;
   hiringManagerName?: string;
-  jobDescription: string;
+  jobDescription?: string;
   summary?: string;
   keyAchievements?: string[];
   skills?: string[];
+  educations?: Array<{ degree: string; institution: string; year?: string }>;
+  projects?: Array<{ name: string; description?: string; technologies: string[] }>;
+  experiences?: Array<{ jobTitle: string; company: string; highlights: string[] }>;
+  previousGenerations?: string[];
   allowDeterministicFallback?: boolean;
 }
 
@@ -149,12 +193,17 @@ export interface SuggestedKeyword {
   whyItMatters: string;
   suggestedSection: 'skills' | 'experience' | 'summary' | 'projects';
   userTriageStatus: UserTriageStatus;
+  suggestedAction?: string;
+  isTransferable?: boolean;
+  isLearningGoal?: boolean;
 }
 
 export interface SuggestKeywordsResult {
   matchedKeywords: SuggestedKeyword[];
   missingKeywords: SuggestedKeyword[];
   underEmphasizedKeywords: SuggestedKeyword[];
+  transferableKeywords?: SuggestedKeyword[];
+  learningGoalKeywords?: SuggestedKeyword[];
   allSuggestions: SuggestedKeyword[];
   provider: ProviderType;
   isDeterministic: boolean;

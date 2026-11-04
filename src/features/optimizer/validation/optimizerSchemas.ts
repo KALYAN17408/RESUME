@@ -51,10 +51,16 @@ export const optimizeSummaryInputSchema = z.object({
   targetCompany: z.string().max(200, 'Target company must not exceed 200 characters').optional().default(''),
   jobDescription: z
     .string()
-    .min(10, 'Job description must be at least 10 characters')
-    .max(25000, 'Job description must not exceed 25,000 characters'),
+    .max(25000, 'Job description must not exceed 25,000 characters')
+    .refine((val) => !val || val.trim().length === 0 || val.trim().length >= 10, {
+      message: 'Job description must be at least 10 characters',
+    })
+    .optional()
+    .default(''),
   skills: z.array(z.string().max(100)).optional().default([]),
   experiencesSummary: z.string().max(5000).optional().default(''),
+  previousGenerations: z.array(z.string()).optional().default([]),
+  candidateProfile: z.record(z.any()).optional(),
   allowDeterministicFallback: z.boolean().optional().default(true),
 });
 
@@ -67,9 +73,16 @@ export const rewriteBulletInputSchema = z.object({
   company: z.string().max(200).optional().default(''),
   jobDescription: z
     .string()
-    .min(10, 'Job description must be at least 10 characters')
-    .max(25000, 'Job description must not exceed 25,000 characters'),
+    .max(25000, 'Job description must not exceed 25,000 characters')
+    .refine((val) => !val || val.trim().length === 0 || val.trim().length >= 10, {
+      message: 'Job description must be at least 10 characters',
+    })
+    .optional()
+    .default(''),
   knownSkills: z.array(z.string().max(100)).optional().default([]),
+  strategy: z.string().optional(),
+  previousGenerations: z.array(z.string()).optional().default([]),
+  resumeContext: z.record(z.any()).optional(),
   allowDeterministicFallback: z.boolean().optional().default(true),
 });
 
@@ -94,11 +107,16 @@ export const generateCoverLetterInputSchema = z.object({
   hiringManagerName: z.string().max(150).optional().default('Hiring Team'),
   jobDescription: z
     .string()
-    .min(10, 'Job description must be at least 10 characters')
-    .max(25000, 'Job description must not exceed 25,000 characters'),
+    .max(25000, 'Job description must not exceed 25,000 characters')
+    .optional()
+    .default(''),
   summary: z.string().max(3000).optional().default(''),
   keyAchievements: z.array(z.string().max(1000)).optional().default([]),
   skills: z.array(z.string().max(100)).optional().default([]),
+  educations: z.array(z.any()).optional().default([]),
+  projects: z.array(z.any()).optional().default([]),
+  experiences: z.array(z.any()).optional().default([]),
+  previousGenerations: z.array(z.string()).optional().default([]),
   allowDeterministicFallback: z.boolean().optional().default(true),
 });
 
@@ -123,7 +141,14 @@ export const providerTypeSchema = z.enum(['supabase-edge', 'deterministic', 'ext
 export const summaryAlternativeSchema = z.object({
   id: z.string().min(1),
   text: z.string().min(10, 'Generated summary must be at least 10 characters'),
-  tone: z.enum(['impact-driven', 'technical-focus', 'executive']),
+  tone: z.enum([
+    'professional-concise',
+    'skills-focused',
+    'role-aligned',
+    'impact-driven',
+    'technical-focus',
+    'executive',
+  ]),
   keywordsUsed: z.array(z.string()),
   rationale: z.string().min(5),
   requiresConfirmation: z.boolean(),
@@ -142,7 +167,7 @@ export const optimizeSummaryResultSchema = z.object({
 export const bulletAlternativeSchema = z.object({
   id: z.string().min(1),
   text: z.string().min(10, 'Rewritten bullet must be at least 10 characters'),
-  formula: z.enum(['XYZ', 'Action-Result', 'Leadership-Scope']),
+  formula: z.string(),
   actionVerb: z.string().min(2),
   metricsOrPlaceholders: z.array(z.string()),
   improvements: z.array(z.string()),
@@ -177,12 +202,17 @@ export const suggestedKeywordSchema = z.object({
   whyItMatters: z.string().min(5),
   suggestedSection: z.enum(['skills', 'experience', 'summary', 'projects']),
   userTriageStatus: z.enum(['already_have', 'need_to_learn', 'not_relevant', 'unreviewed']),
+  suggestedAction: z.string().optional(),
+  isTransferable: z.boolean().optional(),
+  isLearningGoal: z.boolean().optional(),
 });
 
 export const suggestKeywordsResultSchema = z.object({
   matchedKeywords: z.array(suggestedKeywordSchema),
   missingKeywords: z.array(suggestedKeywordSchema),
   underEmphasizedKeywords: z.array(suggestedKeywordSchema),
+  transferableKeywords: z.array(suggestedKeywordSchema).optional().default([]),
+  learningGoalKeywords: z.array(suggestedKeywordSchema).optional().default([]),
   allSuggestions: z.array(suggestedKeywordSchema),
   provider: providerTypeSchema,
   isDeterministic: z.boolean(),
