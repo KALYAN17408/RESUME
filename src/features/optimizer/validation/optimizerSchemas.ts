@@ -169,10 +169,13 @@ export const bulletAlternativeSchema = z.object({
   text: z.string().min(10, 'Rewritten bullet must be at least 10 characters'),
   formula: z.string(),
   actionVerb: z.string().min(2),
-  metricsOrPlaceholders: z.array(z.string()),
-  improvements: z.array(z.string()),
+  metricsOrPlaceholders: z.array(z.string()).optional().default([]),
+  improvements: z.array(z.string()).optional().default([]),
   requiresConfirmation: z.boolean(),
-  unsupportedClaims: z.array(z.string()),
+  unsupportedClaims: z.array(z.string()).optional().default([]),
+  approach: z.enum(['concise-ats', 'technical-contribution', 'outcome-focused']).optional(),
+  relevantKeywords: z.array(z.string()).optional().default([]),
+  metricOpportunity: z.string().optional(),
 });
 
 export const rewriteBulletResultSchema = z.object({

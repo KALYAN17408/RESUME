@@ -43,11 +43,11 @@ describe('AI Optimizer Intelligence & Feature Repairs', () => {
       const leadVerbs = new Set(generations.map((g) => g.alternatives[0].actionVerb));
       expect(leadVerbs.size).toBeGreaterThanOrEqual(3);
 
-      // Verify that no fabricated metrics were introduced (must have bracketed placeholder)
+      // Verify that no fabricated metrics were introduced and bullets remain clean without bracket placeholders
       for (const gen of generations) {
         for (const alt of gen.alternatives) {
-          expect(alt.text).toContain('[add measurable result if available');
-          expect(alt.requiresConfirmation).toBe(true);
+          expect(alt.text).not.toContain('[add measurable result');
+          expect(alt.metricOpportunity).toBeDefined();
         }
       }
     });

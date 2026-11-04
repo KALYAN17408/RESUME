@@ -44,7 +44,8 @@ describe('AiOptimizerService — PII Sanitization & Resilience', () => {
       expect(result.provider).toBe('deterministic');
       expect(result.isDeterministic).toBe(true);
       expect(result.alternatives).toHaveLength(3);
-      expect(result.alternatives[0].text).toContain('[add measurable result if available');
+      expect(result.alternatives[0].text).not.toContain('[add measurable result');
+      expect(result.alternatives[0].text.length).toBeGreaterThan(15);
       expect(result.fallbackReason).toBeTruthy();
     });
 

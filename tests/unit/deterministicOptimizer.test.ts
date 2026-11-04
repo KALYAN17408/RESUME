@@ -22,9 +22,9 @@ describe('Deterministic Grounded Optimizer', () => {
       const xyzAlt = result.alternatives.find((a) => a.formula === 'XYZ');
       expect(xyzAlt).toBeDefined();
       expect(xyzAlt?.actionVerb).toBe('Engineered');
-      // Original had no metric, so it must contain a bracketed placeholder
-      expect(xyzAlt?.text).toContain('[add measurable result if available');
-      expect(xyzAlt?.requiresConfirmation).toBe(true);
+      // Original had no metric: bullet text is clean without placeholders, metric opportunity is provided separately
+      expect(xyzAlt?.text).not.toContain('[add measurable result');
+      expect(xyzAlt?.metricOpportunity).toBeDefined();
     });
 
     it('preserves existing verified metrics and does not replace them with placeholders', () => {

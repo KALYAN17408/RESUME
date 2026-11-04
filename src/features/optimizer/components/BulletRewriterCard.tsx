@@ -14,7 +14,6 @@ import {
   Check,
   CheckCircle2,
   AlertTriangle,
-  Zap,
   Edit3,
   X,
   Undo2,
@@ -164,7 +163,7 @@ export const BulletRewriterCard: React.FC<BulletRewriterCardProps> = ({
             </Badge>
           </div>
           <p className="text-xs text-zinc-500 mt-0.5">
-            Optimize bullet points for strong active verbs, technical specificity, and measurable impact while strictly preventing fabricated metrics.
+            Restructure resume bullets for technical accuracy, measurable impact, and natural ATS alignment without fabricated claims.
           </p>
         </div>
 
@@ -174,13 +173,12 @@ export const BulletRewriterCard: React.FC<BulletRewriterCardProps> = ({
             onChange={(e) => setSelectedStrategy(e.target.value as any)}
             className="text-xs px-3 py-1.5 rounded-xl border border-zinc-200 bg-white text-zinc-800 font-semibold focus:outline-none focus:ring-1 focus:ring-black shadow-xs"
           >
-            <option value="diverse">All Strategies (Diverse Rotation)</option>
-            <option value="action-oriented">Action-Oriented (Strong Leadership)</option>
-            <option value="impact-oriented">Impact-Oriented (Outcome & Value)</option>
-            <option value="technical-oriented">Technical-Oriented (Stack & Architecture)</option>
-            <option value="concise-oriented">Concise-Oriented (Zero Fluff)</option>
+            <option value="diverse">All Approaches (Concise, Technical, Outcome)</option>
+            <option value="concise-oriented">Concise & ATS-Focused</option>
+            <option value="technical-oriented">Technical Contribution-Focused</option>
+            <option value="impact-oriented">Outcome & Value-Focused</option>
             <option value="achievement-oriented">Achievement-Oriented (Google XYZ)</option>
-            <option value="job-targeted">Job-Targeted (JD Alignment)</option>
+            <option value="job-targeted">Job-Targeted Alignment</option>
           </select>
 
           {activeBulletText && (
@@ -462,12 +460,18 @@ export const BulletRewriterCard: React.FC<BulletRewriterCardProps> = ({
                     >
                       {/* Alternative Title & Tags */}
                       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-100 pb-3">
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                           <span className="text-xs font-black text-zinc-900 uppercase tracking-wider">
-                            Alternative #{idx + 1}
+                            Suggestion {idx + 1}
                           </span>
                           <Badge variant="default" size="sm" className="bg-zinc-100 text-zinc-800 text-[10px]">
-                            {alt.formula} Formula
+                            {alt.approach === 'concise-ats'
+                              ? 'Concise & ATS'
+                              : alt.approach === 'technical-contribution'
+                              ? 'Technical Contribution'
+                              : alt.approach === 'outcome-focused'
+                              ? 'Outcome-Focused'
+                              : `${alt.formula} Formula`}
                           </Badge>
                           <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-700">
                             Verb: {alt.actionVerb}
@@ -494,7 +498,7 @@ export const BulletRewriterCard: React.FC<BulletRewriterCardProps> = ({
                             onChange={(e) => handleBulletTextChange(alt.id, e.target.value)}
                             rows={3}
                             className="w-full p-3 rounded-xl bg-white border border-zinc-300 text-xs sm:text-sm text-zinc-900 leading-relaxed font-sans focus:outline-hidden focus:ring-2 focus:ring-black"
-                            placeholder="Edit bullet point and replace bracketed placeholders with real metrics..."
+                            placeholder="Edit bullet point to customize wording..."
                           />
                           <div className="flex items-center justify-between pt-1">
                             <button
@@ -516,17 +520,33 @@ export const BulletRewriterCard: React.FC<BulletRewriterCardProps> = ({
                           </div>
                         </div>
                       ) : (
-                        <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 text-xs sm:text-sm text-zinc-900 leading-relaxed font-sans">
+                        <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 text-xs sm:text-sm text-zinc-900 leading-relaxed font-sans font-medium">
                           {currentRewrittenText}
                         </div>
                       )}
 
-                      {/* Improvements List */}
+                      {/* Relevant Keywords */}
+                      {alt.relevantKeywords && alt.relevantKeywords.length > 0 && (
+                        <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                          <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider mr-1">
+                            Relevant keywords:
+                          </span>
+                          {alt.relevantKeywords.map((kw, kIdx) => (
+                            <span
+                              key={kIdx}
+                              className="text-[10px] font-medium px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-700 border border-zinc-200"
+                            >
+                              {kw}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Why This Is Stronger (Improvements List) */}
                       {alt.improvements.length > 0 && (
                         <div className="space-y-1">
                           <div className="flex items-center gap-1.5 text-[10px] font-bold text-zinc-500 uppercase tracking-wider">
-                            <Zap className="w-3 h-3 text-zinc-400" />
-                            <span>Applied Heuristics</span>
+                            <span>Why this is stronger</span>
                           </div>
                           <ul className="text-[11px] text-zinc-600 space-y-0.5 list-disc list-inside">
                             {alt.improvements.map((imp, i) => (
@@ -536,15 +556,27 @@ export const BulletRewriterCard: React.FC<BulletRewriterCardProps> = ({
                         </div>
                       )}
 
-                      {/* Placeholders / Metric Warnings */}
+                      {/* Metric Opportunity Notice */}
+                      {alt.metricOpportunity && (
+                        <div className="p-3 rounded-2xl bg-zinc-50 border border-zinc-200 text-zinc-800 text-xs space-y-1">
+                          <div className="flex items-center gap-1.5 font-bold text-zinc-900">
+                            <span>Metric opportunity</span>
+                          </div>
+                          <p className="text-[11px] text-zinc-600 leading-relaxed">
+                            {alt.metricOpportunity}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* Legacy Placeholders / Metric Warnings if explicitly requiresConfirmation */}
                       {alt.requiresConfirmation && (
                         <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs space-y-1">
                           <div className="flex items-center gap-1.5 font-bold text-amber-950">
                             <AlertTriangle className="w-3.5 h-3.5 text-amber-700" />
-                            <span>Placeholder Metric Required</span>
+                            <span>Metric Opportunity</span>
                           </div>
                           <p className="text-[11px] text-amber-800 leading-relaxed">
-                            Original bullet lacked quantifiable numbers. Click <strong>Edit & Fill Metric</strong> below to replace <code className="bg-amber-100 px-1 py-0.5 rounded text-amber-900 font-mono text-[10px]">[add measurable result...]</code> with your actual stats.
+                            Original bullet lacked quantifiable numbers. Consider clicking <strong>Edit & Fill Metric</strong> below if you have specific measurable stats to add.
                           </p>
                         </div>
                       )}

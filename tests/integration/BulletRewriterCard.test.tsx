@@ -83,7 +83,7 @@ describe('BulletRewriterCard Component', () => {
 
     expect(screen.getByText('XYZ Formula')).toBeInTheDocument();
     expect(screen.getByText('Verb: Engineered')).toBeInTheDocument();
-    expect(screen.getByText(/Placeholder Metric Required/i)).toBeInTheDocument();
+    expect(screen.getByText(/Metric Opportunity/i)).toBeInTheDocument();
 
     const stageBtns = screen.getAllByRole('button', { name: /apply to staged changes/i });
     fireEvent.click(stageBtns[0]);
@@ -118,7 +118,7 @@ describe('BulletRewriterCard Component', () => {
     fireEvent.click(editBtns[0]);
 
     // Textarea is shown
-    const textarea = screen.getByPlaceholderText(/edit bullet point and replace bracketed placeholders/i);
+    const textarea = screen.getByPlaceholderText(/edit bullet point/i);
     expect(textarea).toBeInTheDocument();
 
     // Fill in actual metric

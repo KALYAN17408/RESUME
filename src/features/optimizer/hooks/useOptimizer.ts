@@ -249,7 +249,7 @@ export function useOptimizer(options?: UseOptimizerOptions) {
       try {
         rewriteBulletInputSchema.parse({
           originalBullet: bulletText,
-          jobDescription: jobDescription || 'Standard technical evaluation',
+          jobDescription: jobDescription || '',
           strategy,
         });
         setBulletError(null);
@@ -271,7 +271,7 @@ export function useOptimizer(options?: UseOptimizerOptions) {
           originalBullet: bulletText,
           jobTitle: jobTitle || selectedResume?.targetRole,
           company: companyName,
-          jobDescription: jobDescription || 'Standard technical evaluation',
+          jobDescription: jobDescription || '',
           knownSkills,
           strategy,
           previousGenerations: prevGenForBullet,

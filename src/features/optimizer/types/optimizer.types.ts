@@ -163,6 +163,8 @@ export interface OptimizeSummaryResult {
   fallbackReason?: string;
 }
 
+export type BulletApproach = 'concise-ats' | 'technical-contribution' | 'outcome-focused';
+
 export interface BulletAlternative {
   id: string;
   text: string;
@@ -172,6 +174,9 @@ export interface BulletAlternative {
   improvements: string[];
   requiresConfirmation: boolean;
   unsupportedClaims: string[];
+  approach?: BulletApproach;
+  relevantKeywords?: string[];
+  metricOpportunity?: string;
 }
 
 export interface RewriteBulletResult {

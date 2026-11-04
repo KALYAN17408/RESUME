@@ -27,38 +27,56 @@ function buildPromptForOperation(operation: string, payload: any): string {
       return `
 OPERATION: rewrite-bullet
 ORIGINAL BULLET: "${payload.originalBullet}"
-JOB TITLE: "${payload.jobTitle || 'Role'}"
-TARGET JOB DESCRIPTION: ${payload.jobDescription || 'Standard technical evaluation'}
-KNOWN SKILLS: ${JSON.stringify(payload.knownSkills || [])}
-PREVIOUS GENERATIONS TO AVOID REPEATING: ${JSON.stringify(payload.previousGenerations || [])}
-PREFERRED STRATEGY: ${payload.strategy || 'diverse'}
+TARGET ROLE: "${payload.jobTitle || ''}"
+TARGET JOB DESCRIPTION: ${payload.jobDescription ? `"${payload.jobDescription}"` : 'None provided'}
+KNOWN CANDIDATE SKILLS: ${JSON.stringify(payload.knownSkills || [])}
+PREVIOUS GENERATIONS TO AVOID: ${JSON.stringify(payload.previousGenerations || [])}
 
 INSTRUCTIONS:
-Generate 3 distinct, high-impact bullet alternatives exploring different strategies:
-- Action-oriented: Strong leadership and initiative verbs (e.g. Orchestrated, Architected, Spearheaded, Championed).
-- Impact-oriented: Focuses on measurable outcomes, throughput, or business value.
-- Technical-oriented: Emphasizes specific implementation mechanisms, architecture, and tools.
-- Concise: Tight, eliminates filler words and passive voice.
-- Achievement (Google XYZ): Accomplished [X] as measured by [Y] by doing [Z].
-- Job-Targeted: Tailors wording specifically to keywords in the target job description.
+You are an expert technical resume coach and ATS optimization specialist.
+Analyze the candidate's original bullet point and rewrite it into 3 genuinely distinct, polished, professional alternatives representing 3 different improvement approaches:
 
-RULES:
-- If quantifiable metrics exist in the original bullet, retain and highlight them.
-- If no metrics exist, insert an explicit bracketed prompt: "[add measurable result if available, e.g. % increase or hours saved]". NEVER invent numbers!
-- Ensure alternatives are completely distinct from any previous generations listed above.
+1. Concise and ATS-Focused (approach: "concise-ats"):
+   - Clear, direct, high-impact phrasing.
+   - Naturally includes relevant technical keywords from the source bullet and target role.
+   - Eliminates passive voice, weak filler, and wordiness.
 
-RETURN EXACT JSON MATCHING:
+2. Technical Contribution-Focused (approach: "technical-contribution"):
+   - Emphasizes tools, implementation mechanisms, engineering work, or problem-solving actually present in the source.
+   - Demonstrates technical depth (e.g. relational data handling, application logic, component integration).
+
+3. Outcome-Focused (approach: "outcome-focused"):
+   - Highlights practical utility, functional outcome, or operational problem-solving without inventing fake metrics or corporate scale.
+
+CRITICAL RULES:
+- FACTUAL INTEGRITY: Strictly preserve the candidate's actual contribution, tools, and seniority. Do NOT add unmentioned leadership, architecture scale, tools, or responsibilities.
+- NO DUPLICATE VERBS: Never concatenate duplicate verbs like "Engineered and delivered developed..." or "Orchestrated development of developed...".
+- NO GENERIC FILLER: Never insert cliché padding such as "robust implementation", "modern architecture standards", or "production workflows" unless supported by the source bullet.
+- NO BRACKET PLACEHOLDERS IN BULLET TEXT: The "text" field must be a complete, polished, ready-to-use resume bullet. Do NOT insert "[add measurable result...]" inside "text".
+- METRICS: Only include metrics if numbers exist in the source bullet. If no metric is present, formulate a helpful follow-up question in the "metricOpportunity" field (e.g., "Consider specifying how many applications were built or volume of data handled").
+- DIVERSITY: Each of the 3 alternatives must use a completely distinct sentence structure and active verb. Never repeat phrasing from previous generations.
+
+REFERENCE TRANSFORMATION EXAMPLE:
+Original: "Developed mini applications using Python and MySQL."
+- Concise & ATS: "Built Python applications backed by MySQL to implement core functionality and manage structured data."
+- Technical Contribution: "Implemented Python-based applications with MySQL integration, strengthening application logic and relational data handling."
+- Outcome-Focused: "Developed mini applications using Python and MySQL, applying programming and database concepts to solve practical problems."
+
+RETURN EXACT JSON MATCHING THIS SCHEMA:
 {
   "originalBullet": "${payload.originalBullet}",
   "alternatives": [
     {
       "id": "uuid",
-      "text": "Rewritten bullet string",
-      "formula": "Action-Oriented" | "Impact-Oriented" | "Technical-Oriented" | "Concise" | "Google XYZ" | "Job-Targeted",
-      "actionVerb": "First active verb",
-      "metricsOrPlaceholders": ["metric or bracket placeholder"],
+      "text": "Polished rewritten bullet string ready to put on a resume",
+      "approach": "concise-ats" | "technical-contribution" | "outcome-focused",
+      "formula": "XYZ" | "Action-Result" | "Outcome-Focused",
+      "actionVerb": "First active verb (e.g. Built, Implemented, Developed)",
+      "relevantKeywords": ["keyword1", "keyword2"],
+      "metricOpportunity": "Optional follow-up question if original had no metric",
+      "metricsOrPlaceholders": [],
       "improvements": ["improvement note 1", "improvement note 2"],
-      "requiresConfirmation": boolean,
+      "requiresConfirmation": false,
       "unsupportedClaims": []
     }
   ]
