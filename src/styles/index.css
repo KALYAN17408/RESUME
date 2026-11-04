@@ -11,6 +11,26 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color: #0f172a;
+    background-color: #f8fafc;
+  }
+
+  /* Accessible focus indicators for all interactive elements */
+  :focus-visible {
+    outline: 2px solid #0f172a;
+    outline-offset: 2px;
+  }
+}
+
+/* Global Prefers-Reduced-Motion accessibility compliance */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -50,4 +70,16 @@ html {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(30, 41, 59, 0.8);
+}
+
+/* Reusable BAMA Utility Classes */
+@layer utilities {
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 focus-visible:ring-offset-2;
+  }
+
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
