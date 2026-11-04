@@ -21,7 +21,7 @@ export const WelcomeBanner: React.FC = () => {
               {tier} Tier Workspace
             </Badge>
             <Badge variant="success" size="sm" className="bg-emerald-500/20 text-emerald-300 border-emerald-400/30 text-[10px] gap-1">
-              <ShieldCheck className="w-3 h-3" /> Phase 2 Resume Builder Live
+              <ShieldCheck className="w-3 h-3" /> ATS Resume Builder Live
             </Badge>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
@@ -38,7 +38,7 @@ export const WelcomeBanner: React.FC = () => {
               Active Security Model
             </span>
             <span className="text-xs font-bold text-white flex items-center gap-1.5 mt-1">
-              <Sparkles className="w-3.5 h-3.5 text-zinc-300" /> Supabase PKCE Auth
+              <Sparkles className="w-3.5 h-3.5 text-zinc-300" /> Cloud Sync Verified
             </span>
           </div>
         </div>

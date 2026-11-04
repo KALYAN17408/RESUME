@@ -204,7 +204,7 @@ export const AtsAnalyzerPage: React.FC = () => {
         <div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-zinc-900 tracking-wider uppercase">
-              Module B • Phase 3
+              ATS Optimization Engine
             </span>
             <Badge variant="outline" size="sm" className="font-mono text-[10px]">
               Recruiter-Grade AST

@@ -132,7 +132,7 @@ export const ResumeListPage: React.FC = () => {
           <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
             <span>My Resumes</span>
             <Badge variant="brand" size="sm">
-              Module A
+              ATS Builder
             </Badge>
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">

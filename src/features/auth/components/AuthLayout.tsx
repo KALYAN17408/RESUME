@@ -52,8 +52,8 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title, subtitl
         </div>
 
         {/* Security watermark */}
-        <p className="text-center text-[11px] text-slate-400">
-          Protected by Supabase PKCE Auth & PostgreSQL Row Level Security.
+        <p className="text-center text-[11px] text-slate-500">
+          Protected by Enterprise Authentication & PostgreSQL Row Level Security.
         </p>
       </div>
 

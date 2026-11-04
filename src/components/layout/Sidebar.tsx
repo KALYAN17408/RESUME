@@ -29,9 +29,9 @@ export const Sidebar: React.FC = () => {
     { name: 'Resume Builder', href: '/dashboard/resumes', icon: FileText, badge: 'Live' },
     { name: 'ATS Analyzer', href: '/dashboard/analyzer', icon: ScanSearch, badge: 'Live' },
     { name: 'Cover Letter Generator', href: '/dashboard/cover-letter', icon: Mail, badge: 'Live' },
-    { name: 'Job Matching', href: '/dashboard/jobs', icon: Briefcase, badge: 'Phase 4' },
-    { name: 'AI Career Copilot', href: '/dashboard/copilot', icon: Bot, badge: 'Phase 5' },
-    { name: 'Mock Interviews', href: '/dashboard/interviews', icon: MessageSquare, badge: 'Phase 5' },
+    { name: 'Job Matching', href: '/dashboard/jobs', icon: Briefcase, badge: 'Coming Soon' },
+    { name: 'AI Career Copilot', href: '/dashboard/copilot', icon: Bot, badge: 'Coming Soon' },
+    { name: 'Mock Interviews', href: '/dashboard/interviews', icon: MessageSquare, badge: 'Coming Soon' },
     { name: 'Account Settings', href: '/dashboard/settings', icon: Settings },
   ];
 

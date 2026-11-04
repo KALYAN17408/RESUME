@@ -24,7 +24,7 @@ export const DashboardOverview: React.FC = () => {
     {
       id: 'module-a',
       title: 'AI Resume Builder',
-      moduleTag: 'Module A',
+      moduleTag: 'Resume Builder',
       phaseBadge: 'Operational',
       description: 'Single-column ATS templates (Jake’s, Harvard, Stanford, Modern Tech) with live split-screen preview and vector text PDF export.',
       features: [
@@ -39,7 +39,7 @@ export const DashboardOverview: React.FC = () => {
     {
       id: 'module-b',
       title: 'ATS Resume Analyzer',
-      moduleTag: 'Module B',
+      moduleTag: 'ATS Scanner',
       phaseBadge: 'Operational',
       description: 'PDF/DOCX ingestion with 4-vector recruiter-grade scoring, deterministic keyword density analysis, and actionable diagnostic fix recommendations.',
       features: [
