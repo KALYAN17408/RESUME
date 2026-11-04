@@ -103,3 +103,4 @@ describe('CoverLetterService — Draft Persistence & Legacy Migration', () => {
     expect(netflixDraft?.jobTitle).toBe('Distributed Systems Engineer');
   });
 });
+

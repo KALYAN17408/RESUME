@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import type { SkillCategory } from '../../types/resume.types';
 import { Plus, Trash2, X, Wrench } from 'lucide-react';
 
@@ -18,6 +19,7 @@ export const SkillsForm: React.FC<SkillsFormProps> = ({
   onDeleteCategory,
 }) => {
   const [newSkillInputs, setNewSkillInputs] = useState<Record<string, string>>({});
+  const [deleteCategoryTarget, setDeleteCategoryTarget] = useState<SkillCategory | null>(null);
 
   const handleAddSkill = (catId: string) => {
     const text = (newSkillInputs[catId] || '').trim();
@@ -62,7 +64,7 @@ export const SkillsForm: React.FC<SkillsFormProps> = ({
       </div>
 
       {categories.length === 0 ? (
-        <div className="p-8 text-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 space-y-3">
+        <div className="p-8 text-center rounded-radius-md border-2 border-dashed border-slate-200 bg-slate-50/50 space-y-3">
           <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400">
             <Wrench className="w-5 h-5" />
           </div>
@@ -86,7 +88,7 @@ export const SkillsForm: React.FC<SkillsFormProps> = ({
           {categories.map((cat) => (
             <div
               key={cat.id}
-              className="p-4 rounded-2xl border border-slate-200 bg-white space-y-3 shadow-xs"
+              className="p-4 rounded-radius-md border border-slate-200 bg-white space-y-3 shadow-xs"
             >
               <div className="flex items-center justify-between gap-3">
                 <Input
@@ -98,13 +100,9 @@ export const SkillsForm: React.FC<SkillsFormProps> = ({
                 />
                 <button
                   type="button"
-                  onClick={() => {
-                    if (confirm(`Remove category "${cat.name}"?`)) {
-                      onDeleteCategory(cat.id);
-                    }
-                  }}
-                  className="p-2 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors mt-5"
-                  title="Delete category"
+                  onClick={() => setDeleteCategoryTarget(cat)}
+                  className="p-2 text-slate-400 hover:text-rose-600 rounded-radius-xs hover:bg-rose-50 transition-colors mt-5 focus-ring"
+                  aria-label={`Delete category ${cat.name}`}
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -117,20 +115,21 @@ export const SkillsForm: React.FC<SkillsFormProps> = ({
                 </label>
 
                 {/* Chips */}
-                <div className="flex flex-wrap gap-1.5 min-h-[32px] p-2 bg-slate-50 rounded-xl border border-slate-200">
+                <div className="flex flex-wrap gap-1.5 min-h-[32px] p-2 bg-slate-50 rounded-radius-sm border border-slate-200">
                   {cat.skills.length === 0 ? (
                     <span className="text-[11px] text-slate-400 italic">No skills added yet</span>
                   ) : (
                     cat.skills.map((skill, sIdx) => (
                       <span
                         key={sIdx}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-xs"
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-radius-xs bg-white border border-slate-200 text-xs font-medium text-slate-800 shadow-xs"
                       >
                         <span>{skill}</span>
                         <button
                           type="button"
                           onClick={() => handleRemoveSkill(cat.id, skill)}
-                          className="hover:text-rose-600 text-slate-400 transition-colors"
+                          aria-label={`Remove skill ${skill}`}
+                          className="hover:text-rose-600 text-slate-400 transition-colors p-0.5 rounded-radius-xs"
                         >
                           <X className="w-3 h-3" />
                         </button>
@@ -154,7 +153,7 @@ export const SkillsForm: React.FC<SkillsFormProps> = ({
                         handleAddSkill(cat.id);
                       }
                     }}
-                    className="flex-1 text-xs rounded-xl border border-slate-300 px-3 py-2 text-slate-800 focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
+                    className="flex-1 text-xs rounded-radius-sm border border-slate-300 px-3 py-2 text-slate-800 focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus:outline-none"
                   />
                   <Button
                     size="sm"
@@ -170,6 +169,22 @@ export const SkillsForm: React.FC<SkillsFormProps> = ({
           ))}
         </div>
       )}
+
+      {/* Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={!!deleteCategoryTarget}
+        onClose={() => setDeleteCategoryTarget(null)}
+        onConfirm={() => {
+          if (deleteCategoryTarget) {
+            onDeleteCategory(deleteCategoryTarget.id);
+            setDeleteCategoryTarget(null);
+          }
+        }}
+        title="Delete Skill Category"
+        description={`Are you sure you want to remove "${deleteCategoryTarget?.name || 'this category'}" and all its skills? This action cannot be undone.`}
+        confirmLabel="Delete Category"
+        variant="danger"
+      />
     </div>
   );
 };

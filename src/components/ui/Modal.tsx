@@ -52,11 +52,11 @@ export const Modal: React.FC<ModalProps> = ({
       role="dialog"
       aria-modal="true"
       aria-labelledby={title ? 'modal-title' : undefined}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-in fade-in-0 duration-standard"
     >
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-950/40 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-slate-950/40 backdrop-blur-xs transition-opacity"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -64,7 +64,7 @@ export const Modal: React.FC<ModalProps> = ({
       {/* Modal Dialog */}
       <div
         className={cn(
-          'relative w-full rounded-2xl bg-white p-6 shadow-2xl border border-slate-100 z-10 animate-in zoom-in-95 duration-200',
+          'relative w-full rounded-radius-lg bg-surface-base p-6 shadow-modal border border-border-default z-10 animate-in zoom-in-95 duration-standard',
           maxWidthClasses[maxWidth],
           className
         )}
@@ -76,12 +76,12 @@ export const Modal: React.FC<ModalProps> = ({
                 {title}
               </h3>
             )}
-            {description && <p className="text-xs text-slate-500 mt-1">{description}</p>}
+            {description && <p className="text-xs text-slate-600 mt-1">{description}</p>}
           </div>
           <button
             onClick={onClose}
             aria-label="Close dialog"
-            className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition-colors"
+            className="text-slate-400 hover:text-slate-600 p-1.5 rounded-radius-xs hover:bg-slate-100 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>

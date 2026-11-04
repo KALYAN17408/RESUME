@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import type { CertificationItem } from '../../types/resume.types';
 import { Plus, Trash2, Award } from 'lucide-react';
 
@@ -17,6 +18,8 @@ export const CertificationsForm: React.FC<CertificationsFormProps> = ({
   onUpdate,
   onDelete,
 }) => {
+  const [deleteTarget, setDeleteTarget] = useState<CertificationItem | null>(null);
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
@@ -37,7 +40,7 @@ export const CertificationsForm: React.FC<CertificationsFormProps> = ({
       </div>
 
       {certifications.length === 0 ? (
-        <div className="p-8 text-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 space-y-3">
+        <div className="p-8 text-center rounded-radius-md border-2 border-dashed border-slate-200 bg-slate-50/50 space-y-3">
           <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400">
             <Award className="w-5 h-5" />
           </div>
@@ -56,7 +59,7 @@ export const CertificationsForm: React.FC<CertificationsFormProps> = ({
           {certifications.map((cert) => (
             <div
               key={cert.id}
-              className="p-4 rounded-2xl border border-slate-200 bg-white space-y-3 shadow-xs"
+              className="p-4 rounded-radius-md border border-slate-200 bg-white space-y-3 shadow-xs"
             >
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-900">
@@ -64,13 +67,9 @@ export const CertificationsForm: React.FC<CertificationsFormProps> = ({
                 </span>
                 <button
                   type="button"
-                  onClick={() => {
-                    if (confirm(`Remove certification "${cert.name || 'this certification'}"?`)) {
-                      onDelete(cert.id);
-                    }
-                  }}
-                  className="p-1 text-slate-400 hover:text-rose-600 transition-colors"
-                  title="Delete certification"
+                  onClick={() => setDeleteTarget(cert)}
+                  className="p-1 text-slate-400 hover:text-rose-600 transition-colors rounded-radius-xs focus-ring"
+                  aria-label={`Delete certification ${cert.name || 'entry'}`}
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -113,6 +112,22 @@ export const CertificationsForm: React.FC<CertificationsFormProps> = ({
           ))}
         </div>
       )}
+
+      {/* Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={() => {
+          if (deleteTarget) {
+            onDelete(deleteTarget.id);
+            setDeleteTarget(null);
+          }
+        }}
+        title="Delete Certification"
+        description={`Are you sure you want to remove certification "${deleteTarget?.name || 'this certification'}"? This action cannot be undone.`}
+        confirmLabel="Delete Certification"
+        variant="danger"
+      />
     </div>
   );
 };

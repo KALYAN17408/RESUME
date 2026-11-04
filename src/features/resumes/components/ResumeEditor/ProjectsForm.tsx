@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import type { ProjectItem } from '../../types/resume.types';
 import { Plus, Trash2, ChevronDown, ChevronUp, FolderGit2 } from 'lucide-react';
 
@@ -20,6 +21,7 @@ export const ProjectsForm: React.FC<ProjectsFormProps> = ({
   const [expandedId, setExpandedId] = useState<string | null>(
     projects[0]?.id || null
   );
+  const [deleteTarget, setDeleteTarget] = useState<ProjectItem | null>(null);
 
   return (
     <div className="space-y-4">
@@ -41,7 +43,7 @@ export const ProjectsForm: React.FC<ProjectsFormProps> = ({
       </div>
 
       {projects.length === 0 ? (
-        <div className="p-8 text-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 space-y-3">
+        <div className="p-8 text-center rounded-radius-md border-2 border-dashed border-slate-200 bg-slate-50/50 space-y-3">
           <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mx-auto text-slate-400">
             <FolderGit2 className="w-5 h-5" />
           </div>
@@ -62,50 +64,55 @@ export const ProjectsForm: React.FC<ProjectsFormProps> = ({
             return (
               <div
                 key={proj.id}
-                className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-xs transition-all"
+                className="rounded-radius-md border border-slate-200 bg-white overflow-hidden shadow-xs transition-all"
               >
                 {/* Header preview row */}
-                <div
-                  onClick={() => setExpandedId(isExpanded ? null : proj.id)}
-                  className="p-3.5 bg-slate-50/80 hover:bg-slate-100/80 cursor-pointer flex items-center justify-between transition-colors"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 font-bold text-xs flex items-center justify-center">
+                <div className="p-3.5 bg-slate-50/80 hover:bg-slate-100/80 flex items-center justify-between transition-colors">
+                  <button
+                    type="button"
+                    aria-expanded={isExpanded}
+                    aria-controls={`proj-body-${proj.id}`}
+                    onClick={() => setExpandedId(isExpanded ? null : proj.id)}
+                    className="flex-1 flex items-center gap-2.5 text-left focus-ring rounded-radius-xs"
+                  >
+                    <span className="w-6 h-6 rounded-radius-xs bg-emerald-100 text-emerald-800 font-bold text-xs flex items-center justify-center shrink-0">
                       {index + 1}
                     </span>
-                    <div className="text-left">
-                      <h4 className="text-xs font-bold text-slate-900">
+                    <div className="min-w-0">
+                      <h4 className="text-xs font-bold text-slate-900 truncate">
                         {proj.name || 'New Project'}
                       </h4>
-                      <p className="text-[11px] text-slate-500">
+                      <p className="text-[11px] text-slate-500 truncate">
                         {proj.technologies.length > 0 ? proj.technologies.join(', ') : 'Technologies not specified'}
                       </p>
                     </div>
-                  </div>
+                  </button>
 
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 shrink-0 ml-2">
                     <button
                       type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (confirm(`Remove project "${proj.name || 'this project'}"?`)) {
-                          onDelete(proj.id);
-                        }
-                      }}
-                      className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors"
-                      title="Delete entry"
+                      onClick={() => setDeleteTarget(proj)}
+                      className="p-1.5 text-slate-400 hover:text-rose-600 rounded-radius-xs hover:bg-rose-50 transition-colors focus-ring"
+                      aria-label={`Delete project ${proj.name || 'project'}`}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
-                    <span className="text-slate-400 p-1">
+                    <button
+                      type="button"
+                      aria-expanded={isExpanded}
+                      aria-controls={`proj-body-${proj.id}`}
+                      aria-label={isExpanded ? 'Collapse project section' : 'Expand project section'}
+                      onClick={() => setExpandedId(isExpanded ? null : proj.id)}
+                      className="text-slate-400 p-1 rounded-radius-xs hover:text-slate-700 focus-ring"
+                    >
                       {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                    </span>
+                    </button>
                   </div>
                 </div>
 
                 {/* Form Body */}
                 {isExpanded && (
-                  <div className="p-4 space-y-3.5 border-t border-slate-100">
+                  <div id={`proj-body-${proj.id}`} className="p-4 space-y-3.5 border-t border-slate-100">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <Input
                         label="Project Name"
@@ -164,7 +171,7 @@ export const ProjectsForm: React.FC<ProjectsFormProps> = ({
                         value={proj.description}
                         placeholder="Engineered high-throughput background queue handling 50k requests/min with automatic backoff..."
                         onChange={(e) => onUpdate(proj.id, { description: e.target.value })}
-                        className="w-full text-xs rounded-xl border border-slate-300 p-2.5 text-slate-800 focus:border-black focus:ring-1 focus:ring-black focus:outline-none"
+                        className="w-full text-xs rounded-radius-sm border border-slate-300 p-2.5 text-slate-800 focus:border-slate-900 focus:ring-1 focus:ring-slate-900 focus:outline-none"
                       />
                     </div>
                   </div>
@@ -174,6 +181,22 @@ export const ProjectsForm: React.FC<ProjectsFormProps> = ({
           })}
         </div>
       )}
+
+      {/* Confirmation Dialog */}
+      <ConfirmationDialog
+        isOpen={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={() => {
+          if (deleteTarget) {
+            onDelete(deleteTarget.id);
+            setDeleteTarget(null);
+          }
+        }}
+        title="Delete Project"
+        description={`Are you sure you want to remove project "${deleteTarget?.name || 'this project'}"? This action cannot be undone.`}
+        confirmLabel="Delete Project"
+        variant="danger"
+      />
     </div>
   );
 };

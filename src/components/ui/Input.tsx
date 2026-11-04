@@ -20,9 +20,9 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {label}
           </label>
         )}
-        <div className="relative rounded-xl">
+        <div className="relative rounded-radius-sm">
           {leftIcon && (
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500">
               {leftIcon}
             </div>
           )}
@@ -33,7 +33,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             aria-invalid={!!error}
             aria-describedby={error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined}
             className={cn(
-              'w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 transition-all focus:border-black focus:outline-none focus:ring-2 focus:ring-black/10 disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed',
+              'w-full rounded-radius-sm border border-slate-300 bg-white px-3.5 py-2 text-sm text-slate-900 placeholder:text-slate-400 transition-all focus:border-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900/10 disabled:bg-slate-50 disabled:text-slate-500 disabled:cursor-not-allowed',
               leftIcon && 'pl-10',
               rightIcon && 'pr-10',
               error && 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20',
@@ -42,7 +42,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {rightIcon && (
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-400">
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-500">
               {rightIcon}
             </div>
           )}
@@ -53,7 +53,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           </p>
         )}
         {!error && helperText && (
-          <p id={`${inputId}-helper`} className="text-xs text-slate-500">
+          <p id={`${inputId}-helper`} className="text-xs text-slate-600">
             {helperText}
           </p>
         )}
