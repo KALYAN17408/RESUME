@@ -26,12 +26,12 @@ export const Sidebar: React.FC = () => {
 
   const navigation = [
     { name: 'Overview', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Resume Builder', href: '/dashboard/resumes', icon: FileText, badge: 'Live' },
-    { name: 'ATS Analyzer', href: '/dashboard/analyzer', icon: ScanSearch, badge: 'Live' },
-    { name: 'Cover Letter Generator', href: '/dashboard/cover-letter', icon: Mail, badge: 'Live' },
-    { name: 'Job Matching', href: '/dashboard/jobs', icon: Briefcase, badge: 'Soon' },
-    { name: 'AI Career Copilot', href: '/dashboard/copilot', icon: Bot, badge: 'Soon' },
-    { name: 'Mock Interviews', href: '/dashboard/interviews', icon: MessageSquare, badge: 'Soon' },
+    { name: 'Resume Builder', href: '/dashboard/resumes', icon: FileText },
+    { name: 'ATS Analyzer', href: '/dashboard/analyzer', icon: ScanSearch },
+    { name: 'Cover Letter Generator', href: '/dashboard/cover-letter', icon: Mail },
+    { name: 'Job Matching', href: '/dashboard/jobs', icon: Briefcase },
+    { name: 'AI Career Copilot', href: '/dashboard/copilot', icon: Bot },
+    { name: 'Mock Interviews', href: '/dashboard/interviews', icon: MessageSquare },
     { name: 'Account Settings', href: '/dashboard/settings', icon: Settings },
   ];
 
@@ -99,15 +99,6 @@ export const Sidebar: React.FC = () => {
                   <Icon className={cn('w-4 h-4 shrink-0 transition-colors', isActive ? 'text-blue-600' : 'text-slate-400')} />
                   <span>{item.name}</span>
                 </div>
-                {item.badge && (
-                  <Badge
-                    variant={item.badge === 'Live' ? (isActive ? 'brand' : 'teal') : 'default'}
-                    size="sm"
-                    className="text-[10px] py-0 px-1.5"
-                  >
-                    {item.badge}
-                  </Badge>
-                )}
               </Link>
             );
           })}
