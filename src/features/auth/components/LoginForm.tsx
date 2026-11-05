@@ -39,6 +39,21 @@ export const LoginForm: React.FC = () => {
     },
   });
 
+  const handleOAuthSignIn = async (provider: 'google' | 'github') => {
+    try {
+      await AuthService.signInWithOAuth(provider);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : `Failed to connect to ${provider}.`;
+      addToast({
+        type: 'info',
+        title: `${provider === 'google' ? 'Google' : 'GitHub'} OAuth`,
+        message: message.includes('provider is not enabled')
+          ? `${provider === 'google' ? 'Google' : 'GitHub'} sign-in can be enabled in your Supabase Auth dashboard.`
+          : message,
+      });
+    }
+  };
+
   const onSubmit = async (data: LoginFormData) => {
     setAuthError(null);
     setIsSubmitting(true);
@@ -74,13 +89,7 @@ export const LoginForm: React.FC = () => {
         <button
           type="button"
           disabled={!isConfigured}
-          onClick={() =>
-            addToast({
-              type: 'info',
-              title: 'OAuth Integration',
-              message: 'Google OAuth can be enabled directly in your Supabase Auth dashboard.',
-            })
-          }
+          onClick={() => handleOAuthSignIn('google')}
           className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <svg className="w-4 h-4" viewBox="0 0 24 24">
@@ -107,13 +116,7 @@ export const LoginForm: React.FC = () => {
         <button
           type="button"
           disabled={!isConfigured}
-          onClick={() =>
-            addToast({
-              type: 'info',
-              title: 'OAuth Integration',
-              message: 'GitHub OAuth can be enabled directly in your Supabase Auth dashboard.',
-            })
-          }
+          onClick={() => handleOAuthSignIn('github')}
           className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-xs transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <svg className="w-4 h-4 fill-slate-900" viewBox="0 0 24 24">

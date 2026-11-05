@@ -64,6 +64,22 @@ export class AuthService {
     }
   }
 
+  static async signInWithOAuth(provider: 'google' | 'github'): Promise<void> {
+    this.checkConfigured();
+
+    const redirectTo = `${window.location.origin}/dashboard`;
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider,
+      options: {
+        redirectTo,
+      },
+    });
+
+    if (error) {
+      throw error;
+    }
+  }
+
   static async resetPasswordForEmail(email: string): Promise<void> {
     this.checkConfigured();
 
