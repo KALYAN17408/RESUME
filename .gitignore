@@ -39,6 +39,10 @@ dist-ssr
 build
 *.local
 
+# Supabase local temp
+supabase/.temp/
+.temp/
+
 # Environment variables
 .env
 .env.development.local
