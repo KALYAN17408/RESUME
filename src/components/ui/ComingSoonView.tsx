@@ -104,14 +104,14 @@ export const ComingSoonView: React.FC<ComingSoonViewProps> = ({
             {message}
           </p>
 
-          {/* Development Status Banner */}
+          {/* Coming Soon Notice Banner */}
           <div className="rounded-xl bg-slate-50 border border-slate-200/80 p-4 max-w-lg mx-auto mb-8 text-center">
-            <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-slate-700 font-medium">
-              <Clock className="w-4 h-4 text-slate-400 shrink-0" />
-              <span>This feature is currently under active development.</span>
+            <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-slate-900 font-bold uppercase tracking-wider">
+              <Clock className="w-4 h-4 text-slate-500 shrink-0" />
+              <span>COMING SOON</span>
             </div>
-            <p className="text-[11px] text-slate-500 mt-1">
-              We are building a seamless, high-accuracy experience to support your career growth. Stay tuned for upcoming releases.
+            <p className="text-xs text-slate-500 mt-1">
+              This feature is coming soon. Stay tuned for upcoming updates!
             </p>
           </div>
 
@@ -163,3 +163,4 @@ export const ComingSoonView: React.FC<ComingSoonViewProps> = ({
     </div>
   );
 };
+

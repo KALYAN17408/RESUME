@@ -65,3 +65,4 @@ As instructed, this is a UI-only presentation update:
 - `tests/integration/JobMatchingPage.test.tsx` *(Updated integration tests for Coming Soon UI and navigation)*
 - `tests/integration/CareerCopilotPage.test.tsx` *(Updated integration tests for Coming Soon UI and navigation)*
 - `tests/integration/MockInterviewPage.test.tsx` *(Updated integration tests for Coming Soon UI and navigation)*
+

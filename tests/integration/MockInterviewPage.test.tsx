@@ -22,7 +22,7 @@ describe('MockInterviewPage Coming Soon Screen', () => {
       screen.getByText(/Prepare for your next interview with AI-powered practice sessions/i)
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/This feature is currently under active development/i)
+      screen.getByText(/This feature is coming soon/i)
     ).toBeInTheDocument();
 
     // Planned capabilities

@@ -22,7 +22,7 @@ describe('JobMatchingPage Coming Soon Screen', () => {
       screen.getByText(/Find opportunities that match your skills and career goals/i)
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/This feature is currently under active development/i)
+      screen.getByText(/This feature is coming soon/i)
     ).toBeInTheDocument();
 
     // Planned capabilities

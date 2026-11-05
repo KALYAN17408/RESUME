@@ -22,7 +22,7 @@ describe('CareerCopilotPage Coming Soon Screen', () => {
       screen.getByText(/Your personal AI career assistant is on its way/i)
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/This feature is currently under active development/i)
+      screen.getByText(/This feature is coming soon/i)
     ).toBeInTheDocument();
 
     // Planned capabilities
