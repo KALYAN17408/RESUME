@@ -5,13 +5,11 @@ import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { Spinner } from '@/components/ui/Spinner';
 import {
-  Briefcase,
   Building2,
   Pause,
   StopCircle,
   Send,
   HelpCircle,
-  Award,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 

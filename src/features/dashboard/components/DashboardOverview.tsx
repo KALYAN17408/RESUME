@@ -11,6 +11,7 @@ import {
   Mail,
   Bot,
   MessageSquare,
+  Briefcase,
   CheckCircle2,
   Calendar,
   Layers,
@@ -73,38 +74,55 @@ export const DashboardOverview: React.FC = () => {
       ctaLabel: 'Open Generator',
     },
     {
+      id: 'module-jobs',
+      title: 'Job Matching & Tracker',
+      moduleTag: 'Job Matching',
+      phaseBadge: 'Ready',
+      description: 'Compare target job descriptions against your resume, calculate ATS qualification alignment, and track applications.',
+      features: [
+        'Deterministic qualification alignment & skill gap detection',
+        'Match scoring based on real job descriptions and resume text',
+        'Track Interested, Applied, Interviewing, and Offer statuses',
+        'Direct links, follow-up dates, and recruiter contact notes',
+      ],
+      icon: Briefcase,
+      color: 'text-blue-600 bg-blue-50 border-blue-200/80',
+      badgeVariant: 'brand',
+      ctaLabel: 'Open Job Tracker',
+    },
+    {
       id: 'module-d',
-      title: 'Career Copilot',
+      title: 'AI Career Copilot',
       moduleTag: 'Career Guide',
-      phaseBadge: 'Coming Soon',
+      phaseBadge: 'Ready',
       description: 'Grounded career assistant to guide your job search pipeline, skill gap analysis, and offer strategy.',
       features: [
-        'Personalized career guidance grounded on your profile',
-        'Targeted career trajectory and skills gap roadmap',
-        'Interactive resume refinement suggestions',
-        'Offer evaluation and market compensation insights',
+        'Personalized career guidance grounded on your real profile',
+        'Targeted career trajectory and 90-day skills gap roadmaps',
+        'Strategic resume bullet quantification suggestions',
+        'Interactive behavioral and technical preparation coaching',
       ],
       icon: Bot,
-      color: 'text-amber-600 bg-amber-50 border-amber-200/80',
-      badgeVariant: 'amber',
-      ctaLabel: 'Learn More',
+      color: 'text-violet-600 bg-violet-50 border-violet-200/80',
+      badgeVariant: 'violet',
+      ctaLabel: 'Open Copilot',
     },
     {
       id: 'module-e',
-      title: 'Mock Interview Prep',
+      title: 'Interactive Mock Interviews',
       moduleTag: 'Interview Hub',
-      phaseBadge: 'Coming Soon',
-      description: 'Role-specific coding, system design, and behavioral interview question banks with guided answer frameworks.',
+      phaseBadge: 'Ready',
+      description: 'Role-specific behavioral, technical, and situational interview question banks with automated STAR feedback.',
       features: [
-        'Role-specific question generation from job descriptions',
-        'System Design walkthroughs & technical evaluation tracks',
-        'STAR method behavioral question simulations',
-        'Structured answer frameworks and model responses',
+        'Role-specific questions dynamically generated from your resume',
+        'Real-time response evaluation and STAR framework checklist',
+        'Behavioral, technical, HR, and mixed drill tracks',
+        'Permanent session history and post-interview scorecards',
       ],
       icon: MessageSquare,
-      color: 'text-indigo-600 bg-indigo-50 border-indigo-200/80',
-      badgeVariant: 'default',
-      ctaLabel: 'Learn More',
+      color: 'text-teal-600 bg-teal-50 border-teal-200/80',
+      badgeVariant: 'teal',
+      ctaLabel: 'Open Mock Interviews',
     },
   ];
 
@@ -210,6 +228,42 @@ export const DashboardOverview: React.FC = () => {
                     }}
                   >
                     Open Cover Letter Generator
+                  </Button>
+                )}
+                {selectedModule.id === 'module-jobs' && (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedModule(null);
+                      navigate('/dashboard/jobs');
+                    }}
+                  >
+                    Open Job Tracker
+                  </Button>
+                )}
+                {selectedModule.id === 'module-d' && (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedModule(null);
+                      navigate('/dashboard/copilot');
+                    }}
+                  >
+                    Open Career Copilot
+                  </Button>
+                )}
+                {selectedModule.id === 'module-e' && (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedModule(null);
+                      navigate('/dashboard/interviews');
+                    }}
+                  >
+                    Open Mock Interviews
                   </Button>
                 )}
               </div>

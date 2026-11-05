@@ -7,7 +7,7 @@ const mockResume: ResumeData = {
   userId: 'user-1',
   title: 'Full Stack Engineer Resume',
   templateId: 'jakes-technical',
-  sectionOrder: ['personal', 'skills', 'experience'],
+  sectionsOrder: ['personal', 'skills', 'experience'],
   personalInfo: {
     fullName: 'Casey Morgan',
     professionalTitle: 'Full Stack Engineer',
@@ -44,7 +44,7 @@ const mockResume: ResumeData = {
     },
   ],
   educations: [],
-  customSections: [],
+  enabledSections: {} as any,
   customization: {
     accentColor: '#7C3AED',
     fontFamily: 'Inter',
@@ -54,7 +54,7 @@ const mockResume: ResumeData = {
   },
   createdAt: '2026-01-01',
   updatedAt: '2026-01-01',
-};
+} as unknown as ResumeData;
 
 describe('CareerCopilotService & Grounded Synthesizer', () => {
   it('generates structured resume review guidance incorporating real candidate context', () => {

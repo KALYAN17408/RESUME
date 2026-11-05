@@ -48,7 +48,7 @@ export function generateInterviewQuestions(
 ): MockInterviewQA[] {
   const questions: { question: string; type: InterviewType }[] = [];
 
-  // Extract candidate technologies if available
+  // Extract candidate technologies or job keywords if available
   const skills: string[] = [];
   if (resumeData?.skillCategories) {
     for (const cat of resumeData.skillCategories) {
@@ -58,13 +58,24 @@ export function generateInterviewQuestions(
     }
   }
 
+  // If JD provided and skills are empty, extract key technical terms from JD
+  if (skills.length === 0 && jobDescription) {
+    const jdWords = jobDescription.match(/\b(React|TypeScript|Node\.js|Python|AWS|Docker|Kubernetes|Go|PostgreSQL|GraphQL)\b/gi) || [];
+    jdWords.forEach((w) => {
+      if (!skills.includes(w)) skills.push(w);
+    });
+  }
+
   const primaryTech = skills.length > 0 ? skills.slice(0, 3).join(' and ') : 'modern software stacks';
   const roleName = targetRole.trim() || 'Software Engineer';
+  const isAdvanced = difficulty === 'advanced';
 
   // Role-specific targeted question
   if (interviewType === 'technical' || interviewType === 'mixed') {
     questions.push({
-      question: `In your work as a ${roleName}, how have you leveraged ${primaryTech} to solve performance bottlenecks or architectural complexity?`,
+      question: isAdvanced
+        ? `In your work as a ${roleName}, how do you evaluate architectural trade-offs and disaster recovery strategies when designing large-scale systems using ${primaryTech}?`
+        : `In your work as a ${roleName}, how have you leveraged ${primaryTech} to solve performance bottlenecks or architectural complexity?`,
       type: 'technical',
     });
   }

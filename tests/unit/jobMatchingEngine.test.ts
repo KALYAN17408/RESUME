@@ -7,7 +7,7 @@ const mockResume: ResumeData = {
   userId: 'user-abc',
   title: 'Full Stack Engineer Resume',
   templateId: 'jakes-technical',
-  sectionOrder: ['personal', 'summary', 'skills', 'experience', 'projects', 'education'],
+  sectionsOrder: ['personal', 'summary', 'skills', 'experience', 'projects', 'education'],
   personalInfo: {
     fullName: 'Jordan Taylor',
     professionalTitle: 'Senior Full Stack Software Engineer',
@@ -64,7 +64,7 @@ const mockResume: ResumeData = {
       endDate: '2020-06',
     },
   ],
-  customSections: [],
+  enabledSections: {} as any,
   customization: {
     accentColor: '#2563EB',
     fontFamily: 'Inter',
@@ -74,7 +74,7 @@ const mockResume: ResumeData = {
   },
   createdAt: '2026-01-01T00:00:00Z',
   updatedAt: '2026-01-01T00:00:00Z',
-};
+} as unknown as ResumeData;
 
 describe('JobMatchingEngine', () => {
   it('correctly calculates match score and identifies matched vs missing skills', () => {

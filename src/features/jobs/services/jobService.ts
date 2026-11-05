@@ -3,6 +3,7 @@ import { getSupabaseEnv } from '@/lib/supabase/env';
 import type { SavedJob, JobFormData, JobMatchAnalysis } from '../types/job.types';
 
 const STORAGE_PREFIX = 'resumax_saved_jobs_';
+const dbJobs = () => (supabase as any).from('saved_jobs');
 
 function getLocalJobs(userId: string): SavedJob[] {
   try {
@@ -31,8 +32,7 @@ export class JobService {
 
     if (isConfigured) {
       try {
-        const { data, error } = await supabase
-          .from('saved_jobs')
+        const { data, error } = await dbJobs()
           .select('*')
           .eq('user_id', userId)
           .order('created_at', { ascending: false });
@@ -114,7 +114,7 @@ export class JobService {
 
     if (isConfigured) {
       try {
-        const { error } = await supabase.from('saved_jobs').insert({
+        const { error } = await dbJobs().insert({
           id: newJob.id,
           user_id: newJob.userId,
           resume_id: newJob.resumeId || null,
@@ -198,8 +198,7 @@ export class JobService {
         if (updates.resumeId !== undefined) dbPayload.resume_id = updates.resumeId;
         if (matchAnalysis !== undefined) dbPayload.match_analysis = matchAnalysis;
 
-        await supabase
-          .from('saved_jobs')
+        await dbJobs()
           .update(dbPayload)
           .eq('id', jobId)
           .eq('user_id', userId);
@@ -226,8 +225,7 @@ export class JobService {
 
     if (isConfigured) {
       try {
-        await supabase
-          .from('saved_jobs')
+        await dbJobs()
           .delete()
           .eq('id', jobId)
           .eq('user_id', userId);

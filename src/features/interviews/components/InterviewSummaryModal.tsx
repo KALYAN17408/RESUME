@@ -2,7 +2,7 @@ import React from 'react';
 import type { MockInterviewSession } from '../types/interview.types';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
-import { Award, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react';
+import { CheckCircle2, AlertTriangle } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
 interface InterviewSummaryModalProps {

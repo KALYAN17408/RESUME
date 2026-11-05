@@ -3,7 +3,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { useUIStore } from '@/stores/uiStore';
 import { ResumeService } from '@/features/resumes/services/resumeService';
 import type { ResumeData } from '@/features/resumes/types/resume.types';
-import type { CareerConversation, CareerMessage } from '../types/copilot.types';
+import type { CareerConversation } from '../types/copilot.types';
 import { CopilotStorageService } from '../services/copilotStorageService';
 import { CareerCopilotService } from '../services/careerCopilotService';
 import { ConversationList } from '../components/ConversationList';
@@ -18,7 +18,6 @@ import {
   FileText,
   X,
   Menu,
-  Sparkles,
   RefreshCw,
   AlertCircle,
 } from 'lucide-react';
@@ -36,7 +35,7 @@ export const CareerCopilotPage: React.FC = () => {
   // Conversations state
   const [conversations, setConversations] = useState<CareerConversation[]>([]);
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
-  const [isLoadingConvs, setIsLoadingConvs] = useState(true);
+  const [, setIsLoadingConvs] = useState(true);
 
   // Chat message & generation state
   const [inputPrompt, setInputPrompt] = useState('');
@@ -419,9 +418,9 @@ export const CareerCopilotPage: React.FC = () => {
         onClose={() => setDeletingConv(null)}
         onConfirm={handleConfirmDelete}
         title="Delete Conversation"
-        message={`Are you sure you want to delete "${deletingConv?.title}"? All chat history in this conversation will be permanently removed.`}
-        confirmText="Delete Chat"
-        type="danger"
+        description={`Are you sure you want to delete "${deletingConv?.title}"? All chat history in this conversation will be permanently removed.`}
+        confirmLabel="Delete Chat"
+        variant="danger"
       />
     </div>
   );

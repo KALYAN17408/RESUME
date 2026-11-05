@@ -4,7 +4,7 @@ import type { ResumeData } from '@/features/resumes/types/resume.types';
 import { Modal } from '@/components/ui/Modal';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
-import { Building2, Briefcase, MapPin, Globe, Calendar, FileText } from 'lucide-react';
+import { Building2, Briefcase, MapPin, Globe, Calendar } from 'lucide-react';
 
 interface JobFormModalProps {
   isOpen: boolean;

@@ -16,15 +16,7 @@ import { PastSessionsList } from '../components/PastSessionsList';
 import { ConfirmationDialog } from '@/components/ui/ConfirmationDialog';
 import { Button } from '@/components/ui/Button';
 import { Spinner } from '@/components/ui/Spinner';
-import {
-  MessageSquare,
-  Plus,
-  Award,
-  CheckCircle2,
-  Clock,
-  Sparkles,
-  Layers,
-} from 'lucide-react';
+import { MessageSquare, Plus } from 'lucide-react';
 
 export const MockInterviewPage: React.FC = () => {
   const { user } = useAuthStore();
@@ -288,9 +280,10 @@ export const MockInterviewPage: React.FC = () => {
         onClose={() => setDeletingSession(null)}
         onConfirm={handleConfirmDelete}
         title="Delete Interview Session"
-        message={`Are you sure you want to delete this ${deletingSession?.interviewType} mock interview for ${deletingSession?.targetRole}? All answers and feedback will be removed.`}
-        confirmText={isDeleting ? 'Deleting...' : 'Delete Session'}
-        type="danger"
+        description={`Are you sure you want to delete this ${deletingSession?.interviewType} mock interview for ${deletingSession?.targetRole}? All answers and feedback will be removed.`}
+        confirmLabel={isDeleting ? 'Deleting...' : 'Delete Session'}
+        variant="danger"
+        isLoading={isDeleting}
       />
     </div>
   );

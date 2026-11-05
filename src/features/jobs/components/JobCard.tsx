@@ -7,10 +7,8 @@ import {
   Calendar,
   ExternalLink,
   Sparkles,
-  MoreVertical,
   CheckCircle2,
   Clock,
-  Briefcase,
 } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
@@ -23,13 +21,13 @@ interface JobCardProps {
 
 const STATUS_CONFIG: Record<
   JobApplicationStatus,
-  { label: string; variant: 'default' | 'brand' | 'success' | 'warning' | 'error' | 'violet' | 'teal' | 'amber' }
+  { label: string; variant: 'default' | 'brand' | 'success' | 'warning' | 'danger' | 'violet' | 'teal' | 'amber' }
 > = {
   interested: { label: 'Interested', variant: 'brand' },
   applied: { label: 'Applied', variant: 'violet' },
   interviewing: { label: 'Interviewing', variant: 'teal' },
   offer: { label: 'Offer Received', variant: 'success' },
-  rejected: { label: 'Not Selected', variant: 'error' },
+  rejected: { label: 'Not Selected', variant: 'danger' },
   withdrawn: { label: 'Withdrawn', variant: 'default' },
 };
 

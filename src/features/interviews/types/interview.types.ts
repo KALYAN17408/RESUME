@@ -1,5 +1,3 @@
-import type { ResumeData } from '@/features/resumes/types/resume.types';
-
 export type InterviewType = 'behavioral' | 'technical' | 'hr' | 'situational' | 'mixed';
 export type InterviewDifficulty = 'beginner' | 'intermediate' | 'advanced';
 export type InterviewSessionStatus = 'in_progress' | 'completed' | 'paused';

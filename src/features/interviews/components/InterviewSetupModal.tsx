@@ -8,7 +8,7 @@ import type { ResumeData } from '@/features/resumes/types/resume.types';
 import { Modal } from '@/components/ui/Modal';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
-import { MessageSquare, Briefcase, Building2, Layers, Award } from 'lucide-react';
+import { Briefcase, Building2 } from 'lucide-react';
 
 interface InterviewSetupModalProps {
   isOpen: boolean;

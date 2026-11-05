@@ -7,7 +7,6 @@ import {
   AlertTriangle,
   Lightbulb,
   Briefcase,
-  Target,
   ShieldAlert,
   Sparkles,
 } from 'lucide-react';

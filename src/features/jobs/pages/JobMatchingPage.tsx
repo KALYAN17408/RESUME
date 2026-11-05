@@ -19,9 +19,6 @@ import {
   Sparkles,
   FileText,
   Building2,
-  CheckCircle2,
-  Clock,
-  Layers,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -434,9 +431,10 @@ export const JobMatchingPage: React.FC = () => {
         onClose={() => setDeletingJob(null)}
         onConfirm={handleConfirmDelete}
         title="Delete Job Opportunity"
-        message={`Are you sure you want to remove "${deletingJob?.title}" at ${deletingJob?.company}? This will permanently remove its tracking details and match analysis.`}
-        confirmText={isDeleting ? 'Deleting...' : 'Delete Job'}
-        type="danger"
+        description={`Are you sure you want to remove "${deletingJob?.title}" at ${deletingJob?.company}? This will permanently remove its tracking details and match analysis.`}
+        confirmLabel={isDeleting ? 'Deleting...' : 'Delete Job'}
+        variant="danger"
+        isLoading={isDeleting}
       />
     </div>
   );

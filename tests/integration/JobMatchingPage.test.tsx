@@ -15,7 +15,7 @@ const mockResume: ResumeData = {
   userId: 'test-user',
   title: 'Full Stack Engineer Resume',
   templateId: 'jakes-technical',
-  sectionOrder: ['personal', 'skills'],
+  sectionsOrder: ['personal', 'skills'],
   personalInfo: {
     fullName: 'Alex River',
     professionalTitle: 'Full Stack Engineer',
@@ -33,7 +33,7 @@ const mockResume: ResumeData = {
   experiences: [],
   projects: [],
   educations: [],
-  customSections: [],
+  enabledSections: {} as any,
   customization: {
     accentColor: '#2563EB',
     fontFamily: 'Inter',
@@ -43,7 +43,7 @@ const mockResume: ResumeData = {
   },
   createdAt: '2026-01-01',
   updatedAt: '2026-01-01',
-};
+} as unknown as ResumeData;
 
 const mockJobs: SavedJob[] = [
   {

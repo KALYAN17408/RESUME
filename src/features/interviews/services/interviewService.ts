@@ -5,12 +5,12 @@ import type {
   MockInterviewSession,
   InterviewSetupConfig,
   QuestionFeedback,
-  MockInterviewQA,
 } from '../types/interview.types';
 import { generateInterviewQuestions } from './interviewQuestionGenerator';
 import { evaluateAnswer } from './interviewFeedbackEngine';
 
 const STORAGE_PREFIX = 'resumax_interviews_';
+const dbFrom = (table: string) => (supabase as any).from(table);
 
 function getLocalSessions(userId: string): MockInterviewSession[] {
   try {
@@ -39,8 +39,7 @@ export class InterviewService {
 
     if (isConfigured) {
       try {
-        const { data, error } = await supabase
-          .from('mock_interview_sessions')
+        const { data, error } = await dbFrom('mock_interview_sessions')
           .select(`
             id,
             user_id,
@@ -151,7 +150,7 @@ export class InterviewService {
 
     if (isConfigured) {
       try {
-        await supabase.from('mock_interview_sessions').insert({
+        await dbFrom('mock_interview_sessions').insert({
           id: session.id,
           user_id: session.userId,
           resume_id: session.resumeId,
@@ -179,7 +178,7 @@ export class InterviewService {
           created_at: q.createdAt,
         }));
 
-        await supabase.from('mock_interview_qa').insert(qaInserts);
+        await dbFrom('mock_interview_qa').insert(qaInserts);
       } catch (err) {
         console.warn('[InterviewService] Supabase insert error:', err);
       }
@@ -250,8 +249,7 @@ export class InterviewService {
 
     if (isConfigured) {
       try {
-        await supabase
-          .from('mock_interview_qa')
+        await dbFrom('mock_interview_qa')
           .update({
             user_answer: userAnswer,
             feedback,
@@ -259,8 +257,7 @@ export class InterviewService {
           .eq('session_id', sessionId)
           .eq('question_index', questionIndex);
 
-        await supabase
-          .from('mock_interview_sessions')
+        await dbFrom('mock_interview_sessions')
           .update({
             current_question_index: session.currentQuestionIndex,
             status: session.status,
@@ -291,8 +288,7 @@ export class InterviewService {
 
       if (isConfigured) {
         try {
-          await supabase
-            .from('mock_interview_sessions')
+          await dbFrom('mock_interview_sessions')
             .update({ status: 'paused', updated_at: session.updatedAt })
             .eq('id', sessionId);
         } catch (err) {
@@ -314,8 +310,7 @@ export class InterviewService {
 
     if (isConfigured) {
       try {
-        await supabase
-          .from('mock_interview_sessions')
+        await dbFrom('mock_interview_sessions')
           .delete()
           .eq('id', sessionId)
           .eq('user_id', userId);

@@ -14,6 +14,9 @@ import { ResumeListPage } from '@/features/resumes/pages/ResumeListPage';
 import { ResumeEditorPage } from '@/features/resumes/pages/ResumeEditorPage';
 import { AtsAnalyzerPage } from '@/features/analyzer/pages/AtsAnalyzerPage';
 import { CoverLetterPage } from '@/features/cover-letter/pages/CoverLetterPage';
+import { JobMatchingPage } from '@/features/jobs/pages/JobMatchingPage';
+import { CareerCopilotPage } from '@/features/copilot/pages/CareerCopilotPage';
+import { MockInterviewPage } from '@/features/interviews/pages/MockInterviewPage';
 import { Spinner } from '@/components/ui/Spinner';
 import { Sparkles } from 'lucide-react';
 
@@ -128,9 +131,9 @@ export const AppRouter: React.FC = () => {
         {/* Module C AI Cover Letter Generator */}
         <Route path="cover-letter" element={<CoverLetterPage />} />
         <Route path="ai-optimizer" element={<Navigate to="/dashboard/cover-letter" replace />} />
-        <Route path="jobs" element={<DashboardOverview />} />
-        <Route path="copilot" element={<DashboardOverview />} />
-        <Route path="interviews" element={<DashboardOverview />} />
+        <Route path="jobs" element={<JobMatchingPage />} />
+        <Route path="copilot" element={<CareerCopilotPage />} />
+        <Route path="interviews" element={<MockInterviewPage />} />
       </Route>
 
       {/* 404 Fallback */}

@@ -3,6 +3,7 @@ import { getSupabaseEnv } from '@/lib/supabase/env';
 import type { CareerConversation, CareerMessage } from '../types/copilot.types';
 
 const STORAGE_PREFIX = 'resumax_copilot_conversations_';
+const dbFrom = (table: string) => (supabase as any).from(table);
 
 function getLocalConversations(userId: string): CareerConversation[] {
   try {
@@ -31,8 +32,7 @@ export class CopilotStorageService {
 
     if (isConfigured) {
       try {
-        const { data, error } = await supabase
-          .from('career_conversations')
+        const { data, error } = await dbFrom('career_conversations')
           .select(`
             id,
             user_id,
@@ -109,7 +109,7 @@ export class CopilotStorageService {
 
     if (isConfigured) {
       try {
-        await supabase.from('career_conversations').insert({
+        await dbFrom('career_conversations').insert({
           id: newConv.id,
           user_id: newConv.userId,
           resume_id: newConv.resumeId,
@@ -151,7 +151,7 @@ export class CopilotStorageService {
 
     if (isConfigured) {
       try {
-        await supabase.from('career_messages').insert({
+        await dbFrom('career_messages').insert({
           id: newMsg.id,
           conversation_id: newMsg.conversationId,
           user_id: newMsg.userId,
@@ -161,8 +161,7 @@ export class CopilotStorageService {
           created_at: newMsg.createdAt,
         });
 
-        await supabase
-          .from('career_conversations')
+        await dbFrom('career_conversations')
           .update({ updated_at: now })
           .eq('id', conversationId);
       } catch (err) {
@@ -194,8 +193,7 @@ export class CopilotStorageService {
 
     if (isConfigured) {
       try {
-        await supabase
-          .from('career_conversations')
+        await dbFrom('career_conversations')
           .update({ title: newTitle.trim(), updated_at: now })
           .eq('id', conversationId)
           .eq('user_id', userId);
@@ -223,8 +221,7 @@ export class CopilotStorageService {
 
     if (isConfigured) {
       try {
-        await supabase
-          .from('career_conversations')
+        await dbFrom('career_conversations')
           .delete()
           .eq('id', conversationId)
           .eq('user_id', userId);

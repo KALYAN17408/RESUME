@@ -1,10 +1,8 @@
 import { supabase } from '@/lib/supabase/client';
 import { getSupabaseEnv } from '@/lib/supabase/env';
-import type { ResumeData } from '@/features/resumes/types/resume.types';
 import type {
   CopilotGenerateParams,
   CopilotGenerateResult,
-  CareerMessageMetadata,
 } from '../types/copilot.types';
 
 /**
@@ -19,7 +17,6 @@ export function synthesizeCareerGuidance(
   const prompt = params.prompt.trim().toLowerCase();
   const resume = params.resumeData;
 
-  const candidateName = resume?.personalInfo.fullName || 'Candidate';
   const candidateTitle =
     resume?.personalInfo.professionalTitle || 'Software Professional';
 

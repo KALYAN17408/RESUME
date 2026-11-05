@@ -5,12 +5,10 @@ import { Button } from '@/components/ui/Button';
 import {
   Calendar,
   Building2,
-  Clock,
   Play,
   Eye,
   Trash2,
   Award,
-  Layers,
 } from 'lucide-react';
 
 interface PastSessionsListProps {

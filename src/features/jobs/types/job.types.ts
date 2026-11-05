@@ -1,5 +1,3 @@
-import type { ResumeData } from '@/features/resumes/types/resume.types';
-
 export type JobApplicationStatus =
   | 'interested'
   | 'applied'

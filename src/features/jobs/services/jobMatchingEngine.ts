@@ -12,7 +12,6 @@ export function analyzeJobMatch(
   jobDescription: string,
   targetJobTitle: string
 ): JobMatchAnalysis {
-  const normalizedJd = normalizeText(jobDescription);
   const normalizedTitle = normalizeText(targetJobTitle);
 
   // 1. Extract job keywords from taxonomy
@@ -20,14 +19,12 @@ export function analyzeJobMatch(
   const allJobKeywords = [...detectedTaxonomy, ...extractedPhrases];
 
   // 2. Aggregate candidate resume skills & text
-  const resumeSkillsSet = new Set<string>();
   const resumeSkillsNormalized = new Set<string>();
 
   // Add categorized skills
   if (resume.skillCategories) {
     for (const cat of resume.skillCategories) {
       for (const s of cat.skills) {
-        resumeSkillsSet.add(s);
         resumeSkillsNormalized.add(s.toLowerCase().trim());
       }
     }
@@ -38,7 +35,6 @@ export function analyzeJobMatch(
     for (const proj of resume.projects) {
       if (proj.technologies) {
         for (const t of proj.technologies) {
-          resumeSkillsSet.add(t);
           resumeSkillsNormalized.add(t.toLowerCase().trim());
         }
       }
@@ -74,7 +70,6 @@ export function analyzeJobMatch(
   }
 
   const fullResumeText = resumeTextParts.join(' ');
-  const normalizedResumeText = normalizeText(fullResumeText);
 
   // 3. Match Skills against Job Keywords
   const matchedSkills: string[] = [];

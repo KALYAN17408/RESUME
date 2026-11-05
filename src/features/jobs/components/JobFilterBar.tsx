@@ -1,6 +1,6 @@
 import React from 'react';
 import type { JobApplicationStatus } from '../types/job.types';
-import { Search, Filter, ArrowUpDown } from 'lucide-react';
+import { Search, ArrowUpDown } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
 export type StatusFilterOption = 'all' | JobApplicationStatus;
