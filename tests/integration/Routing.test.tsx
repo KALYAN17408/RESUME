@@ -43,8 +43,8 @@ describe('App Routing & Route Guards', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText(/Welcome back, Alex!/i)).toBeInTheDocument();
-    expect(screen.getByText(/Workspace Metrics/i)).toBeInTheDocument();
-    expect(screen.getByText(/Platform Capabilities/i)).toBeInTheDocument();
+    expect(screen.getByText(/Welcome back, Alex/i)).toBeInTheDocument();
+    expect(screen.getByText(/Account Metrics/i)).toBeInTheDocument();
+    expect(screen.getByText(/Tools & Applications/i)).toBeInTheDocument();
   });
 });

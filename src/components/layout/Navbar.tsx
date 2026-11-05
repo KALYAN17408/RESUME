@@ -42,7 +42,7 @@ export const Navbar: React.FC = () => {
             </div>
             <div className="flex flex-col">
               <span className="text-lg font-black tracking-tight text-slate-900 flex items-center gap-1">
-                ResuMax <span className="text-white font-extrabold text-xs px-1.5 py-0.5 rounded-md bg-black">AI</span>
+                RESUME <span className="text-white font-extrabold text-xs px-1.5 py-0.5 rounded-md bg-black">AI</span>
               </span>
             </div>
           </Link>

@@ -204,17 +204,17 @@ export const AtsAnalyzerPage: React.FC = () => {
         <div>
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-violet-700 tracking-wider uppercase">
-              ATS Optimization Engine
+              Resume Intelligence
             </span>
             <Badge variant="violet" size="sm" className="font-mono text-[10px]">
-              Recruiter-Grade AST
+              ATS Compatibility Audit
             </Badge>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 mt-1">
             ATS Resume Analyzer
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed">
-            Audit your resume against real target job descriptions with deterministic keyword density, technical taxonomy matching, and recruiter-grade formatting checks.
+            Audit your resume against target job descriptions with keyword matching, skills coverage, and standard formatting checks.
           </p>
         </div>
 
@@ -299,7 +299,7 @@ export const AtsAnalyzerPage: React.FC = () => {
                   1. Select Resume Source
                 </h2>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  Analyze an existing ResuMax resume or upload a custom PDF document.
+                  Analyze an existing resume from your account or upload a custom PDF document.
                 </p>
               </div>
 
@@ -372,7 +372,7 @@ export const AtsAnalyzerPage: React.FC = () => {
                       </div>
                       <p className="text-xs font-bold text-slate-900">Choose from Saved Resumes</p>
                       <p className="text-[11px] text-slate-500 mt-1">
-                        Select a resume you built inside ResuMax AI
+                        Select a resume you built inside RESUME AI
                       </p>
                     </div>
                   )}

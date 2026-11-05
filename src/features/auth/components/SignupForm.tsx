@@ -75,7 +75,7 @@ export const SignupForm: React.FC = () => {
         addToast({
           type: 'success',
           title: 'Account Created',
-          message: 'Welcome to ResuMax AI!',
+          message: 'Welcome to RESUME AI!',
         });
         navigate('/dashboard');
       }

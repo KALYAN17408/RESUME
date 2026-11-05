@@ -426,7 +426,7 @@ export const ResuMaxHeroAnimation: React.FC<ResuMaxHeroAnimationProps> = ({
         ctx.fillRect(pos.px + 10 * pos.scale, pos.py + 10 * pos.scale, 170 * pos.scale, 16 * pos.scale);
         ctx.fillStyle = '#00d2ff';
         ctx.font = `bold ${Math.round(9 * pos.scale)}px monospace`;
-        ctx.fillText('⚡ AI ACHIEVEMENT ENHANCEMENT', pos.px + 15 * pos.scale, pos.py + 21 * pos.scale);
+        ctx.fillText('AI ACHIEVEMENT ENHANCEMENT', pos.px + 15 * pos.scale, pos.py + 21 * pos.scale);
 
         ctx.fillStyle = '#10b981';
         ctx.font = `bold ${Math.round(18 * pos.scale)}px sans-serif`;
@@ -444,7 +444,7 @@ export const ResuMaxHeroAnimation: React.FC<ResuMaxHeroAnimationProps> = ({
         ctx.fillRect(pos.px + 10 * pos.scale, pos.py + 10 * pos.scale, 195 * pos.scale, 16 * pos.scale);
         ctx.fillStyle = '#f59e0b';
         ctx.font = `bold ${Math.round(9 * pos.scale)}px monospace`;
-        ctx.fillText('🛡️ EVIDENCE VALIDATION GUARDRAIL', pos.px + 15 * pos.scale, pos.py + 21 * pos.scale);
+        ctx.fillText('EVIDENCE VALIDATION GUARDRAIL', pos.px + 15 * pos.scale, pos.py + 21 * pos.scale);
 
         ctx.fillStyle = '#fbbf24';
         ctx.font = `bold ${Math.round(12 * pos.scale)}px sans-serif`;
@@ -462,7 +462,7 @@ export const ResuMaxHeroAnimation: React.FC<ResuMaxHeroAnimationProps> = ({
         ctx.fillRect(pos.px + 10 * pos.scale, pos.py + 10 * pos.scale, 175 * pos.scale, 16 * pos.scale);
         ctx.fillStyle = '#c084fc';
         ctx.font = `bold ${Math.round(9 * pos.scale)}px monospace`;
-        ctx.fillText('⏱️ MEASURABLE TIME RECOVERY', pos.px + 15 * pos.scale, pos.py + 21 * pos.scale);
+        ctx.fillText('MEASURABLE TIME RECOVERY', pos.px + 15 * pos.scale, pos.py + 21 * pos.scale);
 
         ctx.fillStyle = '#a855f7';
         ctx.font = `bold ${Math.round(17 * pos.scale)}px sans-serif`;

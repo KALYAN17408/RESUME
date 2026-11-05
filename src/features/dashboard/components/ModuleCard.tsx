@@ -14,6 +14,7 @@ export interface ModuleCardProps {
   icon: React.ComponentType<{ className?: string }>;
   color: string;
   badgeVariant?: 'default' | 'brand' | 'violet' | 'teal' | 'amber' | 'success';
+  ctaLabel?: string;
   onExplore?: () => void;
 }
 
@@ -26,6 +27,7 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
   icon: Icon,
   color,
   badgeVariant = 'brand',
+  ctaLabel,
   onExplore,
 }) => {
   return (
@@ -51,7 +53,7 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
 
         <CardContent>
           <div className="space-y-2 text-left">
-            <p className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Planned Capabilities:</p>
+            <p className="text-[11px] font-bold text-slate-700 uppercase tracking-wider">Key Capabilities:</p>
             <ul className="space-y-1.5 text-xs text-slate-600">
               {features.map((feature, i) => (
                 <li key={i} className="flex items-start gap-2">
@@ -64,10 +66,12 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
         </CardContent>
       </div>
 
-      <CardFooter className="justify-between">
-        <span className="text-[11px] font-medium text-slate-400">Scheduled for implementation</span>
+      <CardFooter className="justify-between pt-3 border-t border-slate-100">
+        <span className="text-[11px] font-medium text-slate-400">
+          {phaseBadge === 'Ready' || phaseBadge === 'Active' ? 'Available now' : 'In development'}
+        </span>
         <Button variant="ghost" size="sm" onClick={onExplore} rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
-          View Spec
+          {ctaLabel || (phaseBadge === 'Ready' || phaseBadge === 'Active' ? 'Open' : 'Learn More')}
         </Button>
       </CardFooter>
     </Card>

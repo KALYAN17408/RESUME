@@ -49,7 +49,7 @@ export const LoginForm: React.FC = () => {
       addToast({
         type: 'success',
         title: 'Welcome back!',
-        message: 'Successfully signed in to ResuMax AI.',
+        message: 'Successfully signed in to RESUME AI.',
       });
       navigate('/dashboard');
     } catch (err: unknown) {

@@ -814,7 +814,7 @@ export async function parseResumeFromFile(
     const text = await readFileText(file);
     const json = JSON.parse(text);
 
-    // If it's already a ResuMax AI format
+    // If it's already a RESUME AI format
     if (json.personalInfo && json.sectionsOrder) {
       return {
         ...json,

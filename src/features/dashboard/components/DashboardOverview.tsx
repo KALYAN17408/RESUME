@@ -23,83 +23,88 @@ export const DashboardOverview: React.FC = () => {
   const modules: ModuleCardProps[] = [
     {
       id: 'module-a',
-      title: 'AI Resume Builder',
+      title: 'Resume Builder',
       moduleTag: 'Resume Builder',
-      phaseBadge: 'Operational',
-      description: 'Single-column ATS templates (Jake’s, Harvard, Stanford, Modern Tech) with live split-screen preview and vector text PDF export.',
+      phaseBadge: 'Ready',
+      description: 'Single-column ATS templates with live split-screen preview, full section customization, and clean vector PDF export.',
       features: [
         'Jake’s Tech, Harvard Classic, Stanford Editorial & Modern Tech Clean templates',
-        'Live split-screen editor with debounced auto-save',
+        'Live split-screen editor with real-time auto-save',
         'Vector text-stream PDF export with 100% selectable text',
-        'Full section reordering and customization engine',
+        'Section reordering and appearance customization',
       ],
       icon: FileText,
       color: 'text-blue-600 bg-blue-50 border-blue-200/80',
       badgeVariant: 'brand',
+      ctaLabel: 'Open Builder',
     },
     {
       id: 'module-b',
       title: 'ATS Resume Analyzer',
-      moduleTag: 'ATS Scanner',
-      phaseBadge: 'Operational',
-      description: 'PDF/DOCX ingestion with 4-vector recruiter-grade scoring, deterministic keyword density analysis, and actionable diagnostic fix recommendations.',
+      moduleTag: 'ATS Analyzer',
+      phaseBadge: 'Ready',
+      description: 'Scan your resume against real target job descriptions with keyword matching, technical skills analysis, and actionable diagnostic recommendations.',
       features: [
-        'PDF vector text extraction and scanned document detection',
-        '4-vector scoring (Keywords 40%, Skills 25%, Sections 15%, Formatting 20%)',
-        'Quantified metric detection & Google XYZ formula checks',
-        'Direct alignment against target job descriptions with copyable recommendations',
+        'PDF vector text extraction and layout scanning',
+        'Compatibility scoring across keywords, skills, sections, and formatting',
+        'Quantified metric detection & high-impact verb checks',
+        'Direct alignment against target job descriptions with copyable fix tips',
       ],
       icon: ScanSearch,
       color: 'text-violet-600 bg-violet-50 border-violet-200/80',
       badgeVariant: 'violet',
+      ctaLabel: 'Open Analyzer',
     },
     {
       id: 'module-c',
-      title: 'AI Cover Letter Generator',
+      title: 'Cover Letter Generator',
       moduleTag: 'Cover Letters',
-      phaseBadge: 'Operational',
-      description: 'Role-tailored, grounded cover letter generator with 4 tones, draft persistence, and instant ATS-compliant vector PDF export.',
+      phaseBadge: 'Ready',
+      description: 'Generate personalized cover letters tailored strictly to your verified resume and target role with custom tones and instant PDF export.',
       features: [
-        'Candidate evidence grounded strictly in selected resume (skills, projects, education)',
+        'Candidate evidence grounded strictly in your selected resume details',
         '4 distinct tones (Professional, Confident, Concise, Enthusiastic)',
-        'In-browser editable letter text with live word & character metrics',
-        'Multi-page ATS-friendly PDF download & local draft persistence',
+        'In-browser editable letter text with live word & character counts',
+        'ATS-compliant PDF download & local draft saving',
       ],
       icon: Mail,
       color: 'text-teal-600 bg-teal-50 border-teal-200/80',
       badgeVariant: 'teal',
+      ctaLabel: 'Open Generator',
     },
     {
       id: 'module-d',
-      title: 'AI Career Copilot ("Max")',
-      moduleTag: 'Module D',
-      phaseBadge: 'Phase 5',
-      description: 'Grounded career assistant managing your entire search pipeline, skill gap analysis, and offer strategy.',
+      title: 'Career Copilot',
+      moduleTag: 'Career Guide',
+      phaseBadge: 'Coming Soon',
+      description: 'Grounded career assistant to guide your job search pipeline, skill gap analysis, and offer strategy.',
       features: [
-        'Conversational drawer grounded on your verified profile',
+        'Personalized career guidance grounded on your profile',
         'Targeted career trajectory and skills gap roadmap',
-        'Interactive resume refinement prompts',
+        'Interactive resume refinement suggestions',
         'Offer evaluation and market compensation insights',
       ],
       icon: Bot,
       color: 'text-amber-600 bg-amber-50 border-amber-200/80',
       badgeVariant: 'amber',
+      ctaLabel: 'Learn More',
     },
     {
       id: 'module-e',
-      title: 'Mock Interview Prep Hub',
-      moduleTag: 'Module E',
-      phaseBadge: 'Phase 5',
-      description: 'Role-specific coding, system design, and behavioral question banks with interactive AI critiques.',
+      title: 'Mock Interview Prep',
+      moduleTag: 'Interview Hub',
+      phaseBadge: 'Coming Soon',
+      description: 'Role-specific coding, system design, and behavioral interview question banks with guided answer frameworks.',
       features: [
-        'Role-specific question generation from job specifications',
-        'System Design walkthroughs & DSA evaluation tracks',
+        'Role-specific question generation from job descriptions',
+        'System Design walkthroughs & technical evaluation tracks',
         'STAR method behavioral question simulations',
-        'Scored AI feedback and model answer walkthroughs',
+        'Structured answer frameworks and model responses',
       ],
       icon: MessageSquare,
       color: 'text-indigo-600 bg-indigo-50 border-indigo-200/80',
       badgeVariant: 'default',
+      ctaLabel: 'Learn More',
     },
   ];
 
@@ -111,8 +116,8 @@ export const DashboardOverview: React.FC = () => {
       {/* Quick Stats */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Workspace Metrics</h2>
-          <span className="text-xs text-slate-500 font-medium">Free Tier Entitlements</span>
+          <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Account Metrics</h2>
+          <span className="text-xs text-slate-500 font-medium">Free Plan Entitlements</span>
         </div>
         <QuickStats />
       </div>
@@ -121,14 +126,14 @@ export const DashboardOverview: React.FC = () => {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-slate-900 tracking-tight text-left">Platform Capabilities</h2>
+            <h2 className="text-lg font-bold text-slate-900 tracking-tight text-left">Tools & Applications</h2>
             <p className="text-xs text-slate-500 text-left">
-              Production modules planned in the Phase 0 architectural roadmap.
+              Create, evaluate, and tailor your job application materials.
             </p>
           </div>
           <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1.5">
             <Layers className="w-3.5 h-3.5 text-blue-600" />
-            5 Modules Scheduled
+            All Applications
           </span>
         </div>
 
@@ -151,7 +156,7 @@ export const DashboardOverview: React.FC = () => {
             <p className="text-xs text-slate-600 leading-relaxed">{selectedModule.description}</p>
             <div className="rounded-xl border border-slate-100 bg-slate-50 p-4 space-y-2">
               <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-                Architecture Specifications:
+                Key Capabilities:
               </h4>
               <ul className="space-y-2 text-xs text-slate-700">
                 {selectedModule.features.map((feat, i) => (

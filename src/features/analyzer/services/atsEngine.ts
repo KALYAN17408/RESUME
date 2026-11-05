@@ -525,7 +525,7 @@ export function runAtsAnalysis(input: AtsAnalysisInput, userId: string): AtsRepo
   const explanation =
     'Estimated ATS compatibility score calculated via deterministic multi-vector analysis: ' +
     '40% Keyword Match Density, 25% Technical Skills Taxonomy, 15% Section Completeness, ' +
-    'and 20% Formatting & Readability Metrics. ResuMax AI does not claim affiliation with any commercial ATS platform.';
+    'and 20% Formatting & Readability Metrics. RESUME AI does not claim affiliation with any commercial ATS platform.';
 
   const scores: AtsScoreBreakdown = {
     overallScore,

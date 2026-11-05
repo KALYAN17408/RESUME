@@ -482,8 +482,9 @@ export const ResumePdfDocument: React.FC<ResumePdfDocumentProps> = ({ data }) =>
     <Document
       title={data.title || 'Resume'}
       author={personalInfo.fullName || 'Candidate'}
-      subject="Professional Resume created with ResuMax AI"
-      creator="ResuMax AI — ATS Resume Intelligence"
+      subject="Professional Resume created with RESUME AI"
+      creator="RESUME AI"
+      producer="RESUME AI — ATS Resume Intelligence"
     >
       <Page size="A4" style={[baseStyles.page, { fontFamily: baseFont }]}>
         {/* Header Rendering based on active template */}

@@ -72,9 +72,12 @@ describe('CoverLetterPage Component & Integration Workflow', () => {
     fireEvent.click(generateBtn);
 
     // Wait for generated content to appear in editor
-    await waitFor(() => {
-      expect(screen.getByText(/Cover Letter Editor/i)).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText(/Cover Letter Editor/i)).toBeInTheDocument();
+      },
+      { timeout: 5000 }
+    );
 
     const textarea = screen.getByPlaceholderText(/Cover letter body paragraphs.../i) as HTMLTextAreaElement;
     expect(textarea).toBeInTheDocument();

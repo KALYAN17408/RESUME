@@ -132,11 +132,11 @@ export const ResumeListPage: React.FC = () => {
           <h1 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-2">
             <span>My Resumes</span>
             <Badge variant="brand" size="sm">
-              ATS Builder
+              Resume Builder
             </Badge>
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Build, edit, and export ATS-friendly single-column resumes with real-time vector text.
+            Build, edit, and export ATS-friendly resumes with live preview and clean vector PDF export.
           </p>
         </div>
 
@@ -230,7 +230,7 @@ export const ResumeListPage: React.FC = () => {
 
           <div className="pt-6 border-t border-slate-200/80 flex items-center justify-center gap-6 text-[11px] text-slate-500">
             <span className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" /> 100% Vector Stream PDF
+              <ShieldCheck className="w-4 h-4 text-emerald-600" /> Professional Vector PDF
             </span>
             <span className="flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-blue-600" /> Auto-saved in Real Time

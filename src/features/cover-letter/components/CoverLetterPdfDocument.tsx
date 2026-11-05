@@ -160,7 +160,7 @@ export const CoverLetterPdfDocument: React.FC<CoverLetterPdfProps> = ({
   }
 
   return (
-    <Document title={subjectLine || 'Cover Letter'} author={name || 'ResuMax AI'}>
+    <Document title={subjectLine || 'Cover Letter'} author={name || 'RESUME AI'}>
       <Page size="A4" style={styles.page} wrap>
         {/* Header with Candidate Contact Info */}
         {(name || contactTokens.length > 0) && (

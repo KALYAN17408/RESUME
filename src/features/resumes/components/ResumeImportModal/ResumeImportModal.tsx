@@ -154,7 +154,7 @@ export const ResumeImportModal: React.FC<ResumeImportModalProps> = ({
     <Modal isOpen={isOpen} onClose={handleClose} title="Import Resume from Device">
       <div className="space-y-5">
         <p className="text-xs text-zinc-500">
-          Upload an existing resume from your computer. ResuMax AI automatically parses your contact details, work experience, education, and technical skills into an editable ATS-ready format.
+          Upload an existing resume from your computer. RESUME AI automatically parses your contact details, work experience, education, and technical skills into an editable ATS-ready format.
         </p>
 
         <input

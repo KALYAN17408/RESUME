@@ -458,7 +458,7 @@ export const CoverLetterPage: React.FC = () => {
                     </span>
                     {generatedResult?.isDeterministic ? (
                       <Badge variant="outline" size="sm" className="font-mono text-[10px]">
-                        Grounded Synthesis (Offline)
+                        Offline Mode Active
                       </Badge>
                     ) : (
                       <Badge variant="teal" size="sm" className="text-[10px]">
@@ -509,10 +509,10 @@ export const CoverLetterPage: React.FC = () => {
                   <Sparkles className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
                   <div className="space-y-0.5">
                     <div className="font-semibold text-slate-900 text-[11px]">
-                      Grounded Synthesis Active (Offline)
+                      Offline Mode Active
                     </div>
                     <p className="text-[11px] text-slate-500 leading-relaxed">
-                      Generated using factual candidate evidence from your resume without hallucinating qualifications.
+                      Generated using candidate information from your saved resume.
                     </p>
                   </div>
                 </div>

@@ -59,11 +59,11 @@ export const Sidebar: React.FC = () => {
         {/* Brand header */}
         <div className="flex h-16 items-center justify-between px-6 border-b border-slate-100">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-violet-600 flex items-center justify-center text-white shadow-sm shadow-blue-500/25">
+            <div className="w-8 h-8 rounded-xl bg-black flex items-center justify-center text-white shadow-sm shadow-black/20">
               <Sparkles className="w-4 h-4" />
             </div>
             <span className="text-base font-black tracking-tight text-slate-900">
-              ResuMax <span className="text-blue-600 font-extrabold text-xs px-1.5 py-0.5 rounded-md bg-blue-50 border border-blue-200">AI</span>
+              RESUME <span className="text-black font-extrabold text-xs px-1.5 py-0.5 rounded-md bg-zinc-100 border border-zinc-200">AI</span>
             </span>
           </Link>
           <button

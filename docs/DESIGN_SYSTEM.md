@@ -1,8 +1,9 @@
-# ResuMax AI — Design System & Tokens Specification
+# RESUME AI — Design System & Tokens Specification
 
 **Methodology:** BAMA `design-system` & `design-kit`  
+**Brand Identity:** RESUME AI (Permanent Black Brand Logo + Coordinated Multi-Color Interface)  
 **Visual Identity:** Modern Multi-Color SaaS (Blue + Violet + Teal + Amber)  
-**Version:** 2.0.0  
+**Version:** 2.1.0  
 **Stack:** Tailwind CSS, React 18, TypeScript  
 
 ---
@@ -13,14 +14,15 @@ Following the BAMA design-kit methodology, all visual attributes are organized i
 
 ```mermaid
 flowchart TD
-    A["Layer 1: Raw Palette<br/>(Blue, Violet, Teal, Amber, Emerald, Red, Slate)"] --> B["Layer 2: Meaning / Semantic Layer<br/>(brand-*, surface-*, content-*, border-*, status-*)"]
+    A["Layer 1: Raw Palette<br/>(Black Logo, Blue, Violet, Teal, Amber, Emerald, Red, Slate)"] --> B["Layer 2: Meaning / Semantic Layer<br/>(brand-*, surface-*, content-*, border-*, status-*)"]
     B --> C["Layer 3: Scales & Component Application<br/>(radius-*, duration-*, font-*, space-*)"]
     C --> D["Components<br/>(Button, Input, Card, Modal, Tooltip, Dialog, Badge, ScoreGauge)"]
 ```
 
-1. **Palette (Raw):** Primary Blue (`#2563EB`), Secondary Violet (`#7C3AED`), Teal (`#0D9488`), Amber (`#F59E0B`), Success (`#16A34A`), Error (`#DC2626`), Slate scale.
-2. **Meaning (Semantic):** Component-facing names (`surface-base`, `content-primary`, `border-default`, `status-success`, feature accents).
-3. **Scales (Metrics):** Standardized scales for radius, spacing, typography, and motion.
+1. **Brand Identity:** Permanent black logo artwork (`bg-black text-white` with `Sparkles`) preserving high brand recognition across all pages.
+2. **Palette (Raw):** Primary Blue (`#2563EB`), Secondary Violet (`#7C3AED`), Teal (`#0D9488`), Amber (`#F59E0B`), Success (`#16A34A`), Error (`#DC2626`), Slate scale.
+3. **Meaning (Semantic):** Component-facing names (`surface-base`, `content-primary`, `border-default`, `status-success`, feature accents).
+4. **Scales (Metrics):** Standardized scales for radius, spacing, typography, and motion.
 
 ---
 

@@ -35,7 +35,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title, subtitl
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl font-black tracking-tight text-slate-900">
-              ResuMax <span className="text-black font-extrabold text-xs px-1.5 py-0.5 rounded-md bg-zinc-100 border border-zinc-200">AI</span>
+              RESUME <span className="text-black font-extrabold text-xs px-1.5 py-0.5 rounded-md bg-zinc-100 border border-zinc-200">AI</span>
             </span>
           </Link>
           <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight sm:text-3xl pt-2">
@@ -53,7 +53,7 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title, subtitl
 
         {/* Security watermark */}
         <p className="text-center text-[11px] text-slate-500">
-          Protected by Enterprise Authentication & PostgreSQL Row Level Security.
+          Protected by industry-standard encryption & secure data privacy.
         </p>
       </div>
 

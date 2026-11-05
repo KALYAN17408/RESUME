@@ -1,11 +1,12 @@
 import React from 'react';
 import { useAuthStore } from '@/stores/authStore';
-import { Sparkles, ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from 'lucide-react';
 import { Badge } from '@/components/ui/Badge';
 
 export const WelcomeBanner: React.FC = () => {
   const { user, profile } = useAuthStore();
-  const userName = profile?.full_name || user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Engineer';
+  const rawName = profile?.full_name || user?.user_metadata?.full_name || (user?.email ? user.email.split('@')[0] : '');
+  const userName = rawName ? rawName.trim() : '';
   const tier = profile?.tier || 'free';
 
   return (
@@ -18,29 +19,18 @@ export const WelcomeBanner: React.FC = () => {
         <div className="space-y-2">
           <div className="flex items-center gap-2.5 flex-wrap">
             <Badge variant="outline" size="sm" className="bg-white/15 text-white border-white/30 uppercase tracking-wider text-[10px] font-semibold backdrop-blur-xs">
-              {tier} Tier Workspace
+              {tier} Plan
             </Badge>
             <Badge variant="outline" size="sm" className="bg-emerald-400/20 text-emerald-100 border-emerald-300/40 text-[10px] gap-1 font-semibold backdrop-blur-xs">
-              <ShieldCheck className="w-3 h-3 text-emerald-300" /> ATS Resume Builder Live
+              <ShieldCheck className="w-3 h-3 text-emerald-300" /> Resume Builder Active
             </Badge>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-white drop-shadow-xs">
-            Welcome back, {userName}! 👋
+            {userName ? `Welcome back, ${userName}` : 'Welcome back'}
           </h1>
           <p className="text-xs sm:text-sm text-blue-50/90 max-w-xl leading-relaxed">
-            Your career command center is ready. Build ATS-compliant resumes with live vector PDF export, scan match scores, and generate tailored cover letters.
+            Your career workspace is ready. Create professional resumes, analyze your ATS compatibility, and generate tailored cover letters.
           </p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="rounded-radius-md border border-white/20 bg-white/10 p-4 backdrop-blur-md text-left shrink-0 shadow-xs">
-            <span className="text-[10px] font-semibold text-blue-100 uppercase tracking-wider block">
-              Active Security Model
-            </span>
-            <span className="text-xs font-bold text-white flex items-center gap-1.5 mt-1">
-              <Sparkles className="w-3.5 h-3.5 text-amber-300" /> Cloud Sync Verified
-            </span>
-          </div>
         </div>
       </div>
     </div>

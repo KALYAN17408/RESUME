@@ -14,11 +14,11 @@ export const Footer: React.FC = () => {
                 <Sparkles className="w-4 h-4" />
               </div>
               <span className="text-base font-bold text-slate-900 tracking-tight">
-                ResuMax <span className="text-black">AI</span>
+                RESUME <span className="text-black font-extrabold text-xs px-1.5 py-0.5 rounded-md bg-zinc-100 border border-zinc-200">AI</span>
               </span>
             </Link>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Engineering-grade AI career platform. Built to empower technical professionals with parser-safe resumes and interview readiness.
+              Professional AI career platform. Built to empower job seekers with parser-safe resumes and tailored application materials.
             </p>
             <div className="flex items-center gap-4 text-xs text-slate-400 pt-2">
               <span className="flex items-center gap-1">
@@ -32,7 +32,7 @@ export const Footer: React.FC = () => {
 
           {/* Product Links */}
           <div className="space-y-3">
-            <h4 className="text-xs font-semibold text-slate-900 uppercase tracking-wider">Product Modules</h4>
+            <h4 className="text-xs font-semibold text-slate-900 uppercase tracking-wider">Features</h4>
             <ul className="space-y-2 text-xs text-slate-600">
               <li>
                 <span className="hover:text-slate-900 cursor-pointer">AI Resume Builder</span>
@@ -41,13 +41,13 @@ export const Footer: React.FC = () => {
                 <span className="hover:text-slate-900 cursor-pointer">ATS Resume Analyzer</span>
               </li>
               <li>
-                <span className="hover:text-slate-900 cursor-pointer">Job Matching Engine</span>
+                <span className="hover:text-slate-900 cursor-pointer">Cover Letter Generator</span>
               </li>
               <li>
-                <span className="hover:text-slate-900 cursor-pointer">AI Career Copilot</span>
+                <span className="hover:text-slate-900 cursor-pointer">Career Copilot</span>
               </li>
               <li>
-                <span className="hover:text-slate-900 cursor-pointer">Mock Interview Hub</span>
+                <span className="hover:text-slate-900 cursor-pointer">Mock Interview Prep</span>
               </li>
             </ul>
           </div>
@@ -73,12 +73,12 @@ export const Footer: React.FC = () => {
 
           {/* Architecture & Compliance */}
           <div className="space-y-3">
-            <h4 className="text-xs font-semibold text-slate-900 uppercase tracking-wider">Architecture & Standards</h4>
+            <h4 className="text-xs font-semibold text-slate-900 uppercase tracking-wider">Platform & Standards</h4>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Built with React, TypeScript, Supabase, and Vector text-stream PDF processing. Zero rasterized canvas rendering.
+              True vector text-stream PDF processing with selectable text and recruiter-grade formatting standards.
             </p>
             <div className="pt-2 text-xs text-slate-400">
-              <p>© {new Date().getFullYear()} ResuMax AI. All rights reserved.</p>
+              <p>© {new Date().getFullYear()} RESUME AI. All rights reserved.</p>
               <p className="mt-1">Independent platform inspired by modern career workflows.</p>
             </div>
           </div>

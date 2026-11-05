@@ -636,9 +636,9 @@ export const LandingPage: React.FC = () => {
               }}
             >
               <Card className="p-6 hover:shadow-subtle transition-all">
-                <h4 className="text-sm font-bold text-slate-900">How does ResuMax AI generate PDFs differently?</h4>
+                <h4 className="text-sm font-bold text-slate-900">How does RESUME AI generate PDFs differently?</h4>
                 <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                  Many tools use canvas snapshots (rendering HTML to an image inside a PDF), which leaves zero selectable text for ATS bots. ResuMax AI outputs true vector text streams where each word, glyph, and link is readable by any parser.
+                  Many tools use canvas snapshots (rendering HTML to an image inside a PDF), which leaves zero selectable text for ATS bots. RESUME AI outputs true vector text streams where each word, glyph, and link is readable by any parser.
                 </p>
               </Card>
             </motion.div>
