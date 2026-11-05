@@ -128,7 +128,7 @@ export const AtsAnalyzerPage: React.FC = () => {
       let isScannedPdf = false;
 
       if (sourceType === 'existing_resume') {
-        setAnalysisStep('Ingesting structured resume sections...');
+        setAnalysisStep('Reading resume sections...');
         let resumeToUse = fullResumeData;
         if (!resumeToUse && user?.id && selectedResumeItem) {
           resumeToUse = await ResumeService.getResume(selectedResumeItem.id, user.id);
@@ -138,17 +138,17 @@ export const AtsAnalyzerPage: React.FC = () => {
         }
         extractedResumeText = convertResumeDataToText(resumeToUse);
       } else if (sourceType === 'uploaded_pdf' && uploadedFile) {
-        setAnalysisStep('Extracting vector text from uploaded PDF...');
+        setAnalysisStep('Extracting text from uploaded PDF...');
         const arrayBuffer = await uploadedFile.arrayBuffer();
         const extracted = await extractTextFromPdf(arrayBuffer);
         extractedResumeText = extracted.text;
         isScannedPdf = extracted.isScannedPdf;
       }
 
-      setAnalysisStep('Evaluating keyword density and taxonomy matching...');
+      setAnalysisStep('Analyzing keywords and skills...');
       await new Promise((r) => setTimeout(r, 400)); // Smooth UI transition
 
-      setAnalysisStep('Scoring section completeness & impact metrics...');
+      setAnalysisStep('Reviewing sections and formatting...');
       await new Promise((r) => setTimeout(r, 400));
 
       const input: AtsAnalysisInput = {

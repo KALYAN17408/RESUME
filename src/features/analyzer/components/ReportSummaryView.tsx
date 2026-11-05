@@ -52,7 +52,7 @@ ${report.missingKeywords.slice(0, 8).map((k) => `• ${k.term} (${k.importance})
 === ACTIONABLE RECOMMENDATIONS ===
 ${report.recommendations.map((r, i) => `${i + 1}. [${r.severity.toUpperCase()}] ${r.title}\n   ${r.suggestion}`).join('\n\n')}
 
-Note: Estimated ATS compatibility score based on keyword density, skills taxonomy, structure completeness, and readability metrics. RESUME AI does not claim affiliation with any commercial ATS platform.
+Note: Estimated ATS compatibility score based on keyword match, skills, structure, and readability metrics. RESUME AI does not claim affiliation with any commercial ATS platform.
 `.trim();
 
     navigator.clipboard.writeText(summaryText);
@@ -72,7 +72,7 @@ Note: Estimated ATS compatibility score based on keyword density, skills taxonom
           <div className="text-xs">
             <h4 className="font-bold">Scanned or Rasterized PDF Detected</h4>
             <p className="mt-0.5 text-amber-800 leading-relaxed">
-              This PDF contains pages but virtually zero vector text streams. Real applicant tracking systems (Workday, Greenhouse, Taleo) cannot read flat images without OCR and frequently discard them. We strongly recommend building your resume directly in the RESUME AI Builder for 100% parseable vector output.
+              This PDF contains scanned images rather than selectable text. Most applicant tracking systems cannot read text from flat images and may discard the file. We recommend uploading a PDF with selectable text or creating your resume in RESUME AI.
             </p>
           </div>
         </div>
@@ -301,9 +301,9 @@ Note: Estimated ATS compatibility score based on keyword density, skills taxonom
         {activeTab === 'keywords' && (
           <div className="p-6 bg-white rounded-3xl border border-zinc-200 space-y-4">
             <div>
-              <h3 className="text-sm font-bold text-zinc-900">Target Role Keyword Match Analysis</h3>
+              <h3 className="text-sm font-bold text-zinc-900">Keyword Match Analysis</h3>
               <p className="text-xs text-zinc-500 mt-0.5">
-                Evaluates exact and semantic matching against terminology extracted from your target job description.
+                Compare keywords from your target job description with those found in your resume.
               </p>
             </div>
             <KeywordPillList

@@ -97,7 +97,7 @@ export const PdfUploadZone: React.FC<PdfUploadZoneProps> = ({
             Click to upload or drag & drop resume PDF
           </p>
           <p className="text-[11px] text-zinc-500 mt-1">
-            Standard PDF format up to 10MB (Vector text streams recommended)
+            Standard PDF format up to 10MB (Selectable text recommended)
           </p>
         </div>
       ) : (

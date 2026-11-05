@@ -152,7 +152,7 @@ export const ResumeToolbar: React.FC<ResumeToolbarProps> = ({
                   title="Saved to local browser storage"
                 >
                   <Cloud className="w-3.5 h-3.5 text-slate-900" />
-                  <span className="hidden sm:inline">Cached Locally</span>
+                  <span className="hidden sm:inline">Saved locally</span>
                 </span>
               )}
               {saveStatus === 'error' && (
@@ -266,8 +266,8 @@ export const ResumeToolbar: React.FC<ResumeToolbarProps> = ({
               </Tooltip>
             </div>
 
-            {/* Export Vector PDF */}
-            <Tooltip content="Export ATS-compliant vector PDF">
+            {/* Export PDF */}
+            <Tooltip content="Export PDF">
               <Button
                 variant="primary"
                 size="sm"

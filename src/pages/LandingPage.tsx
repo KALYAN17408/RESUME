@@ -59,7 +59,7 @@ export const LandingPage: React.FC = () => {
 
             <FadeIn delay={0.3} distance={30}>
               <p className="text-base sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                Create recruiter-approved, ATS-safe resumes in minutes. Built on battle-tested single-column formats with real-time vector text PDF export.
+                Create recruiter-approved, ATS-safe resumes in minutes. Built on proven single-column formats with clean PDF export.
               </p>
             </FadeIn>
           </div>
@@ -84,7 +84,7 @@ export const LandingPage: React.FC = () => {
           <FadeIn delay={0.5} distance={15}>
             <div className="pt-4 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 font-medium">
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600" /> 100% Vector Text-Stream PDF
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" /> ATS-Compliant PDF Export
               </span>
               <span className="flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-black" /> Workday & Greenhouse Parser Safe
@@ -135,16 +135,16 @@ export const LandingPage: React.FC = () => {
                   <div className="space-y-1 text-left">
                     <h3 className="text-base font-bold text-slate-900">AI Resume Builder</h3>
                     <p className="text-xs text-slate-500 leading-relaxed">
-                      Single-column formats (Jake&apos;s, Harvard, Stanford) with live split-screen editor and searchable vector text PDF downloads.
+                      Single-column formats (Jake&apos;s, Harvard, Stanford) with live split-screen editor and searchable PDF downloads.
                     </p>
                   </div>
                 </div>
                 <ul className="text-xs text-slate-600 space-y-1.5 text-left border-t border-slate-100 pt-3">
                   <li className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-black shrink-0" /> Zero parsing tables
+                    <CheckCircle2 className="w-3.5 h-3.5 text-black shrink-0" /> Single-column layout
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-black shrink-0" /> Debounced autosave
+                    <CheckCircle2 className="w-3.5 h-3.5 text-black shrink-0" /> Automatic saving
                   </li>
                 </ul>
               </Card>
@@ -167,13 +167,13 @@ export const LandingPage: React.FC = () => {
                   <div className="space-y-1 text-left">
                     <h3 className="text-base font-bold text-slate-900">ATS Resume Analyzer</h3>
                     <p className="text-xs text-slate-500 leading-relaxed">
-                      Upload your existing PDF or DOCX resume for a 5-vector recruiter audit measuring parseability, impact, and keywords.
+                      Upload your existing resume PDF for an ATS compatibility audit measuring readability, impact, and keywords.
                     </p>
                   </div>
                 </div>
                 <ul className="text-xs text-slate-600 space-y-1.5 text-left border-t border-slate-100 pt-3">
                   <li className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> 0–100 Recruiter Score
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> 0–100 ATS Score
                   </li>
                   <li className="flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> One-click bullet fixes
@@ -261,7 +261,7 @@ export const LandingPage: React.FC = () => {
                 Recruiter-Approved ATS Templates
               </h2>
               <p className="text-sm sm:text-base text-slate-600">
-                No graphics, two-column bars, or unparseable tables. Designed strictly around corporate parsing engine standards.
+                No complex graphics, columns, or tables. Designed around standard applicant tracking system formats.
               </p>
             </div>
           </FadeIn>
@@ -432,9 +432,9 @@ export const LandingPage: React.FC = () => {
               <span className="w-8 h-8 rounded-xl bg-black text-white font-black text-sm flex items-center justify-center">
                 4
               </span>
-              <h4 className="text-sm font-bold text-slate-900">Vector PDF Export</h4>
+              <h4 className="text-sm font-bold text-slate-900">Clean PDF Export</h4>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Download true vector text-stream PDFs guaranteed to pass ATS scanners with 100% accuracy.
+                Download clean, selectable-text PDFs formatted to pass ATS scanners reliably.
               </p>
             </motion.div>
           </StaggerContainer>
@@ -483,7 +483,7 @@ export const LandingPage: React.FC = () => {
                       <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Up to 3 active resumes
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Vector text-stream PDF downloads
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Clean PDF downloads
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Standard ATS templates
@@ -535,13 +535,13 @@ export const LandingPage: React.FC = () => {
                       <CheckCircle2 className="w-4 h-4 text-black" /> 30 Per-job tailored resumes/mo
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-black" /> 25 Recruiter-grade ATS audits
+                      <CheckCircle2 className="w-4 h-4 text-black" /> 25 ATS resume audits
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-black" /> 50 Daily AI copilot turns
                     </li>
                     <li className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-black" /> DOCX and Vector PDF exports
+                      <CheckCircle2 className="w-4 h-4 text-black" /> Clean PDF exports
                     </li>
                   </ul>
                 </div>
@@ -624,7 +624,7 @@ export const LandingPage: React.FC = () => {
               <Card className="p-6 hover:shadow-subtle transition-all">
                 <h4 className="text-sm font-bold text-slate-900">Why are single-column resumes recommended for tech?</h4>
                 <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                  Most enterprise ATS platforms (Workday, Taleo, Greenhouse) read text top-to-bottom. Multi-column tables or text boxes frequently result in jumbled text where job titles and companies become mismatched, causing automated rejection.
+                  Most applicant tracking systems (Workday, Taleo, Greenhouse) read text top-to-bottom. Multi-column tables or text boxes frequently result in jumbled text where job titles and companies become mismatched, causing automated rejection.
                 </p>
               </Card>
             </motion.div>
@@ -638,7 +638,7 @@ export const LandingPage: React.FC = () => {
               <Card className="p-6 hover:shadow-subtle transition-all">
                 <h4 className="text-sm font-bold text-slate-900">How does RESUME AI generate PDFs differently?</h4>
                 <p className="text-xs text-slate-600 mt-2 leading-relaxed">
-                  Many tools use canvas snapshots (rendering HTML to an image inside a PDF), which leaves zero selectable text for ATS bots. RESUME AI outputs true vector text streams where each word, glyph, and link is readable by any parser.
+                  Many tools save resumes as flat images inside a PDF, leaving no selectable text for ATS parsers. RESUME AI exports clean text documents where each word and section is readable by ATS software.
                 </p>
               </Card>
             </motion.div>

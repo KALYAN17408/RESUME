@@ -75,7 +75,7 @@ export const Footer: React.FC = () => {
           <div className="space-y-3">
             <h4 className="text-xs font-semibold text-slate-900 uppercase tracking-wider">Platform & Standards</h4>
             <p className="text-xs text-slate-500 leading-relaxed">
-              True vector text-stream PDF processing with selectable text and recruiter-grade formatting standards.
+              Clean PDF exports with selectable text and standard formatting designed for applicant tracking systems.
             </p>
             <div className="pt-2 text-xs text-slate-400">
               <p>© {new Date().getFullYear()} RESUME AI. All rights reserved.</p>

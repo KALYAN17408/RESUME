@@ -15,7 +15,6 @@ import {
   Plus,
   FileText,
   Sparkles,
-  ShieldCheck,
   Search,
   UploadCloud,
 } from 'lucide-react';
@@ -136,7 +135,7 @@ export const ResumeListPage: React.FC = () => {
             </Badge>
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Build, edit, and export ATS-friendly resumes with live preview and clean vector PDF export.
+            Build, edit, and export ATS-friendly resumes with live preview and clean PDF export.
           </p>
         </div>
 
@@ -201,7 +200,7 @@ export const ResumeListPage: React.FC = () => {
           <div className="space-y-1">
             <h3 className="text-base font-bold text-slate-900">No resumes created yet</h3>
             <p className="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
-              Create your first ATS-safe resume using battle-tested formats like Jake&apos;s Tech or Harvard Classic, or start from our engineering sample.
+              Create your first ATS-safe resume using popular templates like Jake&apos;s Tech or Harvard Classic, or start from our sample resume.
             </p>
           </div>
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -226,15 +225,6 @@ export const ResumeListPage: React.FC = () => {
             >
               Start with Sample Data
             </Button>
-          </div>
-
-          <div className="pt-6 border-t border-slate-200/80 flex items-center justify-center gap-6 text-[11px] text-slate-500">
-            <span className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-emerald-600" /> Professional Vector PDF
-            </span>
-            <span className="flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4 text-blue-600" /> Auto-saved in Real Time
-            </span>
           </div>
         </div>
       ) : filteredResumes.length === 0 ? (

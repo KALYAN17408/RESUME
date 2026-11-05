@@ -32,7 +32,7 @@ export const ResumePreview: React.FC<ResumePreviewProps> = ({ data, zoom }) => {
 
           {/* Printable Page Footer / Metadata (Watermark-free ATS notice) */}
           <div className="absolute bottom-2 right-4 text-[9px] text-slate-300 font-mono select-none pointer-events-none">
-            Page 1 of 1 • ATS Compliant Vector Stream
+            Page 1 of 1 • ATS Compliant
           </div>
         </div>
       </div>
