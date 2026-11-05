@@ -1,144 +1,64 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { CareerCopilotPage } from '@/features/copilot/pages/CareerCopilotPage';
-import { ResumeService } from '@/features/resumes/services/resumeService';
-import { CopilotStorageService } from '@/features/copilot/services/copilotStorageService';
-import type { CareerConversation } from '@/features/copilot/types/copilot.types';
-import type { ResumeData } from '@/features/resumes/types/resume.types';
 
-vi.mock('@/features/resumes/services/resumeService');
-vi.mock('@/features/copilot/services/copilotStorageService');
-
-const mockResume: ResumeData = {
-  id: 'res-copilot',
-  userId: 'test-user',
-  title: 'Senior Frontend Resume',
-  templateId: 'jakes-technical',
-  sectionsOrder: ['personal', 'skills'],
-  personalInfo: {
-    fullName: 'Morgan Lee',
-    professionalTitle: 'Senior Frontend Engineer',
-    email: 'morgan@example.com',
-    phone: '',
-    location: '',
-    linkedinUrl: '',
-    githubUrl: '',
-    portfolioUrl: '',
-    summary: '',
-  },
-  skillCategories: [{ id: '1', name: 'Languages', skills: ['React', 'TypeScript'] }],
-  experiences: [],
-  projects: [],
-  educations: [],
-  enabledSections: {} as any,
-  customization: {
-    accentColor: '#7C3AED',
-    fontFamily: 'Inter',
-    fontSize: 'medium',
-    lineSpacing: 'normal',
-    margins: 'normal',
-  },
-  createdAt: '2026-01-01',
-  updatedAt: '2026-01-01',
-} as unknown as ResumeData;
-
-const mockConversations: CareerConversation[] = [
-  {
-    id: 'conv-1',
-    userId: 'test-user',
-    title: 'Resume Bullet Strategy',
-    messages: [
-      {
-        id: 'msg-1',
-        conversationId: 'conv-1',
-        userId: 'test-user',
-        role: 'user',
-        content: 'How can I improve my project highlights?',
-        createdAt: '2026-01-01T10:00:00Z',
-      },
-      {
-        id: 'msg-2',
-        conversationId: 'conv-1',
-        userId: 'test-user',
-        role: 'assistant',
-        content: 'Quantify your impact using the Action + Context + Result formula.',
-        metadata: {
-          actionableSuggestions: ['Add measurable performance metrics'],
-        },
-        createdAt: '2026-01-01T10:00:05Z',
-      },
-    ],
-    createdAt: '2026-01-01T10:00:00Z',
-    updatedAt: '2026-01-01T10:00:05Z',
-  },
-];
-
-describe('CareerCopilotPage Integration', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    vi.mocked(ResumeService.listResumes).mockResolvedValue([
-      { id: 'res-copilot', title: 'Senior Frontend Resume', templateId: 'jakes-technical', updatedAt: '2026-01-01' } as any,
-    ]);
-    vi.mocked(ResumeService.getResume).mockResolvedValue(mockResume);
-    vi.mocked(CopilotStorageService.listConversations).mockResolvedValue(mockConversations);
-  });
-
-  it('renders chat workspace, conversation history, and message bubbles', async () => {
+describe('CareerCopilotPage Coming Soon Screen', () => {
+  it('renders AI Career Copilot Coming Soon UI with badge, title, and descriptive message', () => {
     render(
-      <BrowserRouter>
-        <CareerCopilotPage />
-      </BrowserRouter>
+      <MemoryRouter initialEntries={['/dashboard/copilot']}>
+        <Routes>
+          <Route path="/dashboard/copilot" element={<CareerCopilotPage />} />
+        </Routes>
+      </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('AI Career Copilot')).toBeInTheDocument();
-      expect(screen.getByText('Resume Bullet Strategy')).toBeInTheDocument();
-      expect(screen.getByText('How can I improve my project highlights?')).toBeInTheDocument();
-      expect(screen.getByText(/Quantify your impact using the Action/i)).toBeInTheDocument();
-    });
+    // Title & Badge
+    expect(screen.getByRole('heading', { level: 1, name: 'AI Career Copilot' })).toBeInTheDocument();
+    expect(screen.getByText('Coming Soon')).toBeInTheDocument();
+
+    // Suggested Content Message
+    expect(
+      screen.getByText(/Your personal AI career assistant is on its way/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/This feature is currently under active development/i)
+    ).toBeInTheDocument();
+
+    // Planned capabilities
+    expect(screen.getByText('Grounded Career Guidance')).toBeInTheDocument();
+    expect(screen.getByText('Resume Quantification')).toBeInTheDocument();
+    expect(screen.getByText('Interview & Offer Strategy')).toBeInTheDocument();
   });
 
-  it('displays resume context badge when active', async () => {
+  it('provides Back to Dashboard action button that navigates back to /dashboard', () => {
     render(
-      <BrowserRouter>
-        <CareerCopilotPage />
-      </BrowserRouter>
+      <MemoryRouter initialEntries={['/dashboard/copilot']}>
+        <Routes>
+          <Route path="/dashboard/copilot" element={<CareerCopilotPage />} />
+          <Route path="/dashboard" element={<div data-testid="dashboard-view">Dashboard View</div>} />
+        </Routes>
+      </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('Senior Frontend Resume')).toBeInTheDocument();
-    });
+    const backButton = screen.getByRole('button', { name: /Back to Dashboard/i });
+    expect(backButton).toBeInTheDocument();
+
+    fireEvent.click(backButton);
+    expect(screen.getByTestId('dashboard-view')).toBeInTheDocument();
   });
 
-  it('allows typing and triggers message sending', async () => {
-    vi.mocked(CopilotStorageService.addMessage).mockResolvedValue({
-      id: 'msg-new',
-      conversationId: 'conv-1',
-      userId: 'test-user',
-      role: 'user',
-      content: 'What skills should I learn?',
-      createdAt: '2026-01-01T11:00:00Z',
-    });
-
+  it('does not trigger any background API or network calls', () => {
+    const fetchSpy = vi.spyOn(window, 'fetch');
     render(
-      <BrowserRouter>
-        <CareerCopilotPage />
-      </BrowserRouter>
+      <MemoryRouter initialEntries={['/dashboard/copilot']}>
+        <Routes>
+          <Route path="/dashboard/copilot" element={<CareerCopilotPage />} />
+        </Routes>
+      </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByPlaceholderText(/Ask about resume refinement/i)).toBeInTheDocument();
-    });
-
-    const textarea = screen.getByPlaceholderText(/Ask about resume refinement/i);
-    fireEvent.change(textarea, { target: { value: 'What skills should I learn?' } });
-
-    const sendBtn = screen.getByRole('button', { name: '' }); // Send button
-    fireEvent.click(sendBtn);
-
-    await waitFor(() => {
-      expect(CopilotStorageService.addMessage).toHaveBeenCalled();
-    });
+    expect(fetchSpy).not.toHaveBeenCalled();
+    fetchSpy.mockRestore();
   });
 });

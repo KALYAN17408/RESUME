@@ -1,152 +1,64 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { JobMatchingPage } from '@/features/jobs/pages/JobMatchingPage';
-import { ResumeService } from '@/features/resumes/services/resumeService';
-import { JobService } from '@/features/jobs/services/jobService';
-import type { SavedJob } from '@/features/jobs/types/job.types';
-import type { ResumeData } from '@/features/resumes/types/resume.types';
 
-vi.mock('@/features/resumes/services/resumeService');
-vi.mock('@/features/jobs/services/jobService');
-
-const mockResume: ResumeData = {
-  id: 'res-1',
-  userId: 'test-user',
-  title: 'Full Stack Engineer Resume',
-  templateId: 'jakes-technical',
-  sectionsOrder: ['personal', 'skills'],
-  personalInfo: {
-    fullName: 'Alex River',
-    professionalTitle: 'Full Stack Engineer',
-    email: 'alex@example.com',
-    phone: '123',
-    location: 'NYC',
-    linkedinUrl: '',
-    githubUrl: '',
-    portfolioUrl: '',
-    summary: 'Engineer',
-  },
-  skillCategories: [
-    { id: '1', name: 'Core', skills: ['React', 'TypeScript', 'Node.js'] },
-  ],
-  experiences: [],
-  projects: [],
-  educations: [],
-  enabledSections: {} as any,
-  customization: {
-    accentColor: '#2563EB',
-    fontFamily: 'Inter',
-    fontSize: 'medium',
-    lineSpacing: 'normal',
-    margins: 'normal',
-  },
-  createdAt: '2026-01-01',
-  updatedAt: '2026-01-01',
-} as unknown as ResumeData;
-
-const mockJobs: SavedJob[] = [
-  {
-    id: 'job-1',
-    userId: 'test-user',
-    title: 'Senior Frontend Developer',
-    company: 'Stripe',
-    location: 'San Francisco, CA',
-    employmentType: 'full-time',
-    jobDescription: 'Seeking Senior Frontend Developer proficient in React, TypeScript, and web architecture.',
-    status: 'interested',
-    matchAnalysis: {
-      overallScore: 88,
-      skillsMatch: {
-        matched: ['React', 'TypeScript'],
-        missing: ['GraphQL'],
-        criticalMissing: [],
-        matchPercentage: 66,
-      },
-      experienceAlignment: {
-        titleAlignment: 'strong',
-        relevantRolesFound: ['Full Stack Engineer'],
-        yearsEstimated: 3,
-        summary: 'Strong title alignment found.',
-      },
-      keywordAlignment: {
-        matchedCount: 2,
-        totalJobKeywords: 3,
-        topMatches: ['React', 'TypeScript'],
-      },
-      suggestions: ['Add GraphQL projects'],
-      analyzedAt: '2026-01-01',
-      disclaimer: 'Algorithmic estimate.',
-    },
-    createdAt: '2026-01-02T00:00:00Z',
-    updatedAt: '2026-01-02T00:00:00Z',
-  },
-];
-
-describe('JobMatchingPage Integration', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    vi.mocked(ResumeService.listResumes).mockResolvedValue([
-      { id: 'res-1', title: 'Full Stack Engineer Resume', templateId: 'jakes-technical', updatedAt: '2026-01-01' } as any,
-    ]);
-    vi.mocked(ResumeService.getResume).mockResolvedValue(mockResume);
-    vi.mocked(JobService.listJobs).mockResolvedValue(mockJobs);
-  });
-
-  it('renders job matching workspace, metrics, and saved job card', async () => {
+describe('JobMatchingPage Coming Soon Screen', () => {
+  it('renders Job Matching Coming Soon UI with badge, title, and descriptive message', () => {
     render(
-      <BrowserRouter>
-        <JobMatchingPage />
-      </BrowserRouter>
+      <MemoryRouter initialEntries={['/dashboard/jobs']}>
+        <Routes>
+          <Route path="/dashboard/jobs" element={<JobMatchingPage />} />
+        </Routes>
+      </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText(/Job Matching & Applications/i)).toBeInTheDocument();
-      expect(screen.getByText('Senior Frontend Developer')).toBeInTheDocument();
-      expect(screen.getByText('Stripe')).toBeInTheDocument();
-      expect(screen.getByText('88%')).toBeInTheDocument();
-    });
+    // Title & Badge
+    expect(screen.getByRole('heading', { level: 1, name: 'Job Matching' })).toBeInTheDocument();
+    expect(screen.getByText('Coming Soon')).toBeInTheDocument();
+
+    // Suggested Content Message
+    expect(
+      screen.getByText(/Find opportunities that match your skills and career goals/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/This feature is currently under active development/i)
+    ).toBeInTheDocument();
+
+    // Planned capabilities
+    expect(screen.getByText('Intelligent Match Scoring')).toBeInTheDocument();
+    expect(screen.getByText('Skills Gap Detection')).toBeInTheDocument();
+    expect(screen.getByText('Application Tracker')).toBeInTheDocument();
   });
 
-  it('opens match analysis modal when clicking Analysis button', async () => {
+  it('provides Back to Dashboard action button that navigates back to /dashboard', () => {
     render(
-      <BrowserRouter>
-        <JobMatchingPage />
-      </BrowserRouter>
+      <MemoryRouter initialEntries={['/dashboard/jobs']}>
+        <Routes>
+          <Route path="/dashboard/jobs" element={<JobMatchingPage />} />
+          <Route path="/dashboard" element={<div data-testid="dashboard-view">Dashboard View</div>} />
+        </Routes>
+      </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('Senior Frontend Developer')).toBeInTheDocument();
-    });
+    const backButton = screen.getByRole('button', { name: /Back to Dashboard/i });
+    expect(backButton).toBeInTheDocument();
 
-    const analysisBtn = screen.getByRole('button', { name: /analysis/i });
-    fireEvent.click(analysisBtn);
-
-    await waitFor(() => {
-      expect(screen.getByText(/Match Analysis: Senior Frontend Developer/i)).toBeInTheDocument();
-      expect(screen.getByText(/Matched Skills/i)).toBeInTheDocument();
-      expect(screen.getByText(/Targeted Application Improvements/i)).toBeInTheDocument();
-    });
+    fireEvent.click(backButton);
+    expect(screen.getByTestId('dashboard-view')).toBeInTheDocument();
   });
 
-  it('opens add opportunity modal when clicking Add Opportunity button', async () => {
+  it('does not trigger any background API or network calls', () => {
+    const fetchSpy = vi.spyOn(window, 'fetch');
     render(
-      <BrowserRouter>
-        <JobMatchingPage />
-      </BrowserRouter>
+      <MemoryRouter initialEntries={['/dashboard/jobs']}>
+        <Routes>
+          <Route path="/dashboard/jobs" element={<JobMatchingPage />} />
+        </Routes>
+      </MemoryRouter>
     );
 
-    await waitFor(() => {
-      expect(screen.getByText(/Job Matching & Applications/i)).toBeInTheDocument();
-    });
-
-    const addBtn = screen.getByRole('button', { name: /Add Opportunity/i });
-    fireEvent.click(addBtn);
-
-    await waitFor(() => {
-      expect(screen.getByText(/Add New Job Opportunity/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/Job Title \*/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/Company \*/i)).toBeInTheDocument();
-    });
+    expect(fetchSpy).not.toHaveBeenCalled();
+    fetchSpy.mockRestore();
   });
 });

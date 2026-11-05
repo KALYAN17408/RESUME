@@ -77,8 +77,8 @@ export const DashboardOverview: React.FC = () => {
       id: 'module-jobs',
       title: 'Job Matching & Tracker',
       moduleTag: 'Job Matching',
-      phaseBadge: 'Ready',
-      description: 'Compare target job descriptions against your resume, calculate ATS qualification alignment, and track applications.',
+      phaseBadge: 'Coming Soon',
+      description: 'Find opportunities that match your skills and career goals with intelligent job matching, skill gap detection, and application tracking.',
       features: [
         'Deterministic qualification alignment & skill gap detection',
         'Match scoring based on real job descriptions and resume text',
@@ -88,14 +88,14 @@ export const DashboardOverview: React.FC = () => {
       icon: Briefcase,
       color: 'text-blue-600 bg-blue-50 border-blue-200/80',
       badgeVariant: 'brand',
-      ctaLabel: 'Open Job Tracker',
+      ctaLabel: 'View Preview',
     },
     {
       id: 'module-d',
       title: 'AI Career Copilot',
       moduleTag: 'Career Guide',
-      phaseBadge: 'Ready',
-      description: 'Grounded career assistant to guide your job search pipeline, skill gap analysis, and offer strategy.',
+      phaseBadge: 'Coming Soon',
+      description: 'Your personal AI career assistant is on its way. Get career guidance, resume improvement suggestions, interview preparation support, and personalized recommendations.',
       features: [
         'Personalized career guidance grounded on your real profile',
         'Targeted career trajectory and 90-day skills gap roadmaps',
@@ -105,14 +105,14 @@ export const DashboardOverview: React.FC = () => {
       icon: Bot,
       color: 'text-violet-600 bg-violet-50 border-violet-200/80',
       badgeVariant: 'violet',
-      ctaLabel: 'Open Copilot',
+      ctaLabel: 'View Preview',
     },
     {
       id: 'module-e',
       title: 'Interactive Mock Interviews',
       moduleTag: 'Interview Hub',
-      phaseBadge: 'Ready',
-      description: 'Role-specific behavioral, technical, and situational interview question banks with automated STAR feedback.',
+      phaseBadge: 'Coming Soon',
+      description: 'Prepare for your next interview with AI-powered practice sessions. We are building realistic interview experiences with personalized feedback to help you improve your confidence.',
       features: [
         'Role-specific questions dynamically generated from your resume',
         'Real-time response evaluation and STAR framework checklist',
@@ -122,7 +122,7 @@ export const DashboardOverview: React.FC = () => {
       icon: MessageSquare,
       color: 'text-teal-600 bg-teal-50 border-teal-200/80',
       badgeVariant: 'teal',
-      ctaLabel: 'Open Mock Interviews',
+      ctaLabel: 'View Preview',
     },
   ];
 
@@ -239,7 +239,7 @@ export const DashboardOverview: React.FC = () => {
                       navigate('/dashboard/jobs');
                     }}
                   >
-                    Open Job Tracker
+                    Preview Job Matching
                   </Button>
                 )}
                 {selectedModule.id === 'module-d' && (
@@ -251,7 +251,7 @@ export const DashboardOverview: React.FC = () => {
                       navigate('/dashboard/copilot');
                     }}
                   >
-                    Open Career Copilot
+                    Preview Career Copilot
                   </Button>
                 )}
                 {selectedModule.id === 'module-e' && (
@@ -263,7 +263,7 @@ export const DashboardOverview: React.FC = () => {
                       navigate('/dashboard/interviews');
                     }}
                   >
-                    Open Mock Interviews
+                    Preview Mock Interviews
                   </Button>
                 )}
               </div>
