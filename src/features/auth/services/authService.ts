@@ -72,6 +72,11 @@ export class AuthService {
       provider,
       options: {
         redirectTo,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+        skipBrowserRedirect: true,
       },
     });
 
@@ -80,8 +85,19 @@ export class AuthService {
     }
 
     if (data?.url) {
-      window.location.href = data.url;
+      window.location.assign(data.url);
     }
+  }
+
+  static async exchangeCodeForSession(code: string): Promise<{ user: User | null; session: Session | null }> {
+    this.checkConfigured();
+
+    const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error) {
+      throw error;
+    }
+
+    return { user: data.user, session: data.session };
   }
 
   static async resetPasswordForEmail(email: string): Promise<void> {

@@ -48,6 +48,9 @@ supabase/.temp/
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Netlify
+.netlify/
 .env.local
 
 # Editor directories and files

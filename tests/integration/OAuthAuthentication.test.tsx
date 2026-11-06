@@ -229,5 +229,98 @@ describe('OAuth Authentication Integration Tests (Google & GitHub)', () => {
 
       expect(useAuthStore.getState().user?.id).toBe('usr-oauth-99');
     });
+
+    it('exchanges code for session when code is present in query parameters', async () => {
+      const mockSession = {
+        user: { id: 'usr-oauth-exchange-1', email: 'exchanged@example.com' },
+        access_token: 'exchange-token',
+      } as any;
+
+      vi.spyOn(supabase.auth, 'getSession').mockResolvedValueOnce({
+        data: { session: null },
+        error: null,
+      });
+
+      const exchangeSpy = vi.spyOn(supabase.auth, 'exchangeCodeForSession').mockResolvedValueOnce({
+        data: { session: mockSession, user: mockSession.user },
+        error: null,
+      });
+
+      render(
+        <MemoryRouter initialEntries={['/auth/callback?code=test-auth-code-123']}>
+          <Routes>
+            <Route path="/auth/callback" element={<AuthCallbackPage />} />
+            <Route path="/dashboard" element={<div>Dashboard Workspace Target</div>} />
+          </Routes>
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        expect(exchangeSpy).toHaveBeenCalledWith('test-auth-code-123');
+        expect(screen.getByText('Dashboard Workspace Target')).toBeInTheDocument();
+      });
+
+      expect(useAuthStore.getState().user?.id).toBe('usr-oauth-exchange-1');
+    });
+
+    it('handles code exchange failure and displays the specific error message', async () => {
+      vi.spyOn(supabase.auth, 'getSession').mockResolvedValue({
+        data: { session: null },
+        error: null,
+      });
+
+      vi.spyOn(supabase.auth, 'exchangeCodeForSession').mockResolvedValueOnce({
+        data: { session: null, user: null },
+        error: new Error('PKCE code verifier not found in storage') as any,
+      });
+
+      render(
+        <MemoryRouter initialEntries={['/auth/callback?code=invalid-or-expired-code']}>
+          <Routes>
+            <Route path="/auth/callback" element={<AuthCallbackPage />} />
+            <Route path="/login" element={<div>Login Page Target</div>} />
+          </Routes>
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText(/Sign-in Incomplete/i)).toBeInTheDocument();
+        expect(screen.getByText(/PKCE code verifier not found in storage/i)).toBeInTheDocument();
+      });
+
+      await waitFor(
+        () => {
+          expect(screen.getByText('Login Page Target')).toBeInTheDocument();
+        },
+        { timeout: 3000 }
+      );
+    });
+
+    it('immediately redirects to /login when neither session nor auth code is present', async () => {
+      vi.spyOn(supabase.auth, 'getSession').mockResolvedValueOnce({
+        data: { session: null },
+        error: null,
+      });
+
+      render(
+        <MemoryRouter initialEntries={['/auth/callback']}>
+          <Routes>
+            <Route path="/auth/callback" element={<AuthCallbackPage />} />
+            <Route path="/login" element={<div>Login Page Target</div>} />
+          </Routes>
+        </MemoryRouter>
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText(/No authentication session or authorization code found/i)).toBeInTheDocument();
+      });
+
+      await waitFor(
+        () => {
+          expect(screen.getByText('Login Page Target')).toBeInTheDocument();
+        },
+        { timeout: 3000 }
+      );
+    });
   });
 });

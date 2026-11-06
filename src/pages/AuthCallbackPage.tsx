@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '@/lib/supabase/client';
 import { useAuthStore } from '@/stores/authStore';
@@ -6,6 +6,7 @@ import { useUIStore } from '@/stores/uiStore';
 import { AuthService } from '@/features/auth/services/authService';
 import { Spinner } from '@/components/ui/Spinner';
 import { Sparkles, AlertCircle } from 'lucide-react';
+import type { Session } from '@supabase/supabase-js';
 
 export const AuthCallbackPage: React.FC = () => {
   const navigate = useNavigate();
@@ -13,12 +14,63 @@ export const AuthCallbackPage: React.FC = () => {
   const { setUser, setProfile } = useAuthStore();
   const { addToast } = useUIStore();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const isProcessedRef = useRef(false);
 
   useEffect(() => {
     let isMounted = true;
 
+    // React 18 StrictMode guard to prevent duplicate code exchange
+    if (isProcessedRef.current) {
+      return;
+    }
+    isProcessedRef.current = true;
+
+    const finalizeSuccessfulSession = async (session: Session) => {
+      if (!isMounted) return;
+
+      setUser(session.user, session);
+      addToast({
+        type: 'success',
+        title: 'Signed In Successfully',
+        message: 'Welcome to your RESUME AI career workspace!',
+      });
+
+      // Remove sensitive auth query parameters from the browser address bar
+      if (typeof window !== 'undefined' && window.history?.replaceState) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+
+      // Fetch user profile asynchronously in the background
+      try {
+        const profile = await AuthService.getUserProfile(session.user.id);
+        if (profile && isMounted) {
+          setProfile(profile);
+        }
+      } catch (profileErr) {
+        console.warn('Profile fetch after OAuth sign-in deferred:', profileErr);
+      }
+
+      navigate('/dashboard', { replace: true });
+    };
+
+    const handleFailure = (readableMessage: string) => {
+      if (!isMounted) return;
+      setErrorMessage(readableMessage);
+      addToast({
+        type: 'error',
+        title: 'OAuth Authentication Failed',
+        message: readableMessage,
+      });
+
+      setTimeout(() => {
+        if (isMounted) {
+          navigate(`/login?error=${encodeURIComponent(readableMessage)}`, { replace: true });
+        }
+      }, 1500);
+    };
+
     const processOAuthCallback = async () => {
-      // 1. Check for error parameters in query string or URL hash
+      // 1. Inspect searchParams and hashParams for OAuth provider error responses
       const searchParams = new URLSearchParams(location.search);
       const hashParams = new URLSearchParams(location.hash.replace(/^#/, ''));
 
@@ -32,100 +84,77 @@ export const AuthCallbackPage: React.FC = () => {
           (error === 'access_denied'
             ? 'Sign-in request was cancelled or denied by the provider.'
             : `Authentication failed: ${error}`);
-
-        if (isMounted) {
-          setErrorMessage(readableMessage);
-          addToast({
-            type: 'error',
-            title: 'OAuth Authentication Failed',
-            message: readableMessage,
-          });
-        }
-
-        setTimeout(() => {
-          if (isMounted) {
-            navigate(`/login?error=${encodeURIComponent(readableMessage)}`, { replace: true });
-          }
-        }, 1200);
+        handleFailure(readableMessage);
         return;
       }
 
-      // 2. Check for active session established by PKCE exchange or hash detection
+      const code = searchParams.get('code');
+
+      // 2. Subscribe immediately to onAuthStateChange before executing async calls
+      // to capture any event already being emitted by the client's internal initializer
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange(async (event, newSession) => {
+        if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && newSession?.user) {
+          subscription.unsubscribe();
+          await finalizeSuccessfulSession(newSession);
+        }
+      });
+
       try {
+        // 3. First check if a session is already established (e.g. detectSessionInUrl or existing session)
         const {
-          data: { session },
+          data: { session: existingSession },
           error: sessionError,
         } = await supabase.auth.getSession();
 
         if (sessionError) {
-          throw sessionError;
+          console.warn('getSession returned error on callback mount:', sessionError.message);
         }
 
-        if (session?.user) {
-          if (isMounted) {
-            setUser(session.user, session);
-            addToast({
-              type: 'success',
-              title: 'Signed In Successfully',
-              message: 'Welcome to your RESUME AI career workspace!',
-            });
-
-            // Fetch and set profile in background
-            AuthService.getUserProfile(session.user.id).then((profile) => {
-              if (profile && isMounted) setProfile(profile);
-            });
-
-            navigate('/dashboard', { replace: true });
-          }
+        if (existingSession?.user) {
+          subscription.unsubscribe();
+          await finalizeSuccessfulSession(existingSession);
           return;
         }
 
-        // 3. Fallback: subscribe to onAuthStateChange in case token exchange is in-flight
-        const {
-          data: { subscription },
-        } = supabase.auth.onAuthStateChange(async (event, newSession) => {
-          if (event === 'SIGNED_IN' && newSession?.user) {
+        // 4. If code is present, actively exchange it for a session (PKCE exchange)
+        if (code) {
+          const { data: exchangeData, error: exchangeError } =
+            await supabase.auth.exchangeCodeForSession(code);
+
+          if (!exchangeError && exchangeData?.session?.user) {
             subscription.unsubscribe();
-            if (isMounted) {
-              setUser(newSession.user, newSession);
-              AuthService.getUserProfile(newSession.user.id).then((profile) => {
-                if (profile && isMounted) setProfile(profile);
-              });
-              addToast({
-                type: 'success',
-                title: 'Signed In Successfully',
-                message: 'Welcome to RESUME AI!',
-              });
-              navigate('/dashboard', { replace: true });
-            }
+            await finalizeSuccessfulSession(exchangeData.session);
+            return;
           }
-        });
 
-        // 4. Timeout safety guard
-        const timeoutId = setTimeout(() => {
-          subscription.unsubscribe();
-          if (isMounted) {
-            const timeoutMsg = 'Authentication session could not be established. Please try again.';
-            setErrorMessage(timeoutMsg);
-            navigate(`/login?error=${encodeURIComponent(timeoutMsg)}`, { replace: true });
+          // If manual exchange returned an error, verify if automatic initializer succeeded in parallel
+          const {
+            data: { session: postExchangeSession },
+          } = await supabase.auth.getSession();
+
+          if (postExchangeSession?.user) {
+            subscription.unsubscribe();
+            await finalizeSuccessfulSession(postExchangeSession);
+            return;
           }
-        }, 6000);
 
-        return () => {
+          // Real error occurred during exchange
           subscription.unsubscribe();
-          clearTimeout(timeoutId);
-        };
-      } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Failed to finalize OAuth login.';
-        if (isMounted) {
-          setErrorMessage(message);
-          addToast({
-            type: 'error',
-            title: 'Authentication Error',
-            message,
-          });
-          navigate(`/login?error=${encodeURIComponent(message)}`, { replace: true });
+          const exchangeFailureMsg =
+            exchangeError?.message || 'Authentication session could not be established. Please try again.';
+          handleFailure(exchangeFailureMsg);
+          return;
         }
+
+        // 5. If neither a session nor an auth code is present, redirect back immediately
+        subscription.unsubscribe();
+        handleFailure('No authentication session or authorization code found.');
+      } catch (err: unknown) {
+        subscription.unsubscribe();
+        const message = err instanceof Error ? err.message : 'Failed to finalize OAuth sign-in.';
+        handleFailure(message);
       }
     };
 
