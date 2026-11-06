@@ -129,13 +129,6 @@ export const SettingsPage: React.FC = () => {
                 </p>
               </div>
             </div>
-
-            <div className="pt-2">
-              <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px]">User Identifier (UUID)</span>
-              <p className="font-mono text-[11px] text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100 break-all select-all mt-1">
-                {user?.id || 'Local Development Session'}
-              </p>
-            </div>
           </CardContent>
         </Card>
 
