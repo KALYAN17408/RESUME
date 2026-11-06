@@ -67,8 +67,8 @@ export class AuthService {
   static async signInWithOAuth(provider: 'google' | 'github'): Promise<void> {
     this.checkConfigured();
 
-    const redirectTo = `${window.location.origin}/dashboard`;
-    const { error } = await supabase.auth.signInWithOAuth({
+    const redirectTo = `${window.location.origin}/auth/callback`;
+    const { data, error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo,
@@ -77,6 +77,10 @@ export class AuthService {
 
     if (error) {
       throw error;
+    }
+
+    if (data?.url) {
+      window.location.href = data.url;
     }
   }
 

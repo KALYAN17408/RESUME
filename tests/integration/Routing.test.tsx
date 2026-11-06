@@ -66,4 +66,14 @@ describe('App Routing & Route Guards', () => {
     expect(screen.getByText(/Reset your password/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Send Reset Instructions/i })).toBeInTheDocument();
   });
+
+  it('renders auth callback page when navigating to /auth/callback', () => {
+    render(
+      <MemoryRouter initialEntries={['/auth/callback']}>
+        <AppRouter />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText(/Completing Secure Sign-In/i)).toBeInTheDocument();
+  });
 });

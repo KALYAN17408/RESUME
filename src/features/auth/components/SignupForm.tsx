@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthService } from '../services/authService';
 import { useAuthStore } from '@/stores/authStore';
 import { useUIStore } from '@/stores/uiStore';
@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Mail, Lock, User as UserIcon, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react';
 import { ConfigMissingBanner } from './ConfigMissingBanner';
+import { OAuthButtons } from './OAuthButtons';
 
 export const signupSchema = z
   .object({
@@ -27,12 +28,22 @@ export type SignupFormData = z.infer<typeof signupSchema>;
 
 export const SignupForm: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { setUser } = useAuthStore();
   const { addToast } = useUIStore();
   const [authError, setAuthError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [verificationSent, setVerificationSent] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState('');
+
+  useEffect(() => {
+    // Check for OAuth error redirected back from provider or callback
+    const searchParams = new URLSearchParams(location.search);
+    const errorParam = searchParams.get('error_description') || searchParams.get('error');
+    if (errorParam) {
+      setAuthError(decodeURIComponent(errorParam));
+    }
+  }, [location.search]);
 
   const {
     register,
@@ -118,6 +129,17 @@ export const SignupForm: React.FC = () => {
   return (
     <div className="space-y-6">
       <ConfigMissingBanner />
+
+      {/* Social registration buttons */}
+      <OAuthButtons onOAuthError={(err) => setAuthError(err)} source="signup" />
+
+      {/* Divider */}
+      <div className="relative flex items-center justify-center">
+        <div className="w-full border-t border-slate-200" />
+        <span className="absolute bg-white px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+          or register with email
+        </span>
+      </div>
 
       {authError && (
         <div className="flex items-start gap-2.5 rounded-xl border border-rose-200 bg-rose-50 p-3 text-left">
