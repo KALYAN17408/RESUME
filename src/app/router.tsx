@@ -84,14 +84,7 @@ export const AppRouter: React.FC = () => {
           </PublicOnlyRoute>
         }
       />
-      <Route
-        path="/forgot-password"
-        element={
-          <PublicOnlyRoute>
-            <ForgotPasswordPage />
-          </PublicOnlyRoute>
-        }
-      />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 
       {/* Protected Standalone Resume Editor Routes */}

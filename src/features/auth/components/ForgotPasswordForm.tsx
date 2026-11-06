@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { Link } from 'react-router-dom';
 import { AuthService } from '../services/authService';
 import { useUIStore } from '@/stores/uiStore';
+import { useAuthStore } from '@/stores/authStore';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Mail, AlertCircle, CheckCircle2, ArrowRight } from 'lucide-react';
@@ -17,6 +18,7 @@ export const forgotPasswordSchema = z.object({
 export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 
 export const ForgotPasswordForm: React.FC = () => {
+  const { user } = useAuthStore();
   const { addToast } = useUIStore();
   const [authError, setAuthError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,7 +32,7 @@ export const ForgotPasswordForm: React.FC = () => {
   } = useForm<ForgotPasswordFormData>({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
-      email: '',
+      email: user?.email || '',
     },
   });
 
@@ -74,9 +76,9 @@ export const ForgotPasswordForm: React.FC = () => {
           </p>
         </div>
         <div className="pt-2">
-          <Link to="/login">
+          <Link to={user ? "/dashboard/settings" : "/login"}>
             <Button variant="outline" className="w-full">
-              Back to Sign In
+              {user ? "Back to Settings" : "Back to Sign In"}
             </Button>
           </Link>
         </div>
@@ -118,8 +120,8 @@ export const ForgotPasswordForm: React.FC = () => {
 
       <p className="text-center text-xs text-slate-500">
         Remember your password?{' '}
-        <Link to="/login" className="font-semibold text-black hover:underline">
-          Back to Sign In
+        <Link to={user ? "/dashboard/settings" : "/login"} className="font-semibold text-black hover:underline">
+          {user ? "Back to Settings" : "Back to Sign In"}
         </Link>
       </p>
     </div>

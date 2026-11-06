@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { AuthService } from '../services/authService';
 import { useUIStore } from '@/stores/uiStore';
+import { useAuthStore } from '@/stores/authStore';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Lock, AlertCircle, ArrowRight } from 'lucide-react';
@@ -24,6 +25,7 @@ export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
 export const ResetPasswordForm: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuthStore();
   const { addToast } = useUIStore();
   const [authError, setAuthError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,9 +51,11 @@ export const ResetPasswordForm: React.FC = () => {
       addToast({
         type: 'success',
         title: 'Password Updated',
-        message: 'Your password has been successfully reset. Please log in with your new credentials.',
+        message: user
+          ? 'Your password has been successfully updated.'
+          : 'Your password has been successfully reset. Please log in with your new credentials.',
       });
-      navigate('/login');
+      navigate(user ? '/dashboard/settings' : '/login');
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Could not reset password.';
       setAuthError(message);

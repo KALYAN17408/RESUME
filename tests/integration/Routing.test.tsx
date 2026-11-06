@@ -47,4 +47,23 @@ describe('App Routing & Route Guards', () => {
     expect(screen.getByText(/Account Metrics/i)).toBeInTheDocument();
     expect(screen.getByText(/Tools & Applications/i)).toBeInTheDocument();
   });
+
+  it('allows authenticated user to access /forgot-password without bouncing to /dashboard', () => {
+    useAuthStore.setState({
+      user: { id: 'usr-123', email: 'alex@example.com' } as any,
+      session: { access_token: 'token' } as any,
+      profile: { id: 'usr-123', email: 'alex@example.com', full_name: 'Alex' },
+      isLoading: false,
+      isInitialized: true,
+    });
+
+    render(
+      <MemoryRouter initialEntries={['/forgot-password']}>
+        <AppRouter />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText(/Reset your password/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Send Reset Instructions/i })).toBeInTheDocument();
+  });
 });
