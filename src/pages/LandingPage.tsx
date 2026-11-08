@@ -106,7 +106,7 @@ export const LandingPage: React.FC = () => {
           <FadeIn direction="up">
             <div className="text-center space-y-3 max-w-3xl mx-auto">
               <Badge variant="brand" size="sm" className="uppercase tracking-wider font-bold">
-                Engineering Architecture
+                Platform Features
               </Badge>
               <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
                 An End-to-End AI Career Platform
@@ -469,10 +469,11 @@ export const LandingPage: React.FC = () => {
                       Create Free Account
                     </Button>
                   </Link>
-                  <a href="#features">
-                    <Button variant="outline" size="lg" className="border-white/30 text-white hover:bg-white/10">
-                      Explore Features
-                    </Button>
+                  <a
+                    href="#features"
+                    className="inline-flex items-center justify-center font-medium transition-all select-none rounded-radius-sm border border-white/40 bg-white/10 text-white hover:bg-white/20 active:bg-white/25 text-base px-6 py-2.5 font-semibold min-h-[44px]"
+                  >
+                    Explore Features
                   </a>
                 </div>
               </div>

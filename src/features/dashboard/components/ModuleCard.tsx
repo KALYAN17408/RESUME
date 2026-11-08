@@ -68,7 +68,7 @@ export const ModuleCard: React.FC<ModuleCardProps> = ({
 
       <CardFooter className="justify-between pt-3 border-t border-slate-100">
         <span className="text-[11px] font-medium text-slate-400">
-          {phaseBadge === 'Ready' || phaseBadge === 'Active' ? 'Available now' : 'In development'}
+          {phaseBadge === 'Ready' || phaseBadge === 'Active' ? 'Available now' : 'Coming soon'}
         </span>
         <Button variant="ghost" size="sm" onClick={onExplore} rightIcon={<ArrowRight className="w-3.5 h-3.5" />}>
           {ctaLabel || (phaseBadge === 'Ready' || phaseBadge === 'Active' ? 'Open' : 'Learn More')}

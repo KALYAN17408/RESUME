@@ -3,9 +3,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { useUIStore } from '@/stores/uiStore';
 import { useAuthStore } from '@/stores/authStore';
-import { Menu, Bell, ShieldCheck } from 'lucide-react';
-import { Badge } from '@/components/ui/Badge';
-import { Tooltip } from '@/components/ui/Tooltip';
+import { Menu } from 'lucide-react';
 import { cn } from '@/utils/cn';
 
 export const DashboardLayout: React.FC = () => {
@@ -88,29 +86,11 @@ export const DashboardLayout: React.FC = () => {
             </nav>
           </div>
 
-          <div className="flex items-center gap-3 sm:gap-4">
-            <Badge variant="success" size="sm" className="hidden sm:inline-flex gap-1 py-1 px-2.5">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Cloud Sync Verified</span>
-            </Badge>
-
-            <Tooltip content="No unread notifications">
-              <button
-                aria-label="Notifications"
-                className="p-2 rounded-radius-sm text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors relative focus-ring"
-              >
-                <Bell className="w-4 h-4" />
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-slate-900" />
-              </button>
-            </Tooltip>
-
-            <div className="h-4 w-px bg-slate-200" />
-
+          <div className="flex items-center gap-3">
             <div className="text-right hidden sm:block">
-              <p className="text-xs font-semibold text-slate-900 truncate max-w-[150px]">
+              <p className="text-xs font-semibold text-slate-900 truncate max-w-[180px]">
                 {user?.user_metadata?.full_name || user?.email?.split('@')[0]}
               </p>
-              <p className="text-[10px] text-slate-500">Authenticated Session</p>
             </div>
           </div>
         </header>
