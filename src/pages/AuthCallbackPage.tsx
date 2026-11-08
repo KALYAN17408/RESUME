@@ -15,6 +15,7 @@ export const AuthCallbackPage: React.FC = () => {
   const { addToast } = useUIStore();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const isProcessedRef = useRef(false);
+  const isFinalizedRef = useRef(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -26,7 +27,9 @@ export const AuthCallbackPage: React.FC = () => {
     isProcessedRef.current = true;
 
     const finalizeSuccessfulSession = async (session: Session) => {
-      if (!isMounted) return;
+      // Guard against duplicate invocations from concurrent onAuthStateChange and exchangeCodeForSession
+      if (!isMounted || isFinalizedRef.current) return;
+      isFinalizedRef.current = true;
 
       setUser(session.user, session);
       addToast({
