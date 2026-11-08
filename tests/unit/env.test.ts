@@ -14,4 +14,11 @@ describe('getSupabaseEnv configuration check', () => {
       expect(config.supabaseAnonKey).toBeDefined();
     }
   });
+
+  it('guarantees that anonKey has valid 3-part JWT structure and is not truncated with dots', () => {
+    const config = getSupabaseEnv();
+    expect(config.supabaseAnonKey).not.toContain('...');
+    expect(config.supabaseAnonKey.split('.').length).toBe(3);
+    expect(config.supabaseUrl).toMatch(/^https:\/\//);
+  });
 });
