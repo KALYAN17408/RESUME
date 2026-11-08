@@ -1,6 +1,7 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/database.types';
 import { getSupabaseEnv } from './env';
+import { browserAuthStorage } from './storage';
 
 let supabaseInstance: SupabaseClient<Database> | null = null;
 
@@ -16,8 +17,8 @@ export function getSupabaseClient(): SupabaseClient<Database> {
       flowType: 'pkce',
       autoRefreshToken: true,
       persistSession: true,
-      detectSessionInUrl: true,
-      storage: window?.localStorage,
+      detectSessionInUrl: false,
+      storage: browserAuthStorage,
     },
   });
 

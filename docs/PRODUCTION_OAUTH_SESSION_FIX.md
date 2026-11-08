@@ -42,6 +42,10 @@ By default in browser environments, Supabase immediately calls `window.location.
 ### Cause 4: React 18 StrictMode Duplicate Execution
 Authorization codes issued in OAuth 2.0 PKCE are strictly **single-use**. Without an execution guard (`useRef`), initial component mounting could trigger multiple concurrent exchange attempts. The second attempt causes Supabase GoTrue to return `invalid_grant: code has expired or already been used`, invalidating the flow.
 
+### Cause 5: Premature Verifier Consumption & Browser Storage Partitioning
+When `detectSessionInUrl: true` was enabled alongside a component-level exchange, Supabase's automatic initializer (`_initialize()`) started on boot and consumed/removed the PKCE verifier from `localStorage`. Concurrently, the callback component attempted to exchange the same code, only to find the verifier had already been removed. Furthermore, in certain browsers (Safari ITP, mobile WebViews, or private browsing), `localStorage` can be partitioned across OAuth redirects. This resulted in:
+`AuthPKCECodeVerifierMissingError: PKCE code verifier not found in storage.`
+
 ---
 
 ## 3. Implemented Fixes
@@ -60,10 +64,16 @@ Authorization codes issued in OAuth 2.0 PKCE are strictly **single-use**. Withou
 - Added query parameters `{ access_type: 'offline', prompt: 'consent' }` for consistent OAuth grant refresh capabilities.
 - Added `AuthService.exchangeCodeForSession(code)` service abstraction.
 
-### 3. Expanded Integration Test Coverage (`tests/integration/OAuthAuthentication.test.tsx`)
-- Added test verifying active `exchangeCodeForSession` invocation when returning with `?code=...`.
-- Added test verifying descriptive error rendering and login redirection when exchange fails.
-- Added test verifying immediate redirection to `/login` when accessed without session or code.
+### 3. Resilient Multi-Layer Storage Adapter (`src/lib/supabase/storage.ts`)
+- Created `browserAuthStorage` implementing Supabase's `SupportedStorage` interface.
+- Layer 1 (`window.localStorage`): Primary fast client storage.
+- Layer 2 (`document.cookie` with `SameSite=Lax; Secure`): Immune to Safari ITP and browser storage partitioning across OAuth redirects.
+- Layer 3 (`window.sessionStorage`): In-memory isolation fallback.
+- Configured in `src/lib/supabase/client.ts` with `detectSessionInUrl: false` to grant `AuthCallbackPage` exclusive, collision-free control over code exchange.
+
+### 4. Expanded Integration & Unit Test Coverage
+- `tests/unit/storage.test.ts`: Verifies write, read, fallback to cookies on localStorage wipe, and cleanup.
+- `tests/integration/OAuthAuthentication.test.tsx`: Verifies active `exchangeCodeForSession` invocation, error handling, and direct access guards.
 
 ---
 
