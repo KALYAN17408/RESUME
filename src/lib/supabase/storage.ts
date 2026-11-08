@@ -24,10 +24,15 @@ export const browserAuthStorage: SupportedStorage = {
     try {
       if (typeof document !== 'undefined' && document.cookie) {
         const cookies = document.cookie.split(';');
+        const targetKey = encodeURIComponent(key);
         for (const cookie of cookies) {
-          const [rawKey, rawVal] = cookie.trim().split('=');
-          if (rawKey === encodeURIComponent(key) && rawVal) {
-            return decodeURIComponent(rawVal);
+          const eqIdx = cookie.indexOf('=');
+          if (eqIdx !== -1) {
+            const rawKey = cookie.slice(0, eqIdx).trim();
+            const rawVal = cookie.slice(eqIdx + 1).trim();
+            if (rawKey === targetKey) {
+              return decodeURIComponent(rawVal);
+            }
           }
         }
       }
@@ -52,12 +57,16 @@ export const browserAuthStorage: SupportedStorage = {
       window.localStorage.setItem(key, value);
     } catch {}
 
-    // 2. Write to cookie with SameSite=Lax and Secure
+    // 2. Write to cookie with SameSite=Lax and Secure (guarding against 4KB limit for large sessions)
     try {
       if (typeof document !== 'undefined') {
-        const isHttps = window.location.protocol === 'https:';
-        const secureFlag = isHttps ? '; Secure' : '';
-        document.cookie = `${encodeURIComponent(key)}=${encodeURIComponent(value)}; path=/; max-age=3600; SameSite=Lax${secureFlag}`;
+        const encodedVal = encodeURIComponent(value);
+        // Only store values within safe single-cookie limits (3KB) to prevent silent browser drop
+        if (encodedVal.length <= 3072) {
+          const isHttps = window.location.protocol === 'https:';
+          const secureFlag = isHttps ? '; Secure' : '';
+          document.cookie = `${encodeURIComponent(key)}=${encodedVal}; path=/; max-age=3600; SameSite=Lax${secureFlag}`;
+        }
       }
     } catch {}
 
