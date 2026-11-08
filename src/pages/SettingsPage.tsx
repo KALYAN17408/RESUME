@@ -4,10 +4,9 @@ import { useUIStore } from '@/stores/uiStore';
 import { AuthService } from '@/features/auth/services/authService';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
 import { Modal } from '@/components/ui/Modal';
 import { Input } from '@/components/ui/Input';
-import { User, Mail, Shield, KeyRound, ExternalLink, Lock, AlertCircle } from 'lucide-react';
+import { User, Mail, Shield, KeyRound, Lock, AlertCircle } from 'lucide-react';
 
 export const SettingsPage: React.FC = () => {
   const { user, profile, signOut } = useAuthStore();
@@ -15,7 +14,6 @@ export const SettingsPage: React.FC = () => {
 
   const userEmail = user?.email || 'user@example.com';
   const userName = profile?.full_name || user?.user_metadata?.full_name || userEmail.split('@')[0];
-  const userTier = profile?.tier || 'free';
 
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const [newPassword, setNewPassword] = useState('');
@@ -102,12 +100,12 @@ export const SettingsPage: React.FC = () => {
     <div className="space-y-6 text-left max-w-4xl mx-auto">
       <div>
         <h1 className="text-2xl font-black text-slate-900 tracking-tight">Account & Workspace Settings</h1>
-        <p className="text-xs text-slate-500 mt-1">Manage your profile, security, and subscription tier.</p>
+        <p className="text-xs text-slate-500 mt-1">Manage your profile and security credentials.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6">
         {/* Profile Card */}
-        <Card className="md:col-span-2">
+        <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
               <User className="w-5 h-5 text-black" />
@@ -129,45 +127,6 @@ export const SettingsPage: React.FC = () => {
                 </p>
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Subscription Plan Card */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle>Subscription</CardTitle>
-              <Badge variant="brand" className="uppercase text-[10px]">
-                {userTier}
-              </Badge>
-            </div>
-            <CardDescription>Your current tier and quota limits.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4 text-xs">
-            <div className="rounded-xl border border-slate-100 bg-slate-50 p-3.5 space-y-2">
-              <div className="flex justify-between text-slate-600">
-                <span>Resumes:</span>
-                <span className="font-semibold text-slate-900">0 / 3</span>
-              </div>
-              <div className="flex justify-between text-slate-600">
-                <span>ATS Scans:</span>
-                <span className="font-semibold text-slate-900">0 / 1 mo</span>
-              </div>
-              <div className="flex justify-between text-slate-600">
-                <span>Copilot Turns:</span>
-                <span className="font-semibold text-slate-900">Preview</span>
-              </div>
-            </div>
-
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full"
-              onClick={() => alert('Subscription billing upgrades will be integrated in Phase 6 with Stripe.')}
-              rightIcon={<ExternalLink className="w-3.5 h-3.5" />}
-            >
-              Upgrade to Pro ($29/mo)
-            </Button>
           </CardContent>
         </Card>
       </div>

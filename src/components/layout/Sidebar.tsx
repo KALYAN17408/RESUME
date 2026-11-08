@@ -16,7 +16,6 @@ import {
   X,
   User as UserIcon,
 } from 'lucide-react';
-import { Badge } from '@/components/ui/Badge';
 import { cn } from '@/utils/cn';
 
 export const Sidebar: React.FC = () => {
@@ -37,7 +36,6 @@ export const Sidebar: React.FC = () => {
 
   const userEmail = user?.email || 'user@example.com';
   const userName = profile?.full_name || user?.user_metadata?.full_name || userEmail.split('@')[0];
-  const userTier = profile?.tier || 'free';
 
   return (
     <>
@@ -112,12 +110,7 @@ export const Sidebar: React.FC = () => {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-semibold text-slate-900 truncate">{userName}</p>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="text-[10px] text-slate-500 truncate max-w-[110px]">{userEmail}</span>
-                <Badge variant="brand" size="sm" className="text-[9px] px-1 py-0 uppercase">
-                  {userTier}
-                </Badge>
-              </div>
+              <p className="text-[10px] text-slate-500 truncate mt-0.5">{userEmail}</p>
             </div>
             <button
               onClick={() => signOut()}

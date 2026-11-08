@@ -6,7 +6,7 @@ export const LoginPage: React.FC = () => {
   return (
     <AuthLayout
       title="Welcome back"
-      subtitle="Enter your credentials to access your career workspace and resumes."
+      subtitle="Sign in to your free workspace to build resumes, analyze ATS scores, and generate cover letters."
     >
       <LoginForm />
     </AuthLayout>

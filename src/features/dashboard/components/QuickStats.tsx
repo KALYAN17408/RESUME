@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/Card';
-import { FileText, ScanSearch, Mail, Zap } from 'lucide-react';
+import { FileText, ScanSearch, Mail } from 'lucide-react';
 import { useAuthStore } from '@/stores/authStore';
 import { ResumeService } from '@/features/resumes/services/resumeService';
 
@@ -52,19 +52,10 @@ export const QuickStats: React.FC = () => {
       badgeColor: 'text-teal-700 bg-teal-50',
       accentGlow: 'hover:border-teal-300 hover:shadow-md hover:shadow-teal-500/5',
     },
-    {
-      name: 'AI Quota Balance',
-      value: '100%',
-      quota: 'Free plan allowance',
-      icon: Zap,
-      color: 'text-amber-600 bg-amber-50/80 border-amber-200',
-      badgeColor: 'text-amber-800 bg-amber-50',
-      accentGlow: 'hover:border-amber-300 hover:shadow-md hover:shadow-amber-500/5',
-    },
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (

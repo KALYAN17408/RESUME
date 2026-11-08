@@ -22,7 +22,6 @@ describe('LandingPage Integration Test', () => {
     // Feature highlights
     expect(screen.getByRole('heading', { name: /AI Resume Builder/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /ATS Resume Analyzer/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /Career Copilot/i })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: /Mock Interview Hub/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Cover Letter Generator/i })).toBeInTheDocument();
   });
 });

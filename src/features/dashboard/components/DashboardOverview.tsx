@@ -135,7 +135,7 @@ export const DashboardOverview: React.FC = () => {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">Account Metrics</h2>
-          <span className="text-xs text-slate-500 font-medium">Free Plan Entitlements</span>
+          <span className="text-xs text-slate-500 font-medium">Workspace Activity</span>
         </div>
         <QuickStats />
       </div>

@@ -58,9 +58,6 @@ export const Navbar: React.FC = () => {
             <a href="#how-it-works" className="hover:text-slate-900 transition-colors">
               How it Works
             </a>
-            <a href="#pricing" className="hover:text-slate-900 transition-colors">
-              Pricing
-            </a>
             <a href="#faq" className="hover:text-slate-900 transition-colors">
               FAQ
             </a>
@@ -132,13 +129,6 @@ export const Navbar: React.FC = () => {
               className="px-3 py-2 rounded-lg hover:bg-slate-50"
             >
               How it Works
-            </a>
-            <a
-              href="#pricing"
-              onClick={() => setMobileMenuOpen(false)}
-              className="px-3 py-2 rounded-lg hover:bg-slate-50"
-            >
-              Pricing
             </a>
             <a
               href="#faq"

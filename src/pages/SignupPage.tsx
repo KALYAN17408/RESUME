@@ -6,7 +6,7 @@ export const SignupPage: React.FC = () => {
   return (
     <AuthLayout
       title="Create your account"
-      subtitle="Start building recruiter-approved, ATS-safe engineering resumes."
+      subtitle="100% free forever. Build ATS-safe resumes, analyze compatibility, and generate cover letters."
     >
       <SignupForm />
     </AuthLayout>

@@ -35,19 +35,19 @@ export const Footer: React.FC = () => {
             <h4 className="text-xs font-semibold text-slate-900 uppercase tracking-wider">Features</h4>
             <ul className="space-y-2 text-xs text-slate-600">
               <li>
-                <span className="hover:text-slate-900 cursor-pointer">AI Resume Builder</span>
+                <Link to="/dashboard/resumes" className="hover:text-slate-900 transition-colors">AI Resume Builder</Link>
               </li>
               <li>
-                <span className="hover:text-slate-900 cursor-pointer">ATS Resume Analyzer</span>
+                <Link to="/dashboard/analyzer" className="hover:text-slate-900 transition-colors">ATS Resume Analyzer</Link>
               </li>
               <li>
-                <span className="hover:text-slate-900 cursor-pointer">Cover Letter Generator</span>
+                <Link to="/dashboard/cover-letter" className="hover:text-slate-900 transition-colors">Cover Letter Generator</Link>
               </li>
               <li>
-                <span className="hover:text-slate-900 cursor-pointer">Career Copilot</span>
+                <span className="text-slate-400">Job Matching <span className="text-[10px] text-blue-600 font-semibold">(Soon)</span></span>
               </li>
               <li>
-                <span className="hover:text-slate-900 cursor-pointer">Mock Interview Prep</span>
+                <span className="text-slate-400">Mock Interviews <span className="text-[10px] text-blue-600 font-semibold">(Soon)</span></span>
               </li>
             </ul>
           </div>
