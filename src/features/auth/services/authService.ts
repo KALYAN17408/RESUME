@@ -100,6 +100,31 @@ export class AuthService {
     return { user: data.user, session: data.session };
   }
 
+  static async verifyRecoveryToken(tokenHash: string): Promise<{ user: User | null; session: Session | null }> {
+    this.checkConfigured();
+
+    const { data, error } = await supabase.auth.verifyOtp({
+      token_hash: tokenHash,
+      type: 'recovery',
+    });
+    if (error) {
+      throw error;
+    }
+
+    return { user: data.user, session: data.session };
+  }
+
+  static async setSession(tokens: { access_token: string; refresh_token: string }): Promise<{ user: User | null; session: Session | null }> {
+    this.checkConfigured();
+
+    const { data, error } = await supabase.auth.setSession(tokens);
+    if (error) {
+      throw error;
+    }
+
+    return { user: data.user, session: data.session };
+  }
+
   static async resetPasswordForEmail(email: string): Promise<void> {
     this.checkConfigured();
 

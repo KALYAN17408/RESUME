@@ -31,7 +31,21 @@ export const AuthCallbackPage: React.FC = () => {
       if (!isMounted || isFinalizedRef.current) return;
       isFinalizedRef.current = true;
 
+      const searchParams = new URLSearchParams(location.search);
+      const isRecovery = searchParams.get('type') === 'recovery' || location.search.includes('recovery');
+      const nextTarget = searchParams.get('next') || (isRecovery ? '/reset-password' : '/dashboard');
+
       setUser(session.user, session);
+
+      // If this callback is for password recovery, redirect directly to /reset-password
+      if (nextTarget === '/reset-password') {
+        if (typeof window !== 'undefined' && window.history?.replaceState) {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+        navigate('/reset-password', { replace: true });
+        return;
+      }
+
       addToast({
         type: 'success',
         title: 'Signed In Successfully',
@@ -98,7 +112,7 @@ export const AuthCallbackPage: React.FC = () => {
       const {
         data: { subscription },
       } = supabase.auth.onAuthStateChange(async (event, newSession) => {
-        if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && newSession?.user) {
+        if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION' || event === 'PASSWORD_RECOVERY') && newSession?.user) {
           subscription.unsubscribe();
           await finalizeSuccessfulSession(newSession);
         }
