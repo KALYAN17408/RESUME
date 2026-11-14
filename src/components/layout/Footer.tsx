@@ -73,13 +73,31 @@ export const Footer: React.FC = () => {
 
           {/* Architecture & Compliance */}
           <div className="space-y-3">
-            <h4 className="text-xs font-semibold text-slate-900 uppercase tracking-wider">Platform & Standards</h4>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Clean PDF exports with selectable text and standard formatting designed for applicant tracking systems.
+            <h4 className="text-xs font-semibold text-slate-900 uppercase tracking-wider">Legal & Compliance</h4>
+            <ul className="space-y-2 text-xs text-slate-600">
+              <li>
+                <Link to="/privacy-policy" className="hover:text-slate-900 transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="hover:text-slate-900 transition-colors">
+                  Terms of Service
+                </Link>
+              </li>
+            </ul>
+            <p className="text-xs text-slate-500 leading-relaxed pt-1">
+              Clean PDF exports formatted for modern applicant tracking systems.
             </p>
             <div className="pt-2 text-xs text-slate-400">
               <p>© {new Date().getFullYear()} RESUME AI. All rights reserved.</p>
-              <p className="mt-1">Independent platform inspired by modern career workflows.</p>
+              <div className="flex items-center gap-3 mt-1.5 text-[11px]">
+                <Link to="/privacy-policy" className="hover:underline text-slate-500">Privacy Policy</Link>
+                <span>•</span>
+                <Link to="/terms" className="hover:underline text-slate-500">Terms</Link>
+                <span>•</span>
+                <a href="https://theresume-ai.netlify.app" className="hover:underline text-slate-500">theresume-ai.netlify.app</a>
+              </div>
             </div>
           </div>
         </div>

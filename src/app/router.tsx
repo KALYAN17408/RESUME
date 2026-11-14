@@ -7,6 +7,8 @@ import { SignupPage } from '@/pages/SignupPage';
 import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage';
 import { ResetPasswordPage } from '@/pages/ResetPasswordPage';
 import { AuthCallbackPage } from '@/pages/AuthCallbackPage';
+import { PrivacyPolicyPage } from '@/pages/PrivacyPolicyPage';
+import { TermsPage } from '@/pages/TermsPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { DashboardOverview } from '@/features/dashboard/components/DashboardOverview';
@@ -88,6 +90,10 @@ export const AppRouter: React.FC = () => {
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/auth/callback" element={<AuthCallbackPage />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+      <Route path="/privacy" element={<PrivacyPolicyPage />} />
+      <Route path="/terms" element={<TermsPage />} />
+      <Route path="/terms-of-service" element={<Navigate to="/terms" replace />} />
 
       {/* Protected Standalone Resume Editor Routes */}
       <Route

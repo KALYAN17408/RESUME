@@ -56,9 +56,16 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, title, subtitl
         </div>
 
         {/* Security Footer */}
-        <div className="pt-6 border-t border-slate-100 text-center text-[11px] text-slate-400 flex items-center justify-center gap-1.5">
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-          <span>Protected by industry-standard encryption & PostgreSQL RLS privacy.</span>
+        <div className="pt-6 border-t border-slate-100 text-center text-[11px] text-slate-400 space-y-1.5">
+          <div className="flex items-center justify-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Protected by industry-standard encryption & PostgreSQL RLS privacy.</span>
+          </div>
+          <div className="flex items-center justify-center gap-2 text-slate-500">
+            <Link to="/terms" className="hover:underline hover:text-slate-700">Terms of Service</Link>
+            <span>•</span>
+            <Link to="/privacy-policy" className="hover:underline hover:text-slate-700">Privacy Policy</Link>
+          </div>
         </div>
       </div>
 
